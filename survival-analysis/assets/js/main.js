@@ -60,6 +60,18 @@ function initProgressBar() {
         const scrollPercent = (scrollTop / scrollHeight) * 100;
 
         progressBar.style.width = scrollPercent + '%';
+
+        // Update gradient position based on scroll progress
+        progressBar.classList.remove('scrolled-25', 'scrolled-50', 'scrolled-75', 'scrolled-100');
+        if (scrollPercent >= 100) {
+            progressBar.classList.add('scrolled-100');
+        } else if (scrollPercent >= 75) {
+            progressBar.classList.add('scrolled-75');
+        } else if (scrollPercent >= 50) {
+            progressBar.classList.add('scrolled-50');
+        } else if (scrollPercent >= 25) {
+            progressBar.classList.add('scrolled-25');
+        }
     });
 }
 

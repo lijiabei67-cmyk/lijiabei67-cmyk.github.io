@@ -77,6 +77,73 @@ body.dark-mode strong {
     color: var(--dm-text-color);
 }
 
+/* ============================================
+   Dark Mode Hero Section
+   ============================================ */
+body.dark-mode .placeholder-box {
+    border-color: var(--dm-primary-color);
+    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
+}
+
+body.dark-mode .placeholder-text {
+    color: var(--dm-text-muted);
+}
+
+body.dark-mode .hero-title {
+    background: linear-gradient(135deg, var(--dm-primary-light), var(--dm-primary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+body.dark-mode .hero-subtitle {
+    color: var(--dm-text-muted);
+}
+
+body.dark-mode .floating-icon {
+    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
+}
+
+body.dark-mode .floating-icon svg {
+    color: var(--dm-primary-color);
+}
+
+body.dark-mode .typewriter-text {
+    color: var(--dm-text-color);
+    border-right-color: var(--dm-primary-color);
+}
+
+body.dark-mode .article-meta-hero {
+    color: var(--dm-text-muted);
+}
+
+/* Dark Mode Target SVG */
+body.dark-mode .target-ring.ring-outer {
+    stroke: var(--dm-border-color);
+}
+
+body.dark-mode .target-ring.ring-middle {
+    stroke: var(--dm-primary-color);
+}
+
+body.dark-mode .target-ring.ring-inner {
+    stroke: var(--dm-primary-light);
+}
+
+body.dark-mode .target-ring.ring-center {
+    fill: var(--dm-primary-color);
+}
+
+body.dark-mode .target-arrow line,
+body.dark-mode .target-arrow polygon {
+    stroke: var(--dm-accent-color);
+    fill: var(--dm-accent-color);
+}
+
+body.dark-mode .target-caption {
+    color: var(--dm-text-muted);
+}
+
 /* Dark Mode Progress Bar */
 body.dark-mode .progress-bar {
     background: linear-gradient(90deg,

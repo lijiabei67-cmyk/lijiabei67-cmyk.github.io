@@ -4,11 +4,10 @@
    ============================================ */
 
 // Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 // Initialize all animations when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-    // Wait a bit for all content to load
     setTimeout(initAnimations, 100);
 });
 
@@ -21,81 +20,315 @@ function initAnimations() {
     initFindingAnimations();
     initCustomerTypeAnimations();
     initSidebarAnimation();
+    initTargetAnimation();
 }
 
 /* ============================================
-   1. Hero Section Animation
+   1. Hero Section Animation Sequence
    ============================================ */
 function initHeroAnimation() {
-    const tl = gsap.timeline();
+    const heroCharacter = document.getElementById('heroCharacter');
+    const heroTypewriter = document.getElementById('heroTypewriter');
+    const heroTitleContainer = document.getElementById('heroTitleContainer');
+    const articleMeta = document.getElementById('articleMeta');
+    const articleKeywords = document.getElementById('articleKeywords');
+    const dustContainer = document.getElementById('dustContainer');
 
-    // Animate title
-    tl.from('.article-header h1', {
+    // Create main timeline
+    const heroTL = gsap.timeline();
+
+    // Step 1: Show character placeholder
+    heroTL.from(heroCharacter, {
+        scale: 0,
+        opacity: 0,
+        duration: 1,
+        ease: 'back.out(1.7)'
+    });
+
+    // Step 2: Typewriter effect
+    heroTL.add(() => {
+        heroTypewriter.style.opacity = 1;
+        typeWriterEffect();
+    }, '+=0.3');
+
+    // Wait for typewriter to complete (approximately 3 seconds)
+    heroTL.to({}, { duration: 3.5 });
+
+    // Step 3: Character runs away with dust effect
+    heroTL.to(heroCharacter, {
+        x: window.innerWidth + 300,
+        y: -100,
+        rotation: 15,
+        scale: 0.5,
+        duration: 0.8,
+        ease: 'power2.in',
+        onComplete: () => {
+            createDustParticles(dustContainer);
+        }
+    });
+
+    // Step 4: Show title container
+    heroTL.to(heroTitleContainer, {
+        opacity: 1,
+        visibility: 'visible',
+        duration: 0.1
+    }, '-=0.3');
+
+    heroTL.from('.hero-title', {
         y: 50,
         opacity: 0,
         duration: 1,
         ease: 'power3.out'
     });
 
-    // Animate meta info
-    tl.from('.article-meta span', {
-        y: 20,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.15,
-        ease: 'power2.out'
-    }, '-=0.5');
-
-    // Animate keywords
-    tl.from('.keyword', {
-        scale: 0,
-        opacity: 0,
-        duration: 0.5,
-        stagger: 0.08,
-        ease: 'back.out(1.7)'
-    }, '-=0.3');
-
-    // Animate abstract box
-    tl.from('.article-abstract', {
+    heroTL.from('.hero-subtitle', {
         y: 30,
         opacity: 0,
         duration: 0.8,
         ease: 'power2.out'
+    }, '-=0.5');
+
+    // Step 5: Floating icons appear and start floating
+    heroTL.from('.floating-icon', {
+        scale: 0,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.15,
+        ease: 'back.out(1.7)'
+    }, '-=0.3');
+
+    // Start continuous floating animation
+    heroTL.add(() => {
+        startFloatingAnimation();
+    });
+
+    // Step 6: Show meta and keywords
+    heroTL.to(articleMeta, {
+        opacity: 1,
+        duration: 0.5
+    });
+
+    heroTL.to(articleKeywords, {
+        opacity: 1,
+        duration: 0.5
+    }, '-=0.3');
+
+    heroTL.from('.article-keywords-hero .keyword', {
+        scale: 0,
+        opacity: 0,
+        duration: 0.4,
+        stagger: 0.08,
+        ease: 'back.out(1.7)'
     }, '-=0.3');
 }
 
+// Typewriter effect function
+function typeWriterEffect() {
+    const text = '我们想分析客户流失的原因和时间点，并且优化获客策略';
+    const typewriterEl = document.querySelector('.typewriter-text');
+    let index = 0;
+
+    function type() {
+        if (index < text.length) {
+            typewriterEl.textContent = text.substring(0, index + 1);
+            index++;
+            setTimeout(type, 80);
+        } else {
+            // Add blinking cursor after typing
+            typewriterEl.classList.add('typewriter-cursor');
+        }
+    }
+
+    type();
+}
+
+// Create dust particles
+function createDustParticles(container) {
+    if (!container) return;
+
+    for (let i = 0; i < 15; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'dust-particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.bottom = Math.random() * 20 + 'px';
+        container.appendChild(particle);
+
+        gsap.to(particle, {
+            x: (Math.random() - 0.5) * 100,
+            y: -Math.random() * 50,
+            opacity: 0.8,
+            scale: Math.random() * 1.5 + 0.5,
+            duration: 0.8,
+            ease: 'power1.out',
+            onComplete: () => particle.remove()
+        });
+    }
+}
+
+// Floating icons continuous animation
+function startFloatingAnimation() {
+    gsap.to('.icon-calculator', {
+        y: -15,
+        duration: 2,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true
+    });
+
+    gsap.to('.icon-notebook', {
+        y: -12,
+        rotation: 5,
+        duration: 2.3,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true,
+        delay: 0.3
+    });
+
+    gsap.to('.icon-chart', {
+        y: -18,
+        rotation: -3,
+        duration: 1.8,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true,
+        delay: 0.5
+    });
+
+    gsap.to('.icon-target', {
+        y: -10,
+        rotation: 8,
+        duration: 2.5,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true,
+        delay: 0.7
+    });
+}
+
 /* ============================================
-   2. Section Animations (Scroll-triggered)
+   2. Target Animation (Background Section)
+   ============================================ */
+function initTargetAnimation() {
+    const targetContainer = document.getElementById('targetContainer');
+    const targetArrow = document.getElementById('targetArrow');
+    const targetSvg = document.querySelector('.target-svg');
+
+    if (!targetContainer || !targetArrow) return;
+
+    // Arrow flying animation
+    gsap.to(targetArrow, {
+        scrollTrigger: {
+            trigger: targetContainer,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse'
+        },
+        motionPath: {
+            path: 'M20,30 Q60,60 95,95',
+            align: 'self',
+            alignOrigin: [0.5, 0.5]
+        },
+        duration: 0.8,
+        ease: 'power2.in',
+        onComplete: () => {
+            // Trigger hit effect
+            if (targetSvg) {
+                targetSvg.classList.add('hit');
+
+                // Shake effect
+                gsap.to(targetSvg, {
+                    x: 5,
+                    duration: 0.05,
+                    repeat: 5,
+                    yoyo: true,
+                    ease: 'power1.inOut',
+                    onComplete: () => {
+                        gsap.to(targetSvg, { x: 0, duration: 0.1 });
+                    }
+                });
+            }
+        }
+    });
+
+    // Alternative simpler arrow animation without motionPath
+    ScrollTrigger.create({
+        trigger: targetContainer,
+        start: 'top 80%',
+        onEnter: () => {
+            // Animate arrow flying to center
+            gsap.fromTo(targetArrow,
+                { opacity: 1 },
+                {
+                    x: 75,
+                    y: 65,
+                    rotation: 45,
+                    duration: 0.6,
+                    ease: 'power2.in',
+                    onComplete: () => {
+                        if (targetSvg) {
+                            targetSvg.classList.add('hit');
+
+                            // Shake effect
+                            gsap.to('.target-ring', {
+                                scale: 1.1,
+                                duration: 0.1,
+                                repeat: 3,
+                                yoyo: true,
+                                ease: 'power1.inOut'
+                            });
+
+                            gsap.to(targetSvg, {
+                                x: 3,
+                                duration: 0.03,
+                                repeat: 8,
+                                yoyo: true,
+                                ease: 'power1.inOut'
+                            });
+                        }
+                    }
+                }
+            );
+        }
+    });
+}
+
+/* ============================================
+   3. Section Animations (Scroll-triggered)
    ============================================ */
 function initSectionAnimations() {
     // Animate each section heading
-    gsap.utils.toArray('.article-section').forEach((section, index) => {
-        // Section title animation
-        gsap.from(section.querySelector('h2'), {
-            scrollTrigger: {
-                trigger: section,
-                start: 'top 80%',
-                toggleActions: 'play none none reverse'
-            },
-            x: -50,
-            opacity: 0,
-            duration: 0.8,
-            ease: 'power3.out'
-        });
+    gsap.utils.toArray('.article-section').forEach((section) => {
+        const heading = section.querySelector('h2');
+        const textContent = section.querySelectorAll('h3, h4, p, ul, ol');
 
-        // Section content fade in
-        gsap.from(section.querySelectorAll('h3, h4, p, ul, ol'), {
-            scrollTrigger: {
-                trigger: section,
-                start: 'top 75%',
-                toggleActions: 'play none none reverse'
-            },
-            y: 30,
-            opacity: 0,
-            duration: 0.6,
-            stagger: 0.1,
-            ease: 'power2.out'
-        });
+        if (heading) {
+            gsap.from(heading, {
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                x: -50,
+                opacity: 0,
+                duration: 0.8,
+                ease: 'power3.out'
+            });
+        }
+
+        if (textContent.length > 0) {
+            gsap.from(textContent, {
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 75%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: 30,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: 'power2.out'
+            });
+        }
     });
 
     // Highlight boxes with special animation
@@ -130,11 +363,10 @@ function initSectionAnimations() {
 }
 
 /* ============================================
-   3. Stat Card Animations
+   4. Stat Card Animations (with counter)
    ============================================ */
 function initStatCardAnimations() {
     gsap.utils.toArray('.stat-card').forEach((card, index) => {
-        // Card entrance animation
         gsap.from(card, {
             scrollTrigger: {
                 trigger: card,
@@ -155,26 +387,24 @@ function initStatCardAnimations() {
             const suffix = valueEl.textContent.replace(/[0-9.,]/g, '');
 
             if (!isNaN(endValue)) {
-                gsap.from(card, {
-                    scrollTrigger: {
-                        trigger: card,
-                        start: 'top 90%',
-                        onEnter: () => {
-                            gsap.from(valueEl, {
-                                textContent: 0,
-                                duration: 1.5,
-                                ease: 'power1.out',
-                                snap: { textContent: endValue % 1 === 0 ? 1 : 0.01 },
-                                onUpdate: function() {
-                                    const current = parseFloat(valueEl.textContent);
-                                    if (endValue % 1 === 0) {
-                                        valueEl.textContent = Math.round(current).toLocaleString() + suffix;
-                                    } else {
-                                        valueEl.textContent = current.toFixed(2) + suffix;
-                                    }
+                ScrollTrigger.create({
+                    trigger: card,
+                    start: 'top 90%',
+                    onEnter: () => {
+                        gsap.from(valueEl, {
+                            textContent: 0,
+                            duration: 1.5,
+                            ease: 'power1.out',
+                            snap: { textContent: endValue % 1 === 0 ? 1 : 0.01 },
+                            onUpdate: function() {
+                                const current = parseFloat(valueEl.textContent);
+                                if (endValue % 1 === 0) {
+                                    valueEl.textContent = Math.round(current).toLocaleString() + suffix;
+                                } else {
+                                    valueEl.textContent = current.toFixed(2) + suffix;
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
                 });
             }
@@ -183,7 +413,7 @@ function initStatCardAnimations() {
 }
 
 /* ============================================
-   4. Chart Container Animations
+   5. Chart Container Animations
    ============================================ */
 function initChartAnimations() {
     gsap.utils.toArray('.chart-container').forEach((container, index) => {
@@ -200,7 +430,6 @@ function initChartAnimations() {
             ease: 'power3.out'
         });
 
-        // Caption fade in
         const caption = container.querySelector('.chart-caption');
         if (caption) {
             gsap.from(caption, {
@@ -218,11 +447,10 @@ function initChartAnimations() {
 }
 
 /* ============================================
-   5. Table Animations
+   6. Table Animations
    ============================================ */
 function initTableAnimations() {
     gsap.utils.toArray('.table-wrapper').forEach(table => {
-        // Table container
         gsap.from(table, {
             scrollTrigger: {
                 trigger: table,
@@ -235,7 +463,6 @@ function initTableAnimations() {
             ease: 'power2.out'
         });
 
-        // Row stagger animation
         const rows = table.querySelectorAll('tbody tr');
         if (rows.length > 0) {
             gsap.from(rows, {
@@ -255,10 +482,10 @@ function initTableAnimations() {
 }
 
 /* ============================================
-   6. Finding Item Animations
+   7. Finding Item Animations
    ============================================ */
 function initFindingAnimations() {
-    gsap.utils.toArray('.finding-item').forEach((item, index) => {
+    gsap.utils.toArray('.finding-item').forEach((item) => {
         const number = item.querySelector('.finding-number');
         const content = item.querySelector('.finding-content');
 
@@ -270,7 +497,6 @@ function initFindingAnimations() {
             }
         });
 
-        // Number pop in
         tl.from(number, {
             scale: 0,
             rotation: -180,
@@ -278,7 +504,6 @@ function initFindingAnimations() {
             ease: 'back.out(1.7)'
         });
 
-        // Content slide in
         tl.from(content, {
             x: 30,
             opacity: 0,
@@ -287,7 +512,6 @@ function initFindingAnimations() {
         }, '-=0.3');
     });
 
-    // Recommendation cards
     gsap.utils.toArray('.recommendation').forEach((card, index) => {
         gsap.from(card, {
             scrollTrigger: {
@@ -305,7 +529,7 @@ function initFindingAnimations() {
 }
 
 /* ============================================
-   7. Customer Type Card Animations
+   8. Customer Type Card Animations
    ============================================ */
 function initCustomerTypeAnimations() {
     gsap.utils.toArray('.customer-type').forEach((card, index) => {
@@ -324,7 +548,6 @@ function initCustomerTypeAnimations() {
             ease: 'back.out(1.4)'
         });
 
-        // CLV value counter
         if (clvValue) {
             const value = parseFloat(clvValue.textContent.replace(/[^0-9.]/g, ''));
             if (!isNaN(value)) {
@@ -350,13 +573,12 @@ function initCustomerTypeAnimations() {
 }
 
 /* ============================================
-   8. Sidebar Animation
+   9. Sidebar Animation
    ============================================ */
 function initSidebarAnimation() {
     const sidebar = document.querySelector('.sidebar-nav');
     if (!sidebar) return;
 
-    // Initial animation
     gsap.from(sidebar, {
         x: -100,
         opacity: 0,
@@ -365,7 +587,6 @@ function initSidebarAnimation() {
         delay: 0.5
     });
 
-    // Nav link hover animations
     const navLinks = sidebar.querySelectorAll('a');
     navLinks.forEach(link => {
         link.addEventListener('mouseenter', () => {
@@ -387,9 +608,8 @@ function initSidebarAnimation() {
 }
 
 /* ============================================
-   9. Smooth Scroll Enhancement
+   10. Smooth Scroll Enhancement
    ============================================ */
-// Enhance smooth scrolling with GSAP
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         e.preventDefault();
@@ -405,18 +625,4 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             });
         }
     });
-});
-
-/* ============================================
-   10. Progress Bar Enhancement
-   ============================================ */
-gsap.to('.progress-bar', {
-    width: '100%',
-    ease: 'none',
-    scrollTrigger: {
-        trigger: 'body',
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 0.3
-    }
 });
