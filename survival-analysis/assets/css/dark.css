@@ -248,10 +248,68 @@ body.dark-mode .badge.warning {
 body.dark-mode .chart-container {
     background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
     border-color: var(--dm-border-color);
+    box-shadow: 0 4px 15px rgba(167, 139, 250, 0.15);
 }
 
 body.dark-mode .chart-caption {
     color: var(--dm-text-muted);
+}
+
+/* Dark Mode Plotly Charts - Force visibility */
+body.dark-mode .js-plotly-plot {
+    background-color: transparent !important;
+}
+
+body.dark-mode .js-plotly-plot .plotly .main-svg {
+    background-color: transparent !important;
+}
+
+body.dark-mode .js-plotly-plot .plotly .bg {
+    fill: transparent !important;
+}
+
+body.dark-mode .js-plotly-plot .plotly .xtitle,
+body.dark-mode .js-plotly-plot .plotly .ytitle,
+body.dark-mode .js-plotly-plot .plotly .g-gtitle {
+    fill: var(--dm-text-color) !important;
+}
+
+body.dark-mode .js-plotly-plot .plotly .xtick text,
+body.dark-mode .js-plotly-plot .plotly .ytick text {
+    fill: var(--dm-text-muted) !important;
+}
+
+/* Dark Mode Grid Lines - Make visible */
+body.dark-mode .js-plotly-plot .plotly .xgrid,
+body.dark-mode .js-plotly-plot .plotly .ygrid {
+    stroke: rgba(167, 139, 250, 0.3) !important;
+}
+
+/* Dark Mode Chart Lines and Traces */
+body.dark-mode .js-plotly-plot .plotly .scatterlayer .line {
+    stroke-width: 3 !important;
+}
+
+/* Dark Mode Pie Chart */
+body.dark-mode .js-plotly-plot .plotly .pielayer .slice {
+    stroke: var(--dm-surface-color) !important;
+    stroke-width: 2 !important;
+}
+
+/* Dark Mode Bar Chart */
+body.dark-mode .js-plotly-plot .plotly .barlayer .bar {
+    stroke: var(--dm-surface-color) !important;
+    stroke-width: 1 !important;
+}
+
+/* Dark Mode Legend */
+body.dark-mode .js-plotly-plot .plotly .legend text {
+    fill: var(--dm-text-color) !important;
+}
+
+body.dark-mode .js-plotly-plot .plotly .legend .legendrect {
+    fill: transparent !important;
+    stroke: var(--dm-border-color) !important;
 }
 
 /* Dark Mode Highlight Box */
@@ -467,32 +525,6 @@ body.dark-mode .reference-desc {
 body.dark-mode .article-footer {
     border-top-color: var(--dm-border-color);
     color: var(--dm-text-muted);
-}
-
-/* Dark Mode Plotly Charts Override */
-body.dark-mode .js-plotly-plot .plotly .main-svg {
-    background-color: var(--dm-surface-color) !important;
-}
-
-body.dark-mode .js-plotly-plot .plotly .bg {
-    fill: var(--dm-surface-color) !important;
-}
-
-body.dark-mode .js-plotly-plot .plotly .xtitle,
-body.dark-mode .js-plotly-plot .plotly .ytitle,
-body.dark-mode .js-plotly-plot .plotly .g-gtitle {
-    fill: var(--dm-text-color) !important;
-}
-
-body.dark-mode .js-plotly-plot .plotly .xtick text,
-body.dark-mode .js-plotly-plot .plotly .ytick text {
-    fill: var(--dm-text-muted) !important;
-}
-
-/* Dark Mode Grid Lines */
-body.dark-mode .js-plotly-plot .plotly .xgrid,
-body.dark-mode .js-plotly-plot .plotly .ygrid {
-    stroke: var(--dm-border-color) !important;
 }
 
 /* Dark Mode Selection */

@@ -7,12 +7,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Check if Plotly is loaded
     if (typeof Plotly !== 'undefined') {
-        initCharts();
+        // Small delay to ensure dark mode class is applied
+        setTimeout(initCharts, 50);
     } else {
         // Wait for Plotly to load
         window.addEventListener('load', function() {
             if (typeof Plotly !== 'undefined') {
-                initCharts();
+                setTimeout(initCharts, 50);
             }
         });
     }
@@ -846,25 +847,32 @@ function createCLVChart() {
    Theme Change Handler
    ============================================ */
 // Re-render charts when theme changes
-const originalToggle = window.initDarkMode;
-if (typeof originalToggle === 'function') {
-    document.getElementById('darkModeToggle').addEventListener('click', function() {
-        setTimeout(function() {
-            initCharts();
-        }, 100);
-    });
-}
+document.addEventListener('DOMContentLoaded', function() {
+    // Direct listener on dark mode toggle button
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', function() {
+            setTimeout(function() {
+                initCharts();
+            }, 50);
+        });
+    }
+});
 
-// Observer for dark mode class changes
-const observer = new MutationObserver(function(mutations) {
+// Observer for dark mode class changes (backup method)
+const chartObserver = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
         if (mutation.attributeName === 'class') {
-            initCharts();
+            // Debounce to prevent multiple rapid re-renders
+            clearTimeout(window.chartRenderTimeout);
+            window.chartRenderTimeout = setTimeout(function() {
+                initCharts();
+            }, 100);
         }
     });
 });
 
 // Start observing when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-    observer.observe(document.body, { attributes: true });
+    chartObserver.observe(document.body, { attributes: true });
 });
