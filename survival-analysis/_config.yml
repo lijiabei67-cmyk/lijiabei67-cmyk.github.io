@@ -1,0 +1,32 @@
+# Jekyll Configuration
+title: 数据分析博客
+description: 探索数据科学、机器学习和统计分析的实践案例
+author: Data Analysis Blog
+lang: zh-CN
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
+# Collections
+collections_dir: .
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"

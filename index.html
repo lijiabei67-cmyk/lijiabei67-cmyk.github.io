@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据分析博客 | Data Analysis Blog</title>
+    <meta name="description" content="数据分析博客 - 探索数据科学、机器学习和统计分析的实践案例">
+    <meta name="keywords" content="数据分析, 数据科学, 机器学习, 统计分析, Python">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #0ABAB5;
+            --secondary-color: #2C3E50;
+            --accent-color: #E74C3C;
+            --success-color: #27AE60;
+            --background-color: #FAFAFA;
+            --surface-color: #FFFFFF;
+            --text-color: #2C3E50;
+            --text-muted: #7F8C8D;
+            --border-color: #E0E0E0;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Source Sans Pro', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #0D9B9B);
+            color: white;
+            padding: 4em 2em;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            margin-bottom: 0.5em;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3em 2em;
+            width: 100%;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5em;
+            padding-bottom: 0.5em;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        /* Blog Cards */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2em;
+        }
+
+        .blog-card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2em;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .blog-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 0.8em;
+        }
+
+        .blog-card h3 a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .blog-card h3 a:hover {
+            text-decoration: underline;
+        }
+
+        .blog-card .excerpt {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1em;
+            line-height: 1.6;
+        }
+
+        .blog-card .meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .blog-card .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5em;
+            margin-top: 1em;
+        }
+
+        .blog-card .tag {
+            display: inline-block;
+            padding: 0.2em 0.6em;
+            background-color: rgba(10, 186, 181, 0.1);
+            color: var(--primary-color);
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* About Section */
+        .about-section {
+            margin-top: 3em;
+            padding: 2em;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+
+        .about-section h2 {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            color: var(--secondary-color);
+            margin-bottom: 1em;
+        }
+
+        .about-section p {
+            color: var(--text-muted);
+        }
+
+        .about-section ul {
+            margin-top: 1em;
+            margin-left: 1.5em;
+        }
+
+        .about-section li {
+            margin-bottom: 0.5em;
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 2em;
+            margin-top: auto;
+        }
+
+        footer p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 3em 1.5em;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            main {
+                padding: 2em 1.5em;
+            }
+
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>数据分析博客</h1>
+        <p>探索数据科学、机器学习和统计分析的实践案例</p>
+    </header>
+
+    <main>
+        <h2 class="section-title">最新文章</h2>
+
+        <div class="blog-grid">
+            <article class="blog-card">
+                <h3><a href="./survival-analysis/">用生存分析预测客户流失</a></h3>
+                <p class="excerpt">探索 Kaplan-Meier 和 Cox 回归如何帮助电信公司识别流失风险因素，预测客户生命周期价值。基于 IBM Telco Customer Churn 数据集的生存分析实战案例。</p>
+                <span class="meta">2026-04-27 · 预计阅读 15 分钟</span>
+                <div class="tags">
+                    <span class="tag">生存分析</span>
+                    <span class="tag">Kaplan-Meier</span>
+                    <span class="tag">Cox 回归</span>
+                    <span class="tag">客户流失</span>
+                </div>
+            </article>
+        </div>
+
+        <div class="about-section">
+            <h2>关于本博客</h2>
+            <p>本博客记录数据分析的学习与实践过程，涵盖以下主题：</p>
+            <ul>
+                <li><strong>统计分析</strong>：生存分析、回归分析、假设检验等</li>
+                <li><strong>机器学习</strong>：分类、回归、聚类等算法应用</li>
+                <li><strong>数据可视化</strong>：使用 Python 进行数据探索与展示</li>
+                <li><strong>业务应用</strong>：将数据分析方法应用于实际业务场景</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 数据分析博客 | Powered by <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a></p>
+    </footer>
+</body>
+</html>

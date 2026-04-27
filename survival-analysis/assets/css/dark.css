@@ -1,0 +1,402 @@
+/* ============================================
+   Dark Mode Styles - Survival Analysis Blog
+   ============================================ */
+
+/* Dark Mode Variables */
+:root {
+    --dm-background-color: #1E1E1E;
+    --dm-surface-color: #2D2D2D;
+    --dm-text-color: #E0E0E0;
+    --dm-text-muted: #9E9E9E;
+    --dm-border-color: #424242;
+    --dm-primary-color: #0ABAB5;
+    --dm-secondary-color: #E0E0E0;
+    --dm-accent-color: #E74C3C;
+    --dm-success-color: #27AE60;
+}
+
+/* Dark Mode Body */
+body.dark-mode {
+    background-color: var(--dm-background-color);
+    color: var(--dm-text-color);
+}
+
+/* Dark Mode Typography */
+body.dark-mode h1 {
+    color: var(--dm-primary-color);
+}
+
+body.dark-mode h2 {
+    color: var(--dm-secondary-color);
+    border-bottom-color: var(--dm-primary-color);
+}
+
+body.dark-mode h3 {
+    color: var(--dm-secondary-color);
+}
+
+body.dark-mode a {
+    color: var(--dm-primary-color);
+}
+
+body.dark-mode a:hover {
+    color: var(--dm-accent-color);
+}
+
+body.dark-mode code {
+    background-color: rgba(10, 186, 181, 0.2);
+}
+
+/* Dark Mode Progress Bar */
+body.dark-mode .progress-bar {
+    background: linear-gradient(90deg, var(--dm-primary-color), var(--dm-success-color));
+}
+
+/* Dark Mode Toggle Button */
+body.dark-mode .dark-mode-toggle {
+    background-color: var(--dm-surface-color);
+    border-color: var(--dm-border-color);
+}
+
+body.dark-mode .dark-mode-toggle svg {
+    color: var(--dm-text-color);
+}
+
+/* Dark Mode Back to Top */
+body.dark-mode .back-to-top {
+    background-color: var(--dm-surface-color);
+    border-color: var(--dm-primary-color);
+}
+
+body.dark-mode .back-to-top svg {
+    color: var(--dm-primary-color);
+}
+
+body.dark-mode .back-to-top:hover {
+    background-color: var(--dm-primary-color);
+}
+
+body.dark-mode .back-to-top:hover svg {
+    color: var(--dm-background-color);
+}
+
+/* Dark Mode Sidebar */
+body.dark-mode .sidebar-nav {
+    background-color: var(--dm-surface-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .sidebar-nav h4 {
+    color: var(--dm-primary-color);
+}
+
+body.dark-mode .sidebar-nav a {
+    color: var(--dm-text-muted);
+}
+
+body.dark-mode .sidebar-nav a:hover,
+body.dark-mode .sidebar-nav a.active {
+    color: var(--dm-primary-color);
+    border-left-color: var(--dm-primary-color);
+}
+
+/* Dark Mode Article Header */
+body.dark-mode .article-header {
+    border-bottom-color: var(--dm-border-color);
+}
+
+body.dark-mode .article-meta {
+    color: var(--dm-text-muted);
+}
+
+body.dark-mode .keyword {
+    background-color: rgba(10, 186, 181, 0.2);
+    color: var(--dm-primary-color);
+}
+
+body.dark-mode .article-abstract {
+    background-color: var(--dm-surface-color);
+    border-color: var(--dm-border-color);
+}
+
+body.dark-mode .article-abstract h3 {
+    color: var(--dm-primary-color);
+}
+
+/* Dark Mode Data Stats */
+body.dark-mode .stat-card {
+    background-color: var(--dm-surface-color);
+    border-color: var(--dm-border-color);
+}
+
+body.dark-mode .stat-card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .stat-card.highlight {
+    border-color: var(--dm-accent-color);
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+body.dark-mode .stat-value {
+    color: var(--dm-primary-color);
+}
+
+body.dark-mode .stat-card.highlight .stat-value {
+    color: var(--dm-accent-color);
+}
+
+body.dark-mode .stat-label {
+    color: var(--dm-text-muted);
+}
+
+/* Dark Mode Tables */
+body.dark-mode table {
+    background-color: var(--dm-surface-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode th {
+    background-color: var(--dm-primary-color);
+}
+
+body.dark-mode td {
+    border-bottom-color: var(--dm-border-color);
+}
+
+body.dark-mode tr:hover {
+    background-color: rgba(10, 186, 181, 0.05);
+}
+
+body.dark-mode tr.highlight-row {
+    background-color: rgba(39, 174, 96, 0.1);
+}
+
+body.dark-mode td.protect {
+    color: var(--dm-success-color);
+}
+
+body.dark-mode td.better {
+    color: var(--dm-success-color);
+}
+
+body.dark-mode .badge.success {
+    background-color: rgba(39, 174, 96, 0.2);
+    color: var(--dm-success-color);
+}
+
+body.dark-mode .badge.warning {
+    background-color: rgba(231, 76, 60, 0.2);
+    color: var(--dm-accent-color);
+}
+
+/* Dark Mode Chart Container */
+body.dark-mode .chart-container {
+    background-color: var(--dm-surface-color);
+    border-color: var(--dm-border-color);
+}
+
+body.dark-mode .chart-caption {
+    color: var(--dm-text-muted);
+}
+
+/* Dark Mode Highlight Box */
+body.dark-mode .highlight-box {
+    background-color: rgba(10, 186, 181, 0.15);
+    border-left-color: var(--dm-primary-color);
+}
+
+/* Dark Mode Formula Box */
+body.dark-mode .formula-box {
+    background-color: var(--dm-surface-color);
+    border-color: var(--dm-border-color);
+}
+
+body.dark-mode .formula-box .formula {
+    background-color: rgba(10, 186, 181, 0.2);
+    color: var(--dm-primary-color);
+}
+
+/* Dark Mode Key Finding */
+body.dark-mode .key-finding {
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.15), rgba(10, 186, 181, 0.15));
+    border-color: var(--dm-success-color);
+}
+
+body.dark-mode .key-finding h4 {
+    color: var(--dm-success-color);
+}
+
+/* Dark Mode Interpretation Box */
+body.dark-mode .interpretation-box {
+    background-color: rgba(10, 186, 181, 0.1);
+    border-color: var(--dm-primary-color);
+}
+
+body.dark-mode .interpretation-box h4 {
+    color: var(--dm-primary-color);
+}
+
+/* Dark Mode Model Metrics */
+body.dark-mode .metric {
+    background-color: var(--dm-surface-color);
+    border-color: var(--dm-border-color);
+}
+
+body.dark-mode .metric-value {
+    color: var(--dm-primary-color);
+}
+
+body.dark-mode .metric-label {
+    color: var(--dm-text-muted);
+}
+
+/* Dark Mode Customer Types */
+body.dark-mode .customer-type {
+    background-color: var(--dm-surface-color);
+    border-color: var(--dm-border-color);
+}
+
+body.dark-mode .customer-type:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .customer-type.high-risk {
+    border-color: var(--dm-accent-color);
+}
+
+body.dark-mode .customer-type.medium-risk {
+    border-color: #F39C12;
+}
+
+body.dark-mode .customer-type.low-risk {
+    border-color: var(--dm-success-color);
+}
+
+body.dark-mode .customer-type.high-risk h4 {
+    color: var(--dm-accent-color);
+}
+
+body.dark-mode .customer-type.medium-risk h4 {
+    color: #F39C12;
+}
+
+body.dark-mode .customer-type.low-risk h4 {
+    color: var(--dm-success-color);
+}
+
+body.dark-mode .customer-type .features {
+    color: var(--dm-text-muted);
+}
+
+body.dark-mode .customer-type.high-risk .clv-value {
+    color: var(--dm-accent-color);
+}
+
+body.dark-mode .customer-type.medium-risk .clv-value {
+    color: #F39C12;
+}
+
+body.dark-mode .customer-type.low-risk .clv-value {
+    color: var(--dm-success-color);
+}
+
+body.dark-mode .customer-type .clv-label {
+    color: var(--dm-text-muted);
+}
+
+/* Dark Mode Findings */
+body.dark-mode .finding-item {
+    background-color: var(--dm-surface-color);
+    border-color: var(--dm-border-color);
+}
+
+body.dark-mode .finding-number {
+    background-color: var(--dm-primary-color);
+}
+
+body.dark-mode .finding-content h4 {
+    color: var(--dm-secondary-color);
+}
+
+body.dark-mode .finding-content p {
+    color: var(--dm-text-muted);
+}
+
+/* Dark Mode Recommendations */
+body.dark-mode .recommendation {
+    background-color: var(--dm-surface-color);
+    border-color: var(--dm-border-color);
+}
+
+body.dark-mode .recommendation h4 {
+    color: var(--dm-primary-color);
+    border-bottom-color: rgba(10, 186, 181, 0.3);
+}
+
+/* Dark Mode Limitations */
+body.dark-mode .limitations {
+    background-color: rgba(231, 76, 60, 0.1);
+    border-color: rgba(231, 76, 60, 0.4);
+}
+
+/* Dark Mode Collapsible Code */
+body.dark-mode .collapsible-code {
+    border-color: var(--dm-border-color);
+}
+
+body.dark-mode .collapsible-trigger {
+    background-color: var(--dm-surface-color);
+    color: var(--dm-text-color);
+}
+
+body.dark-mode .collapsible-trigger:hover {
+    background-color: rgba(10, 186, 181, 0.1);
+}
+
+body.dark-mode .collapsible-trigger span {
+    color: var(--dm-primary-color);
+}
+
+body.dark-mode .collapsible-trigger .chevron {
+    color: var(--dm-text-muted);
+}
+
+body.dark-mode .collapsible-content {
+    background-color: #1A1A1A;
+}
+
+/* Dark Mode References */
+body.dark-mode .references-list li {
+    border-bottom-color: var(--dm-border-color);
+}
+
+body.dark-mode .reference-desc {
+    color: var(--dm-text-muted);
+}
+
+/* Dark Mode Footer */
+body.dark-mode .article-footer {
+    border-top-color: var(--dm-border-color);
+    color: var(--dm-text-muted);
+}
+
+/* Dark Mode Plotly Charts Override */
+body.dark-mode .js-plotly-plot .plotly .main-svg {
+    background-color: var(--dm-surface-color) !important;
+}
+
+body.dark-mode .js-plotly-plot .plotly .bg {
+    fill: var(--dm-surface-color) !important;
+}
+
+body.dark-mode .js-plotly-plot .plotly .xtitle,
+body.dark-mode .js-plotly-plot .plotly .ytitle,
+body.dark-mode .js-plotly-plot .plotly .g-gtitle {
+    fill: var(--dm-text-color) !important;
+}
+
+body.dark-mode .js-plotly-plot .plotly .xtick text,
+body.dark-mode .js-plotly-plot .plotly .ytick text {
+    fill: var(--dm-text-muted) !important;
+}

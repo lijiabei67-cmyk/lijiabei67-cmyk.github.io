@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用生存分析预测客户流失 | 数据分析博客</title>
+    <meta name="description" content="探索 Kaplan-Meier 和 Cox 回归如何帮助电信公司识别流失风险因素，预测客户生命周期价值。基于 IBM Telco Customer Churn 数据集的生存分析实战案例。">
+    <meta name="keywords" content="生存分析, Kaplan-Meier, Cox 回归, 客户流失, 电信行业, 数据分析">
+    <meta name="author" content="Data Analysis Blog">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="用生存分析预测客户流失：从 Kaplan-Meier 到 Cox 回归">
+    <meta property="og:description" content="探索 Kaplan-Meier 和 Cox 回归如何帮助电信公司识别流失风险因素，预测客户生命周期价值。">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://lijiabei67-cmyk.github.io/survival-analysis/">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/dark.css" media="(prefers-color-scheme: dark)" disabled>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="./assets/img/favicon.ico">
+
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" defer></script>
+
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js" defer></script>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+    <!-- Navigation Sidebar (Desktop) -->
+    <nav class="sidebar-nav" id="sidebarNav">
+        <h4>目录</h4>
+        <ul>
+            <li><a href="#background">背景与目标</a></li>
+            <li><a href="#data-overview">数据概览</a></li>
+            <li><a href="#kaplan-meier">Kaplan-Meier 分析</a></li>
+            <li><a href="#cox-model">Cox 比例风险模型</a></li>
+            <li><a href="#aft-model">AFT 模型对比</a></li>
+            <li><a href="#clv">客户生命周期价值</a></li>
+            <li><a href="#conclusion">结论与建议</a></li>
+            <li><a href="#technical-details">技术细节</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Article Header -->
+        <header class="article-header">
+            <h1>用生存分析预测客户流失：从 Kaplan-Meier 到 Cox 回归</h1>
+
+            <div class="article-meta">
+                <span class="date">2026-04-27</span>
+                <span class="reading-time">预计阅读 15 分钟</span>
+            </div>
+
+            <div class="article-keywords">
+                <span class="keyword">生存分析</span>
+                <span class="keyword">客户流失</span>
+                <span class="keyword">Kaplan-Meier</span>
+                <span class="keyword">Cox 回归</span>
+                <span class="keyword">电信行业</span>
+            </div>
+
+            <div class="article-abstract">
+                <h3>摘要</h3>
+                <p>本文基于 IBM Telco Customer Churn 数据集，运用生存分析方法预测电信客户流失。通过 Kaplan-Meier 估计器分析客户留存曲线，使用 Cox 比例风险模型识别关键风险因素，并对比 Log-Logistic AFT 模型的预测效果。研究发现，在线备份服务（HR=0.46）和技术支持服务（HR=0.53）是最强的客户留存保护因素。结合客户生命周期价值（CLV）计算，为电信公司客户保留策略提供数据驱动的决策支持。</p>
+            </div>
+        </header>
+
+        <!-- Section 1: Background -->
+        <section id="background" class="article-section">
+            <h2>1. 背景与目标</h2>
+
+            <h3>为什么用生存分析？</h3>
+            <p>传统的客户流失预测方法（如逻辑回归、决策树）通常将流失视为二元分类问题，忽略了<strong>时间维度</strong>的重要信息。生存分析（Survival Analysis）是一组专门用于分析"事件发生时间"的统计方法，能够：</p>
+            <ul>
+                <li>处理<strong>删失数据</strong>（Censored Data）：客户在观察期结束时仍未流失</li>
+                <li>估计<strong>生存函数</strong>：客户在不同时间点的留存概率</li>
+                <li>识别<strong>风险因素</strong>：哪些因素影响客户流失速度</li>
+            </ul>
+
+            <h3>业务场景</h3>
+            <p>电信行业面临激烈的客户竞争，获取新客户的成本远高于保留现有客户。通过生存分析，我们可以：</p>
+            <ol>
+                <li>预测客户在不同时间点的流失风险</li>
+                <li>识别高风险客户群体，实施针对性干预</li>
+                <li>计算客户生命周期价值（CLV），优化获客策略</li>
+            </ol>
+
+            <h3>分析目标</h3>
+            <div class="highlight-box">
+                <ul>
+                    <li><strong>识别流失风险因素</strong>：哪些服务或客户特征影响留存</li>
+                    <li><strong>预测客户价值</strong>：计算不同客户群体的 CLV</li>
+                    <li><strong>提供业务建议</strong>：基于分析结果提出可落地的策略</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 2: Data Overview -->
+        <section id="data-overview" class="article-section">
+            <h2>2. 数据概览</h2>
+
+            <h3>数据来源</h3>
+            <p>使用 <a href="https://github.com/IBM/telco-customer-churn-on-icp4d" target="_blank" rel="noopener">IBM Telco Customer Churn</a> 数据集，该数据集包含电信公司客户的行为和账户信息。</p>
+
+            <div class="data-stats">
+                <div class="stat-card">
+                    <span class="stat-value">7,043</span>
+                    <span class="stat-label">原始记录数</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">21</span>
+                    <span class="stat-label">特征字段</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">3,351</span>
+                    <span class="stat-label">筛选后记录</span>
+                </div>
+                <div class="stat-card highlight">
+                    <span class="stat-value">46.43%</span>
+                    <span class="stat-label">流失率</span>
+                </div>
+            </div>
+
+            <h3>关键字段</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>类型</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>tenure</code></td>
+                            <td>数值</td>
+                            <td>客户在公司的持续时间（月）- 生存分析的时间变量</td>
+                        </tr>
+                        <tr>
+                            <td><code>Churn</code></td>
+                            <td>分类</td>
+                            <td>客户是否流失（Yes/No）- 生存分析的事件变量</td>
+                        </tr>
+                        <tr>
+                            <td><code>InternetService</code></td>
+                            <td>分类</td>
+                            <td>互联网服务类型（DSL / Fiber optic / No）</td>
+                        </tr>
+                        <tr>
+                            <td><code>OnlineSecurity</code></td>
+                            <td>分类</td>
+                            <td>是否有网络安全服务</td>
+                        </tr>
+                        <tr>
+                            <td><code>OnlineBackup</code></td>
+                            <td>分类</td>
+                            <td>是否有在线备份服务</td>
+                        </tr>
+                        <tr>
+                            <td><code>TechSupport</code></td>
+                            <td>分类</td>
+                            <td>是否有技术支持服务</td>
+                        </tr>
+                        <tr>
+                            <td><code>Contract</code></td>
+                            <td>分类</td>
+                            <td>合同类型（Month-to-month / One year / Two year）</td>
+                        </tr>
+                        <tr>
+                            <td><code>PaymentMethod</code></td>
+                            <td>分类</td>
+                            <td>付款方式</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>筛选条件</h3>
+            <p>为了聚焦分析，我们筛选了以下条件的客户：</p>
+            <ol>
+                <li><strong>合同类型为月付</strong>（Month-to-month）：月付客户流失风险更高，更具分析价值</li>
+                <li><strong>有互联网服务</strong>（InternetService != 'No'）：排除无互联网服务的客户</li>
+            </ol>
+
+            <h3>样本分布</h3>
+            <div class="chart-container">
+                <div id="churnDistributionChart"></div>
+                <p class="chart-caption">图 1：筛选后数据集的流失分布（流失率 46.43%）</p>
+            </div>
+        </section>
+
+        <!-- Section 3: Kaplan-Meier -->
+        <section id="kaplan-meier" class="article-section">
+            <h2>3. Kaplan-Meier 生存分析</h2>
+
+            <h3>方法原理</h3>
+            <p>Kaplan-Meier 是一种<strong>非参数方法</strong>，用于估计生存函数 S(t)，即个体在时间 t 仍然存活的概率。</p>
+
+            <div class="formula-box">
+                <p><strong>核心公式：</strong></p>
+                <p class="formula">S(t) = &prod;<sub>t<sub>i</sub> &le; t</sub> (1 - d<sub>i</sub>/n<sub>i</sub>)</p>
+                <p>其中 d<sub>i</sub> 是在时间 t<sub>i</sub> 发生事件的数量，n<sub>i</sub> 是在时间 t<sub>i</sub> 面临风险的个体数量。</p>
+            </div>
+
+            <h3>整体生存曲线</h3>
+            <div class="chart-container">
+                <div id="kmOverallChart"></div>
+                <p class="chart-caption">图 2：Kaplan-Meier 整体生存曲线（含 95% 置信区间）</p>
+            </div>
+
+            <div class="key-finding">
+                <h4>关键发现</h4>
+                <p><strong>中位生存时间：34 个月</strong></p>
+                <p>这意味着有 50% 的月付互联网客户会在 34 个月内流失。置信区间随时间变宽，因为留存时间越长的客户数量越少，不确定性增加。</p>
+            </div>
+
+            <h3>生存概率变化趋势</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>时间点</th>
+                            <th>生存概率</th>
+                            <th>解读</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>0 月</td><td>100%</td><td>所有客户初始留存</td></tr>
+                        <tr><td>12 月</td><td>~65%</td><td>约 35% 的客户在第一年内流失</td></tr>
+                        <tr><td>24 月</td><td>~50%</td><td>两年后约一半客户流失</td></tr>
+                        <tr><td>34 月</td><td>50%</td><td>中位数，半数客户已流失</td></tr>
+                        <tr><td>48 月</td><td>~35%</td><td>长期留存客户</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>分层生存分析</h3>
+            <p>通过按不同变量分组绘制生存曲线，我们可以识别哪些因素对客户留存有显著影响。</p>
+
+            <h4>按网络安全服务分组</h4>
+            <div class="chart-container">
+                <div id="kmOnlineSecurityChart"></div>
+                <p class="chart-caption">图 3：按网络安全服务分组的 Kaplan-Meier 生存曲线</p>
+            </div>
+
+            <div class="interpretation-box">
+                <p><strong>Log-rank 检验结果：p &lt; 0.05</strong></p>
+                <p>有网络安全服务的客户生存曲线明显高于无服务的客户，表明网络安全服务对客户留存有显著的正向影响。</p>
+            </div>
+
+            <h4>按技术支持服务分组</h4>
+            <div class="chart-container">
+                <div id="kmTechSupportChart"></div>
+                <p class="chart-caption">图 4：按技术支持服务分组的 Kaplan-Meier 生存曲线</p>
+            </div>
+
+            <h4>按互联网服务类型分组</h4>
+            <div class="chart-container">
+                <div id="kmInternetServiceChart"></div>
+                <p class="chart-caption">图 5：按互联网服务类型分组的 Kaplan-Meier 生存曲线</p>
+            </div>
+
+            <h3>Log-rank 检验结果汇总</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>变量</th>
+                            <th>是否显著</th>
+                            <th>业务含义</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="significant">
+                            <td>OnlineSecurity</td>
+                            <td><span class="badge success">显著</span></td>
+                            <td>有网络安全服务的客户留存率更高</td>
+                        </tr>
+                        <tr class="significant">
+                            <td>TechSupport</td>
+                            <td><span class="badge success">显著</span></td>
+                            <td>有技术支持的客户留存率更高</td>
+                        </tr>
+                        <tr class="significant">
+                            <td>InternetService</td>
+                            <td><span class="badge success">显著</span></td>
+                            <td>DSL 客户比光纤客户留存率更高</td>
+                        </tr>
+                        <tr class="significant">
+                            <td>Partner</td>
+                            <td><span class="badge success">显著</span></td>
+                            <td>有伴侣的客户留存率更高</td>
+                        </tr>
+                        <tr class="significant">
+                            <td>Dependents</td>
+                            <td><span class="badge success">显著</span></td>
+                            <td>有受抚养人的客户留存率更高</td>
+                        </tr>
+                        <tr class="not-significant">
+                            <td>gender</td>
+                            <td><span class="badge warning">不显著</span></td>
+                            <td>性别不是客户流失的显著影响因素</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 4: Cox Model -->
+        <section id="cox-model" class="article-section">
+            <h2>4. Cox 比例风险模型</h2>
+
+            <h3>方法原理</h3>
+            <p>Cox 比例风险模型是一种<strong>半参数方法</strong>，支持多变量分析，可以同时考虑多个协变量对生存时间的影响。</p>
+
+            <div class="formula-box">
+                <p><strong>模型方程：</strong></p>
+                <p class="formula">h(t|X) = h<sub>0</sub>(t) &times; exp(&beta;<sub>1</sub>X<sub>1</sub> + &beta;<sub>2</sub>X<sub>2</sub> + ... + &beta;<sub>p</sub>X<sub>p</sub>)</p>
+                <p>其中 h(t|X) 是条件风险函数，h<sub>0</sub>(t) 是基线风险，&beta;<sub>i</sub> 是回归系数。</p>
+            </div>
+
+            <h3>风险比（Hazard Ratio）解读</h3>
+            <ul>
+                <li><strong>HR &gt; 1</strong>：增加风险（加速流失）</li>
+                <li><strong>HR &lt; 1</strong>：降低风险（延缓流失）</li>
+                <li><strong>HR = 1</strong>：无影响</li>
+            </ul>
+
+            <h3>模型变量</h3>
+            <p>基于 Kaplan-Meier 分析结果，选择以下显著变量进入 Cox 模型：</p>
+            <ul>
+                <li><code>Dependents_Yes</code>：是否有受抚养人</li>
+                <li><code>InternetService_DSL</code>：是否使用 DSL 服务</li>
+                <li><code>OnlineBackup_Yes</code>：是否有在线备份服务</li>
+                <li><code>TechSupport_Yes</code>：是否有技术支持服务</li>
+            </ul>
+
+            <h3>模型结果</h3>
+            <div class="chart-container">
+                <div id="forestPlot"></div>
+                <p class="chart-caption">图 6：Cox 模型风险比森林图（Hazard Ratios + 95% CI）</p>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>变量</th>
+                            <th>coef</th>
+                            <th>exp(coef) HR</th>
+                            <th>se(coef)</th>
+                            <th>p 值</th>
+                            <th>95% CI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Dependents_Yes</td>
+                            <td>-0.33</td>
+                            <td class="protect">0.72</td>
+                            <td>0.07</td>
+                            <td>&lt;0.005</td>
+                            <td>[0.63, 0.83]</td>
+                        </tr>
+                        <tr>
+                            <td>InternetService_DSL</td>
+                            <td>-0.22</td>
+                            <td class="protect">0.80</td>
+                            <td>0.06</td>
+                            <td>&lt;0.005</td>
+                            <td>[0.72, 0.90]</td>
+                        </tr>
+                        <tr>
+                            <td>OnlineBackup_Yes</td>
+                            <td>-0.78</td>
+                            <td class="protect highlight">0.46</td>
+                            <td>0.06</td>
+                            <td>&lt;0.005</td>
+                            <td>[0.41, 0.52]</td>
+                        </tr>
+                        <tr>
+                            <td>TechSupport_Yes</td>
+                            <td>-0.64</td>
+                            <td class="protect">0.53</td>
+                            <td>0.08</td>
+                            <td>&lt;0.005</td>
+                            <td>[0.46, 0.61]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="model-metrics">
+                <div class="metric">
+                    <span class="metric-value">0.64</span>
+                    <span class="metric-label">Concordance</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">22639.90</span>
+                    <span class="metric-label">Partial AIC</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">337.77</span>
+                    <span class="metric-label">Log-likelihood &chi;&sup2;</span>
+                </div>
+            </div>
+
+            <h3>结果解读</h3>
+            <div class="interpretation-box">
+                <h4>通俗解读</h4>
+                <ul>
+                    <li><strong>在线备份服务</strong>：有在线备份的客户流失风险降低 <strong>54%</strong>（HR=0.46）</li>
+                    <li><strong>技术支持服务</strong>：有技术支持的客户流失风险降低 <strong>47%</strong>（HR=0.53）</li>
+                    <li><strong>有受抚养人</strong>：有受抚养人的客户流失风险降低 <strong>28%</strong>（HR=0.72）</li>
+                    <li><strong>DSL 服务</strong>：DSL 客户比光纤客户流失风险降低 <strong>20%</strong>（HR=0.80）</li>
+                </ul>
+            </div>
+
+            <div class="key-finding">
+                <h4>关键发现</h4>
+                <p><strong>在线备份服务</strong>是最强的保护因素（HR=0.46），其次是<strong>技术支持服务</strong>（HR=0.53）。所有纳入模型的变量都是保护因素（HR &lt; 1），且统计显著（p &lt; 0.005）。</p>
+            </div>
+
+            <h3>比例风险假设检验</h3>
+            <p>Cox 模型假设各组之间的风险比随时间保持恒定。我们使用 Schoenfeld 残差检验和 Log-log Kaplan-Meier 图进行验证。</p>
+
+            <div class="chart-container">
+                <div id="logLogChart"></div>
+                <p class="chart-caption">图 7：Log-log Kaplan-Meier 图（用于检验比例风险假设）</p>
+            </div>
+
+            <p>如果 Log-log 图中的曲线平行，则满足比例风险假设。如果曲线交叉或不平行，可能需要考虑分层模型或时间依赖变量。</p>
+        </section>
+
+        <!-- Section 5: AFT Model -->
+        <section id="aft-model" class="article-section">
+            <h2>5. AFT 模型对比</h2>
+
+            <h3>方法原理</h3>
+            <p>加速失效时间（Accelerated Failure Time, AFT）模型是一种<strong>参数方法</strong>，假设生存时间服从特定分布。与 Cox 模型不同，AFT 模型直接估计生存时间的变化。</p>
+
+            <div class="formula-box">
+                <p><strong>模型方程：</strong></p>
+                <p class="formula">S<sub>A</sub>(t) = S<sub>B</sub>(&lambda;t)</p>
+                <p>其中 &lambda; 是加速因子：&lambda; &gt; 1 表示 B 组生存时间被"延长"，&lambda; &lt; 1 表示被"加速"。</p>
+            </div>
+
+            <h3>Cox vs AFT 对比</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>特性</th>
+                            <th>Cox 模型</th>
+                            <th>AFT 模型</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>类型</td>
+                            <td>半参数</td>
+                            <td>参数</td>
+                        </tr>
+                        <tr>
+                            <td>估计量</td>
+                            <td>风险比（Hazard Ratio）</td>
+                            <td>时间加速因子</td>
+                        </tr>
+                        <tr>
+                            <td>分布假设</td>
+                            <td>无</td>
+                            <td>需要指定分布（Log-Logistic）</td>
+                        </tr>
+                        <tr>
+                            <td>可解释性</td>
+                            <td>风险变化</td>
+                            <td>时间变化（更直观）</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td>Concordance</td>
+                            <td>0.64</td>
+                            <td class="better">0.73</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Log-Logistic AFT 模型结果</h3>
+            <div class="chart-container">
+                <div id="aftCoefficientsChart"></div>
+                <p class="chart-caption">图 8：AFT 模型时间加速因子</p>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>变量</th>
+                            <th>exp(coef)</th>
+                            <th>解读</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>OnlineSecurity_Yes</td>
+                            <td class="protect highlight">2.37</td>
+                            <td>有网络安全服务的客户留存时间延长 <strong>137%</strong></td>
+                        </tr>
+                        <tr>
+                            <td>OnlineBackup_Yes</td>
+                            <td class="protect">2.25</td>
+                            <td>有在线备份的客户留存时间延长 <strong>125%</strong></td>
+                        </tr>
+                        <tr>
+                            <td>PaymentMethod_Credit card</td>
+                            <td class="protect">2.22</td>
+                            <td>信用卡自动付款客户留存时间延长 <strong>122%</strong></td>
+                        </tr>
+                        <tr>
+                            <td>TechSupport_Yes</td>
+                            <td class="protect">1.99</td>
+                            <td>有技术支持的客户留存时间延长 <strong>99%</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Partner_Yes</td>
+                            <td class="protect">1.97</td>
+                            <td>有伴侣的客户留存时间延长 <strong>97%</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="key-finding">
+                <h4>结论</h4>
+                <p>AFT 模型在本数据集上表现更好（Concordance 0.73 vs 0.64），且时间加速因子的解释更直观，便于业务理解。</p>
+            </div>
+        </section>
+
+        <!-- Section 6: CLV -->
+        <section id="clv" class="article-section">
+            <h2>6. 客户生命周期价值 (CLV)</h2>
+
+            <h3>计算方法</h3>
+            <div class="formula-box">
+                <p><strong>CLV 计算公式：</strong></p>
+                <p class="formula">CLV = &Sigma;<sub>t=0</sub><sup>T</sup> [S(t) &times; M] / (1+r)<sup>t</sup></p>
+                <p>其中 S(t) 是时间 t 的生存概率，M 是月利润，r 是月折现率，T 是计算周期。</p>
+            </div>
+
+            <h3>参数设置</h3>
+            <ul>
+                <li><strong>月利润</strong>：$30</li>
+                <li><strong>年折现率</strong>：10%</li>
+                <li><strong>计算周期</strong>：36 个月</li>
+            </ul>
+
+            <h3>不同客户类型 CLV 对比</h3>
+            <div class="chart-container">
+                <div id="clvChart"></div>
+                <p class="chart-caption">图 9：不同客户类型的生命周期价值对比（36 个月累计 NPV）</p>
+            </div>
+
+            <div class="customer-types">
+                <div class="customer-type high-risk">
+                    <h4>高风险客户</h4>
+                    <p class="features">无受抚养人、光纤服务、无在线备份、无技术支持</p>
+                    <p class="clv-value">$468.52</p>
+                    <p class="clv-label">36 个月 CLV</p>
+                </div>
+                <div class="customer-type medium-risk">
+                    <h4>中等风险客户</h4>
+                    <p class="features">有受抚养人、DSL 服务、无在线备份、无技术支持</p>
+                    <p class="clv-value">$560.87</p>
+                    <p class="clv-label">36 个月 CLV</p>
+                </div>
+                <div class="customer-type low-risk">
+                    <h4>低风险客户</h4>
+                    <p class="features">有受抚养人、DSL 服务、有在线备份、有技术支持</p>
+                    <p class="clv-value">$672.34</p>
+                    <p class="clv-label">36 个月 CLV</p>
+                </div>
+            </div>
+
+            <div class="key-finding">
+                <h4>关键发现</h4>
+                <p>低风险客户的 36 个月 CLV 比高风险客户高 <strong>43%</strong>（$672.34 vs $468.52），证明了客户保留策略的重要性。</p>
+            </div>
+
+            <h3>获客成本分析</h3>
+            <p>假设获客成本（CAC）为 $100，分析各类型客户的回本周期：</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>客户类型</th>
+                            <th>36 个月 CLV</th>
+                            <th>回本月份</th>
+                            <th>CLV/CAC 比率</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>高风险客户</td>
+                            <td>$468.52</td>
+                            <td>第 4 个月</td>
+                            <td>4.7x</td>
+                        </tr>
+                        <tr>
+                            <td>中等风险客户</td>
+                            <td>$560.87</td>
+                            <td>第 3 个月</td>
+                            <td>5.6x</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td>低风险客户</td>
+                            <td>$672.34</td>
+                            <td>第 3 个月</td>
+                            <td class="better">6.7x</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="interpretation-box">
+                <h4>业务建议</h4>
+                <ol>
+                    <li>所有客户类型都能在 <strong>4 个月内收回获客成本</strong>，说明业务模式健康</li>
+                    <li>低风险客户价值最高，应优先获取和保留</li>
+                    <li>应重点推广在线备份和技术支持服务，提升客户价值</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Section 7: Conclusion -->
+        <section id="conclusion" class="article-section">
+            <h2>7. 结论与业务建议</h2>
+
+            <h3>核心发现</h3>
+            <div class="findings-list">
+                <div class="finding-item">
+                    <span class="finding-number">1</span>
+                    <div class="finding-content">
+                        <h4>最强保护因素</h4>
+                        <p>在线备份服务（HR=0.46）和技术支持服务（HR=0.53）是客户留存的最强保护因素。有这些服务的客户流失风险降低近一半。</p>
+                    </div>
+                </div>
+                <div class="finding-item">
+                    <span class="finding-number">2</span>
+                    <div class="finding-content">
+                        <h4>非显著因素</h4>
+                        <p>性别不是客户流失的显著影响因素（p &gt; 0.05），营销策略无需区分性别。</p>
+                    </div>
+                </div>
+                <div class="finding-item">
+                    <span class="finding-number">3</span>
+                    <div class="finding-content">
+                        <h4>模型对比</h4>
+                        <p>AFT 模型（Concordance=0.73）优于 Cox 模型（Concordance=0.64），且时间加速因子的解释更直观。</p>
+                    </div>
+                </div>
+                <div class="finding-item">
+                    <span class="finding-number">4</span>
+                    <div class="finding-content">
+                        <h4>客户价值差异</h4>
+                        <p>低风险客户 36 个月 CLV 比高风险客户高 43%，所有客户类型都能在 4 个月内收回获客成本。</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>业务建议</h3>
+            <div class="recommendations">
+                <div class="recommendation">
+                    <h4>客户保留策略</h4>
+                    <ul>
+                        <li>重点推广<strong>在线备份</strong>和<strong>技术支持</strong>服务</li>
+                        <li>鼓励客户使用<strong>自动付款方式</strong></li>
+                        <li>关注<strong>光纤服务</strong>客户的流失风险，提升服务质量</li>
+                    </ul>
+                </div>
+                <div class="recommendation">
+                    <h4>客户获取策略</h4>
+                    <ul>
+                        <li>优先获取<strong>有受抚养人、有伴侣</strong>的客户群体</li>
+                        <li>推广 <strong>DSL 服务套餐</strong>，降低光纤客户流失风险</li>
+                        <li>设计包含增值服务的<strong>组合套餐</strong></li>
+                    </ul>
+                </div>
+                <div class="recommendation">
+                    <h4>服务改进方向</h4>
+                    <ul>
+                        <li>提升光纤服务的客户体验</li>
+                        <li>开发更多增值服务提高客户粘性</li>
+                        <li>建立客户流失预警系统</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>方法局限性</h3>
+            <div class="limitations">
+                <ul>
+                    <li><strong>数据局限</strong>：数据为样本数据，实际应用需结合真实业务数据</li>
+                    <li><strong>模型假设</strong>：Cox 模型需满足比例风险假设，AFT 模型需指定分布</li>
+                    <li><strong>外部因素</strong>：未考虑竞争对手、市场环境等外部因素</li>
+                    <li><strong>时间范围</strong>：CLV 计算基于 36 个月预测，长期预测不确定性较高</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 8: Technical Details -->
+        <section id="technical-details" class="article-section">
+            <h2>8. 技术细节</h2>
+
+            <div class="collapsible-code">
+                <button class="collapsible-trigger" aria-expanded="false">
+                    <span>数据预处理代码</span>
+                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="collapsible-content">
+                    <pre><code class="language-python"># 数据预处理
+import pandas as pd
+
+# 加载数据
+df = pd.read_csv("Telco-Customer-Churn.csv")
+
+# 将 Churn 列转换为数值: Yes -> 1, No -> 0
+df['churn'] = df['Churn'].map({'Yes': 1, 'No': 0})
+
+# 筛选条件：
+# 1. 合同类型为月付 (Month-to-month)
+# 2. 有互联网服务 (InternetService != 'No')
+telco_pd = df[
+    (df['Contract'] == 'Month-to-month') &
+    (df['InternetService'] != 'No')
+].copy()
+
+print(f"筛选后数据集大小: {telco_pd.shape[0]} 行")
+print(f"流失比例: {telco_pd['churn'].mean()*100:.2f}%")</code></pre>
+                    <button class="copy-btn" data-copy="data-preprocessing">复制代码</button>
+                </div>
+            </div>
+
+            <div class="collapsible-code">
+                <button class="collapsible-trigger" aria-expanded="false">
+                    <span>Kaplan-Meier 模型代码</span>
+                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="collapsible-content">
+                    <pre><code class="language-python">from lifelines import KaplanMeierFitter
+
+# 创建 Kaplan-Meier 拟合器
+kmf = KaplanMeierFitter()
+
+# 准备数据
+T = telco_pd['tenure']  # 持续时间
+C = telco_pd['churn'].astype(float)  # 事件观察
+
+# 拟合模型
+kmf.fit(T, C)
+
+print(f"中位生存时间: {kmf.median_survival_time_} 个月")
+
+# 绘制生存曲线
+import matplotlib.pyplot as plt
+plt.figure(figsize=(12, 6))
+kmf.plot(title='Kaplan-Meier 生存曲线',
+         xlabel='时间（月）',
+         ylabel='生存概率')
+plt.show()</code></pre>
+                    <button class="copy-btn" data-copy="km-model">复制代码</button>
+                </div>
+            </div>
+
+            <div class="collapsible-code">
+                <button class="collapsible-trigger" aria-expanded="false">
+                    <span>Cox 比例风险模型代码</span>
+                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="collapsible-content">
+                    <pre><code class="language-python">from lifelines import CoxPHFitter
+import pandas as pd
+
+# One-Hot 编码
+encode_cols = ['Dependents', 'InternetService', 'OnlineBackup', 'TechSupport']
+encoded_pd = pd.get_dummies(telco_pd, columns=encode_cols, prefix=encode_cols)
+
+# 选择建模变量
+survival_pd = encoded_pd[['churn', 'tenure',
+                          'Dependents_Yes',
+                          'InternetService_DSL',
+                          'OnlineBackup_Yes',
+                          'TechSupport_Yes']]
+
+# 拟合 Cox 模型
+cph = CoxPHFitter(alpha=0.05)
+cph.fit(survival_pd, duration_col='tenure', event_col='churn')
+
+# 打印模型摘要
+cph.print_summary()
+
+# 检验比例风险假设
+cph.check_assumptions(survival_pd, p_value_threshold=0.05)</code></pre>
+                    <button class="copy-btn" data-copy="cox-model">复制代码</button>
+                </div>
+            </div>
+
+            <div class="collapsible-code">
+                <button class="collapsible-trigger" aria-expanded="false">
+                    <span>CLV 计算代码</span>
+                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="collapsible-content">
+                    <pre><code class="language-python">def calculate_clv(customer_features, monthly_profit=30, irr=0.10, months=36):
+    """
+    计算客户生命周期价值
+
+    参数:
+        customer_features: dict, 客户特征
+        monthly_profit: float, 月利润
+        irr: float, 年折现率
+        months: int, 计算月数
+    """
+    import pandas as pd
+
+    # 将客户特征转换为 DataFrame
+    customer_df = pd.DataFrame([customer_features])
+
+    # 预测生存概率
+    survival_probs = cph.predict_survival_function(customer_df)
+
+    # 创建结果表
+    result = pd.DataFrame()
+    result['月份'] = range(0, months + 1)
+    result['生存概率'] = survival_probs.values[:months+1, 0]
+    result['预期月利润'] = result['生存概率'] * monthly_profit
+
+    # 计算 NPV
+    monthly_irr = irr / 12
+    result['NPV'] = result['预期月利润'] / ((1 + monthly_irr) ** result['月份'])
+    result['累计NPV'] = result['NPV'].cumsum()
+
+    return result
+
+# 示例：计算低风险客户的 CLV
+low_risk_customer = {
+    'Dependents_Yes': 1,
+    'InternetService_DSL': 1,
+    'OnlineBackup_Yes': 1,
+    'TechSupport_Yes': 1
+}
+
+clv_result = calculate_clv(low_risk_customer)
+print(f"36 个月 CLV: ${clv_result.loc[36, '累计NPV']:.2f}")</code></pre>
+                    <button class="copy-btn" data-copy="clv-code">复制代码</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 9: References -->
+        <section id="references" class="article-section">
+            <h2>9. 参考资源</h2>
+
+            <div class="references-list">
+                <ul>
+                    <li>
+                        <a href="https://lifelines.readthedocs.io/" target="_blank" rel="noopener">Lifelines 文档</a>
+                        <span class="reference-desc">Python 生存分析库</span>
+                    </li>
+                    <li>
+                        <a href="https://github.com/IBM/telco-customer-churn-on-icp4d" target="_blank" rel="noopener">IBM Telco Customer Churn 数据集</a>
+                        <span class="reference-desc">数据来源</span>
+                    </li>
+                    <li>
+                        <a href="https://github.com/databricks-industry-solutions/survival-analysis" target="_blank" rel="noopener">Databricks 生存分析教程</a>
+                        <span class="reference-desc">参考实现</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="article-footer">
+            <p>&copy; 2026 数据分析博客 | 基于 IBM Telco Customer Churn 数据集</p>
+            <p>使用 Python lifelines 库进行生存分析</p>
+        </footer>
+    </main>
+
+    <!-- Scripts -->
+    <script src="./assets/js/main.js"></script>
+    <script src="./assets/js/charts.js" defer></script>
+</body>
+</html>
