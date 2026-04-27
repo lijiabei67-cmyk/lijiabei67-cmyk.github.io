@@ -8,13 +8,13 @@
     --dm-background-color: #0F0A1F;        /* Deep Dark Purple */
     --dm-surface-color: #1A1333;           /* Dark Purple Surface */
     --dm-surface-elevated: #241845;        /* Elevated Purple */
-    --dm-text-color: #E8E4F3;              /* Light Purple Tint Text */
-    --dm-text-muted: #9F8AC7;              /* Muted Purple */
+    --dm-text-color: #F5F3FF;              /* Bright Light Text - High Contrast */
+    --dm-text-muted: #C4B5FD;              /* Bright Muted Purple - Better Readability */
     --dm-border-color: #3D2E6B;            /* Purple Border */
     --dm-primary-color: #A78BFA;           /* Light Purple (Fluorescent) */
     --dm-primary-light: #C4B5FD;           /* Brighter Purple */
     --dm-primary-dark: #7C3AED;            /* Base Purple */
-    --dm-secondary-color: #E8E4F3;         /* Light Text */
+    --dm-secondary-color: #F5F3FF;         /* Light Text */
     --dm-accent-color: #F472B6;            /* Pink Accent */
     --dm-success-color: #34D399;           /* Bright Green */
     --dm-warning-color: #FBBF24;           /* Bright Amber */
@@ -26,7 +26,7 @@ body.dark-mode {
     color: var(--dm-text-color);
 }
 
-/* Dark Mode Typography */
+/* Dark Mode Typography - Ensure High Contrast */
 body.dark-mode h1 {
     color: var(--dm-primary-color);
     background: linear-gradient(135deg, var(--dm-primary-light), var(--dm-primary-color));
@@ -48,6 +48,18 @@ body.dark-mode h3 {
     color: var(--dm-primary-light);
 }
 
+body.dark-mode h4 {
+    color: var(--dm-text-color);
+}
+
+body.dark-mode p {
+    color: var(--dm-text-color);
+}
+
+body.dark-mode li {
+    color: var(--dm-text-color);
+}
+
 body.dark-mode a {
     color: var(--dm-primary-light);
 }
@@ -57,8 +69,12 @@ body.dark-mode a:hover {
 }
 
 body.dark-mode code {
-    background-color: rgba(167, 139, 250, 0.15);
+    background-color: rgba(167, 139, 250, 0.2);
     color: var(--dm-primary-light);
+}
+
+body.dark-mode strong {
+    color: var(--dm-text-color);
 }
 
 /* Dark Mode Progress Bar */
@@ -190,14 +206,20 @@ body.dark-mode table {
 
 body.dark-mode th {
     background: linear-gradient(135deg, var(--dm-primary-dark), var(--dm-primary-color));
+    color: #FFFFFF;
 }
 
 body.dark-mode td {
     border-bottom-color: var(--dm-border-color);
+    color: var(--dm-text-color);
 }
 
 body.dark-mode tr:hover {
     background-color: rgba(167, 139, 250, 0.05);
+}
+
+body.dark-mode tr:hover td {
+    color: var(--dm-text-color);
 }
 
 body.dark-mode tr.highlight-row {
@@ -238,6 +260,10 @@ body.dark-mode .highlight-box {
     border-left-color: var(--dm-primary-color);
 }
 
+body.dark-mode .highlight-box li {
+    color: var(--dm-text-color);
+}
+
 /* Dark Mode Formula Box */
 body.dark-mode .formula-box {
     background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
@@ -264,6 +290,10 @@ body.dark-mode .key-finding h4 {
     color: var(--dm-success-color);
 }
 
+body.dark-mode .key-finding p {
+    color: var(--dm-text-color);
+}
+
 /* Dark Mode Interpretation Box */
 body.dark-mode .interpretation-box {
     background: linear-gradient(135deg, rgba(167, 139, 250, 0.08), rgba(196, 181, 253, 0.05));
@@ -272,6 +302,14 @@ body.dark-mode .interpretation-box {
 
 body.dark-mode .interpretation-box h4 {
     color: var(--dm-primary-light);
+}
+
+body.dark-mode .interpretation-box li {
+    color: var(--dm-text-color);
+}
+
+body.dark-mode .interpretation-box p {
+    color: var(--dm-text-color);
 }
 
 /* Dark Mode Model Metrics */
@@ -362,7 +400,7 @@ body.dark-mode .finding-content h4 {
 }
 
 body.dark-mode .finding-content p {
-    color: var(--dm-text-muted);
+    color: var(--dm-text-color);
 }
 
 /* Dark Mode Recommendations */
@@ -376,10 +414,18 @@ body.dark-mode .recommendation h4 {
     border-bottom-color: var(--dm-border-color);
 }
 
+body.dark-mode .recommendation li {
+    color: var(--dm-text-color);
+}
+
 /* Dark Mode Limitations */
 body.dark-mode .limitations {
     background: linear-gradient(135deg, rgba(244, 114, 182, 0.08), rgba(244, 114, 182, 0.05));
     border-color: rgba(244, 114, 182, 0.4);
+}
+
+body.dark-mode .limitations li {
+    color: var(--dm-text-color);
 }
 
 /* Dark Mode Collapsible Code */

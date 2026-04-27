@@ -46,22 +46,26 @@ const colors = {
     warning: '#F59E0B',       // Amber
     danger: '#EF4444',        // Red
     light: '#FAF5FF',         // Very Light Purple
-    dark: '#0F0A1F'           // Dark Purple
+    dark: '#0F0A1F',          // Dark Purple
+    surface: '#FFFFFF',
+    text: '#1E1B4B',
+    textMuted: '#6B7280'
 };
 
-// Dark mode colors
+// Dark mode colors - High contrast for visibility
 const darkColors = {
     primary: '#A78BFA',
     primaryLight: '#C4B5FD',
     primaryDark: '#7C3AED',
-    secondary: '#E8E4F3',
+    secondary: '#F5F3FF',     // Bright text
     accent: '#F472B6',
     success: '#34D399',
     warning: '#FBBF24',
     danger: '#F87171',
     surface: '#1A1333',
-    text: '#E8E4F3',
-    textMuted: '#9F8AC7'
+    surfaceLight: '#241845',
+    text: '#F5F3FF',          // Bright white-purple for high contrast
+    textMuted: '#C4B5FD'      // Brighter muted text
 };
 
 // Function to get current theme colors
@@ -73,17 +77,25 @@ function getThemeColors() {
 // Common layout settings
 function getCommonLayout() {
     const themeColors = getThemeColors();
+    const isDark = document.body.classList.contains('dark-mode');
+
     return {
         font: {
             family: "'Source Sans Pro', sans-serif",
             size: 12,
-            color: themeColors.text || themeColors.secondary
+            color: themeColors.text
         },
-        paper_bgcolor: 'rgba(0,0,0,0)',
-        plot_bgcolor: 'rgba(0,0,0,0)',
+        paper_bgcolor: isDark ? 'rgba(26, 19, 51, 0.8)' : 'rgba(0,0,0,0)',
+        plot_bgcolor: isDark ? 'rgba(26, 19, 51, 0.5)' : 'rgba(0,0,0,0)',
         margin: { t: 60, r: 30, b: 60, l: 60 },
         hovermode: 'closest'
     };
+}
+
+// Get grid color based on theme
+function getGridColor() {
+    const isDark = document.body.classList.contains('dark-mode');
+    return isDark ? 'rgba(167, 139, 250, 0.25)' : 'rgba(124, 58, 237, 0.1)';
 }
 
 // Responsive config
@@ -115,7 +127,7 @@ function createChurnDistributionChart() {
         textinfo: 'percent+label',
         textposition: 'outside',
         textfont: {
-            color: themeColors.text || themeColors.secondary,
+            color: themeColors.text,
             size: 13
         },
         hovertemplate: '%{label}: %{value} 人<br>占比: %{percent}<extra></extra>'
@@ -131,7 +143,7 @@ function createChurnDistributionChart() {
         legend: {
             orientation: 'h',
             y: -0.1,
-            font: { color: themeColors.text || themeColors.secondary }
+            font: { color: themeColors.text }
         },
         annotations: [{
             text: '3351<br>客户',
@@ -239,23 +251,23 @@ function createKMOverallChart() {
             font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: { text: '时间（月）', font: { color: themeColors.text || themeColors.secondary } },
-            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            title: { text: '时间（月）', font: { color: themeColors.text } },
+            gridcolor: getGridColor(),
             zeroline: false,
-            tickfont: { color: themeColors.textMuted || '#6B7280' }
+            tickfont: { color: themeColors.textMuted }
         },
         yaxis: {
-            title: { text: '生存概率', font: { color: themeColors.text || themeColors.secondary } },
-            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            title: { text: '生存概率', font: { color: themeColors.text } },
+            gridcolor: getGridColor(),
             zeroline: false,
             tickformat: '.0%',
             range: [0, 1.05],
-            tickfont: { color: themeColors.textMuted || '#6B7280' }
+            tickfont: { color: themeColors.textMuted }
         },
         legend: {
             orientation: 'h',
             y: -0.15,
-            font: { color: themeColors.text || themeColors.secondary }
+            font: { color: themeColors.text }
         }
     };
 
@@ -312,21 +324,21 @@ function createKMOnlineSecurityChart() {
             font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: { text: '时间（月）', font: { color: themeColors.text || themeColors.secondary } },
-            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
-            tickfont: { color: themeColors.textMuted || '#6B7280' }
+            title: { text: '时间（月）', font: { color: themeColors.text } },
+            gridcolor: getGridColor(),
+            tickfont: { color: themeColors.textMuted }
         },
         yaxis: {
-            title: { text: '生存概率', font: { color: themeColors.text || themeColors.secondary } },
-            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            title: { text: '生存概率', font: { color: themeColors.text } },
+            gridcolor: getGridColor(),
             tickformat: '.0%',
             range: [0, 1.05],
-            tickfont: { color: themeColors.textMuted || '#6B7280' }
+            tickfont: { color: themeColors.textMuted }
         },
         legend: {
             orientation: 'h',
             y: -0.15,
-            font: { color: themeColors.text || themeColors.secondary }
+            font: { color: themeColors.text }
         },
         annotations: [{
             x: 50,
@@ -389,21 +401,21 @@ function createKMTechSupportChart() {
             font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: { text: '时间（月）', font: { color: themeColors.text || themeColors.secondary } },
-            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
-            tickfont: { color: themeColors.textMuted || '#6B7280' }
+            title: { text: '时间（月）', font: { color: themeColors.text } },
+            gridcolor: getGridColor(),
+            tickfont: { color: themeColors.textMuted }
         },
         yaxis: {
-            title: { text: '生存概率', font: { color: themeColors.text || themeColors.secondary } },
-            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            title: { text: '生存概率', font: { color: themeColors.text } },
+            gridcolor: getGridColor(),
             tickformat: '.0%',
             range: [0, 1.05],
-            tickfont: { color: themeColors.textMuted || '#6B7280' }
+            tickfont: { color: themeColors.textMuted }
         },
         legend: {
             orientation: 'h',
             y: -0.15,
-            font: { color: themeColors.text || themeColors.secondary }
+            font: { color: themeColors.text }
         }
     };
 
@@ -459,21 +471,21 @@ function createKMInternetServiceChart() {
             font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: { text: '时间（月）', font: { color: themeColors.text || themeColors.secondary } },
-            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
-            tickfont: { color: themeColors.textMuted || '#6B7280' }
+            title: { text: '时间（月）', font: { color: themeColors.text } },
+            gridcolor: getGridColor(),
+            tickfont: { color: themeColors.textMuted }
         },
         yaxis: {
-            title: { text: '生存概率', font: { color: themeColors.text || themeColors.secondary } },
-            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            title: { text: '生存概率', font: { color: themeColors.text } },
+            gridcolor: getGridColor(),
             tickformat: '.0%',
             range: [0, 1.05],
-            tickfont: { color: themeColors.textMuted || '#6B7280' }
+            tickfont: { color: themeColors.textMuted }
         },
         legend: {
             orientation: 'h',
             y: -0.15,
-            font: { color: themeColors.text || themeColors.secondary }
+            font: { color: themeColors.text }
         }
     };
 
@@ -512,7 +524,7 @@ function createForestPlot() {
             symmetric: false,
             array: hr.map((h, i) => ciUpper[i] - h),
             arrayminus: hr.map((h, i) => h - ciLower[i]),
-            color: themeColors.textMuted || '#6B7280',
+            color: themeColors.textMuted,
             thickness: 2.5,
             width: 10
         },
@@ -555,21 +567,21 @@ function createForestPlot() {
             font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: { text: '风险比 (Hazard Ratio)', font: { color: themeColors.text || themeColors.secondary } },
-            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            title: { text: '风险比 (Hazard Ratio)', font: { color: themeColors.text } },
+            gridcolor: getGridColor(),
             range: [0.3, 1.1],
             zeroline: false,
-            tickfont: { color: themeColors.textMuted || '#6B7280' }
+            tickfont: { color: themeColors.textMuted }
         },
         yaxis: {
             autorange: 'reversed',
             gridcolor: 'transparent',
-            tickfont: { color: themeColors.text || themeColors.secondary, size: 13 }
+            tickfont: { color: themeColors.text, size: 13 }
         },
         legend: {
             orientation: 'h',
             y: -0.2,
-            font: { color: themeColors.text || themeColors.secondary }
+            font: { color: themeColors.text }
         },
         annotations: [
             {
@@ -630,19 +642,19 @@ function createLogLogChart() {
             font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: { text: 'log(时间)', font: { color: themeColors.text || themeColors.secondary } },
-            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
-            tickfont: { color: themeColors.textMuted || '#6B7280' }
+            title: { text: 'log(时间)', font: { color: themeColors.text } },
+            gridcolor: getGridColor(),
+            tickfont: { color: themeColors.textMuted }
         },
         yaxis: {
-            title: { text: 'log(-log(生存概率))', font: { color: themeColors.text || themeColors.secondary } },
-            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
-            tickfont: { color: themeColors.textMuted || '#6B7280' }
+            title: { text: 'log(-log(生存概率))', font: { color: themeColors.text } },
+            gridcolor: getGridColor(),
+            tickfont: { color: themeColors.textMuted }
         },
         legend: {
             orientation: 'h',
             y: -0.15,
-            font: { color: themeColors.text || themeColors.secondary }
+            font: { color: themeColors.text }
         },
         annotations: [{
             x: 2.5,
@@ -679,7 +691,7 @@ function createAFTCoefficientsChart() {
         text: expCoef.map(v => v.toFixed(2) + 'x'),
         textposition: 'outside',
         textfont: {
-            color: themeColors.text || themeColors.secondary,
+            color: themeColors.text,
             size: 12,
             family: "'Playfair Display', serif"
         },
@@ -693,15 +705,15 @@ function createAFTCoefficientsChart() {
             font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: { text: '变量', font: { color: themeColors.text || themeColors.secondary } },
-            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
-            tickfont: { color: themeColors.text || themeColors.secondary }
+            title: { text: '变量', font: { color: themeColors.text } },
+            gridcolor: getGridColor(),
+            tickfont: { color: themeColors.text }
         },
         yaxis: {
-            title: { text: 'exp(coef) - 时间加速因子', font: { color: themeColors.text || themeColors.secondary } },
-            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            title: { text: 'exp(coef) - 时间加速因子', font: { color: themeColors.text } },
+            gridcolor: getGridColor(),
             range: [0, 3],
-            tickfont: { color: themeColors.textMuted || '#6B7280' }
+            tickfont: { color: themeColors.textMuted }
         },
         annotations: [{
             x: 0.5,
@@ -788,20 +800,20 @@ function createCLVChart() {
             font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: { text: '月份', font: { color: themeColors.text || themeColors.secondary } },
-            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
-            tickfont: { color: themeColors.textMuted || '#6B7280' }
+            title: { text: '月份', font: { color: themeColors.text } },
+            gridcolor: getGridColor(),
+            tickfont: { color: themeColors.textMuted }
         },
         yaxis: {
-            title: { text: '累计 NPV ($)', font: { color: themeColors.text || themeColors.secondary } },
-            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            title: { text: '累计 NPV ($)', font: { color: themeColors.text } },
+            gridcolor: getGridColor(),
             range: [0, 750],
-            tickfont: { color: themeColors.textMuted || '#6B7280' }
+            tickfont: { color: themeColors.textMuted }
         },
         legend: {
             orientation: 'h',
             y: -0.15,
-            font: { color: themeColors.text || themeColors.secondary }
+            font: { color: themeColors.text }
         },
         annotations: [
             {

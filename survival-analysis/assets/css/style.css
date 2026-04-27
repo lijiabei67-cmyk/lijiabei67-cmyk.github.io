@@ -331,23 +331,6 @@ body.dark-mode .dark-mode-toggle .moon-icon {
     margin: 0 auto;
     padding: 2em 2em;
     min-height: 100vh;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* Ensure body centers all content */
-body {
-    display: flex;
-    justify-content: center;
-}
-
-/* Full-width wrapper for proper centering on all screens */
-body > .main-content,
-body > nav.sidebar-nav,
-body > .progress-bar,
-body > .dark-mode-toggle,
-body > .back-to-top {
-    position: relative;
 }
 
 /* Article Header */
