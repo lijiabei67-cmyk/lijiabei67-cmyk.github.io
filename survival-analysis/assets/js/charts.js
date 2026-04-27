@@ -112,6 +112,7 @@ const config = {
    ============================================ */
 function createChurnDistributionChart() {
     const themeColors = getThemeColors();
+    const isDark = document.body.classList.contains('dark-mode');
 
     const data = [{
         values: [1795, 1556],
@@ -121,7 +122,7 @@ function createChurnDistributionChart() {
         marker: {
             colors: [themeColors.success, themeColors.accent],
             line: {
-                color: themeColors.surface || '#FFFFFF',
+                color: isDark ? '#241845' : '#FFFFFF',
                 width: 2
             }
         },
@@ -143,8 +144,13 @@ function createChurnDistributionChart() {
         showlegend: true,
         legend: {
             orientation: 'h',
-            y: -0.1,
-            font: { color: themeColors.text }
+            y: -0.15,
+            font: {
+                color: themeColors.text,
+                size: 13
+            },
+            bgcolor: 'transparent',
+            bordercolor: 'transparent'
         },
         annotations: [{
             text: '3351<br>客户',
@@ -252,7 +258,7 @@ function createKMOverallChart() {
             font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: { text: '时间（月）', font: { color: themeColors.text } },
+            title: { text: '时间（月）', font: { color: themeColors.text }, standoff: 10 },
             gridcolor: getGridColor(),
             zeroline: false,
             tickfont: { color: themeColors.textMuted }
@@ -267,9 +273,10 @@ function createKMOverallChart() {
         },
         legend: {
             orientation: 'h',
-            y: -0.15,
-            font: { color: themeColors.text }
-        }
+            y: -0.22,
+            font: { color: themeColors.text, size: 11 }
+        },
+        margin: { t: 60, r: 30, b: 80, l: 60 }
     };
 
     Plotly.newPlot('kmOverallChart', [ciTrace, survivalTrace, medianLine, medianPoint], layout, config);

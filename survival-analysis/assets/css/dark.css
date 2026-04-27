@@ -80,15 +80,6 @@ body.dark-mode strong {
 /* ============================================
    Dark Mode Hero Section
    ============================================ */
-body.dark-mode .placeholder-box {
-    border-color: var(--dm-primary-color);
-    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
-}
-
-body.dark-mode .placeholder-text {
-    color: var(--dm-text-muted);
-}
-
 body.dark-mode .hero-title {
     background: linear-gradient(135deg, var(--dm-primary-light), var(--dm-primary-color));
     -webkit-background-clip: text;
@@ -102,6 +93,7 @@ body.dark-mode .hero-subtitle {
 
 body.dark-mode .floating-icon {
     background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
+    border-color: var(--dm-border-color);
 }
 
 body.dark-mode .floating-icon svg {
@@ -117,31 +109,23 @@ body.dark-mode .article-meta-hero {
     color: var(--dm-text-muted);
 }
 
-/* Dark Mode Target SVG */
-body.dark-mode .target-ring.ring-outer {
-    stroke: var(--dm-border-color);
-}
-
-body.dark-mode .target-ring.ring-middle {
+/* Dark Mode Target Mini SVG */
+body.dark-mode .target-mini-svg circle:nth-child(1) {
     stroke: var(--dm-primary-color);
 }
 
-body.dark-mode .target-ring.ring-inner {
+body.dark-mode .target-mini-svg circle:nth-child(2) {
     stroke: var(--dm-primary-light);
 }
 
-body.dark-mode .target-ring.ring-center {
+body.dark-mode .target-mini-svg circle:nth-child(3) {
     fill: var(--dm-primary-color);
 }
 
-body.dark-mode .target-arrow line,
-body.dark-mode .target-arrow polygon {
+body.dark-mode .target-mini-svg path,
+body.dark-mode .target-mini-svg polygon {
     stroke: var(--dm-accent-color);
     fill: var(--dm-accent-color);
-}
-
-body.dark-mode .target-caption {
-    color: var(--dm-text-muted);
 }
 
 /* Dark Mode Progress Bar */
