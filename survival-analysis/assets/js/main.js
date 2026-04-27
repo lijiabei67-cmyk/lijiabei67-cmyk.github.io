@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
    ============================================ */
 function initDarkMode() {
     const toggleBtn = document.getElementById('darkModeToggle');
-    const darkStylesheet = document.querySelector('link[href="./assets/css/dark.css"]');
 
     // Check localStorage for saved preference
     const savedMode = localStorage.getItem('darkMode');
@@ -26,7 +25,6 @@ function initDarkMode() {
     // Apply saved preference or system preference
     if (savedMode === 'true' || (savedMode === null && prefersDark)) {
         document.body.classList.add('dark-mode');
-        darkStylesheet.disabled = false;
     }
 
     // Toggle button click handler
@@ -36,9 +34,6 @@ function initDarkMode() {
         // Save preference to localStorage
         const isDark = document.body.classList.contains('dark-mode');
         localStorage.setItem('darkMode', isDark);
-
-        // Enable/disable dark stylesheet
-        darkStylesheet.disabled = !isDark;
     });
 
     // Listen for system preference changes
@@ -46,10 +41,8 @@ function initDarkMode() {
         if (localStorage.getItem('darkMode') === null) {
             if (e.matches) {
                 document.body.classList.add('dark-mode');
-                darkStylesheet.disabled = false;
             } else {
                 document.body.classList.remove('dark-mode');
-                darkStylesheet.disabled = true;
             }
         }
     });

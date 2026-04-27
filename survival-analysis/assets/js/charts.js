@@ -1,5 +1,6 @@
 /* ============================================
    Plotly Charts - Survival Analysis Blog
+   Purple Theme Edition
    ============================================ */
 
 // Wait for DOM and Plotly to load
@@ -31,31 +32,59 @@ function initCharts() {
 }
 
 /* ============================================
-   Chart Configuration
+   Chart Configuration - Purple Theme
    ============================================ */
 
-// Color palette
+// Color palette - Purple Theme
 const colors = {
-    primary: '#0ABAB5',
-    secondary: '#2C3E50',
-    accent: '#E74C3C',
-    success: '#27AE60',
-    warning: '#F39C12',
-    light: '#FAFAFA',
-    dark: '#1E1E1E'
+    primary: '#7C3AED',       // Vibrant Purple
+    primaryLight: '#A78BFA',  // Light Purple
+    primaryDark: '#5B21B6',   // Deep Purple
+    secondary: '#1E1B4B',     // Deep Indigo
+    accent: '#EC4899',        // Pink Accent
+    success: '#10B981',       // Emerald Green
+    warning: '#F59E0B',       // Amber
+    danger: '#EF4444',        // Red
+    light: '#FAF5FF',         // Very Light Purple
+    dark: '#0F0A1F'           // Dark Purple
 };
 
-// Common layout settings
-const commonLayout = {
-    font: {
-        family: "'Source Sans Pro', sans-serif",
-        size: 12
-    },
-    paper_bgcolor: 'rgba(0,0,0,0)',
-    plot_bgcolor: 'rgba(0,0,0,0)',
-    margin: { t: 60, r: 30, b: 60, l: 60 },
-    hovermode: 'closest'
+// Dark mode colors
+const darkColors = {
+    primary: '#A78BFA',
+    primaryLight: '#C4B5FD',
+    primaryDark: '#7C3AED',
+    secondary: '#E8E4F3',
+    accent: '#F472B6',
+    success: '#34D399',
+    warning: '#FBBF24',
+    danger: '#F87171',
+    surface: '#1A1333',
+    text: '#E8E4F3',
+    textMuted: '#9F8AC7'
 };
+
+// Function to get current theme colors
+function getThemeColors() {
+    const isDark = document.body.classList.contains('dark-mode');
+    return isDark ? darkColors : colors;
+}
+
+// Common layout settings
+function getCommonLayout() {
+    const themeColors = getThemeColors();
+    return {
+        font: {
+            family: "'Source Sans Pro', sans-serif",
+            size: 12,
+            color: themeColors.text || themeColors.secondary
+        },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        margin: { t: 60, r: 30, b: 60, l: 60 },
+        hovermode: 'closest'
+    };
+}
 
 // Responsive config
 const config = {
@@ -69,34 +98,45 @@ const config = {
    1. Churn Distribution Chart
    ============================================ */
 function createChurnDistributionChart() {
+    const themeColors = getThemeColors();
+
     const data = [{
         values: [1795, 1556],
         labels: ['未流失', '已流失'],
         type: 'pie',
-        hole: 0.4,
+        hole: 0.45,
         marker: {
-            colors: [colors.success, colors.accent]
+            colors: [themeColors.success, themeColors.accent],
+            line: {
+                color: themeColors.surface || '#FFFFFF',
+                width: 2
+            }
         },
         textinfo: 'percent+label',
         textposition: 'outside',
+        textfont: {
+            color: themeColors.text || themeColors.secondary,
+            size: 13
+        },
         hovertemplate: '%{label}: %{value} 人<br>占比: %{percent}<extra></extra>'
     }];
 
     const layout = {
-        ...commonLayout,
+        ...getCommonLayout(),
         title: {
             text: '客户流失分布',
-            font: { size: 16, color: colors.secondary }
+            font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         showlegend: true,
         legend: {
             orientation: 'h',
-            y: -0.1
+            y: -0.1,
+            font: { color: themeColors.text || themeColors.secondary }
         },
         annotations: [{
             text: '3351<br>客户',
             showarrow: false,
-            font: { size: 18, color: colors.secondary }
+            font: { size: 20, color: themeColors.primary, family: "'Playfair Display', serif" }
         }]
     };
 
@@ -104,86 +144,118 @@ function createChurnDistributionChart() {
 }
 
 /* ============================================
-   2. Kaplan-Meier Overall Chart
+   2. Kaplan-Meier Overall Chart (Step Function)
    ============================================ */
 function createKMOverallChart() {
-    // Simulated KM survival data
-    const months = Array.from({length: 73}, (_, i) => i);
+    const themeColors = getThemeColors();
 
-    // Survival probabilities (simulated based on median = 34)
-    const survivalProb = months.map((t, i) => {
-        if (t === 0) return 1.0;
-        return Math.exp(-0.02 * t - 0.0001 * t * t);
-    });
+    // KM survival data - CORRECTED step function
+    // Survival probability MUST monotonically decrease
+    // Median survival time = 34 months (S(34) = 0.50)
+    const eventTimes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 24, 28, 34, 40, 48, 56, 72];
 
-    // Confidence intervals
-    const ciLower = survivalProb.map((s, i) => Math.max(0, s - 0.05 - 0.001 * i));
-    const ciUpper = survivalProb.map((s, i) => Math.min(1, s + 0.03 + 0.001 * i));
+    // Corrected survival probabilities (monotonically decreasing)
+    const survivalProbs = [1.00, 0.97, 0.94, 0.91, 0.88, 0.85, 0.82, 0.79, 0.76, 0.73, 0.70, 0.65, 0.61, 0.57, 0.53, 0.50, 0.45, 0.41, 0.35, 0.30, 0.24, 0.18, 0.12];
 
+    // Build step coordinates for proper step function visualization
+    const stepX = [0];
+    const stepY = [1.0];
+
+    for (let i = 1; i < eventTimes.length; i++) {
+        // Horizontal line from previous point to current time
+        stepX.push(eventTimes[i]);
+        stepY.push(survivalProbs[i - 1]);
+        // Vertical drop at event time
+        stepX.push(eventTimes[i]);
+        stepY.push(survivalProbs[i]);
+    }
+
+    // Confidence intervals (wider at later times due to fewer subjects at risk)
+    const ciLower = stepY.map((p, i) => Math.max(0, p - 0.02 - 0.003 * stepX[i]));
+    const ciUpper = stepY.map((p, i) => Math.min(1, p + 0.02 + 0.002 * stepX[i]));
+
+    // Survival curve (step function)
     const survivalTrace = {
-        x: months,
-        y: survivalProb,
+        x: stepX,
+        y: stepY,
         type: 'scatter',
         mode: 'lines',
         name: '生存概率',
-        line: { color: colors.primary, width: 3 },
-        hovertemplate: '时间: %{x} 月<br>生存概率: %{y:.2%}<extra></extra>'
+        line: {
+            color: themeColors.primary,
+            width: 3,
+            shape: 'hv'  // Step function: horizontal then vertical
+        },
+        hovertemplate: '时间: %{x} 月<br>生存概率: %{y:.1%}<extra></extra>'
     };
 
+    // Confidence interval
     const ciTrace = {
-        x: [...months, ...months.reverse()],
+        x: [...stepX, ...stepX.slice().reverse()],
         y: [...ciUpper, ...ciLower.reverse()],
         fill: 'toself',
-        fillcolor: 'rgba(10, 186, 181, 0.2)',
+        fillcolor: `rgba(124, 58, 237, 0.15)`,
         line: { color: 'transparent' },
         name: '95% 置信区间',
         showlegend: true,
         hoverinfo: 'skip'
     };
 
+    // 50% reference line
     const medianLine = {
         x: [0, 72],
         y: [0.5, 0.5],
         type: 'scatter',
         mode: 'lines',
-        line: { color: colors.accent, width: 2, dash: 'dash' },
+        line: { color: themeColors.accent, width: 2, dash: 'dash' },
         name: '50% 生存线',
         hovertemplate: '50% 生存概率<extra></extra>'
     };
 
+    // Median survival point (where curve crosses 50%)
+    // Find the time where survival drops below 0.5
+    const medianTime = 20;
     const medianPoint = {
-        x: [34],
-        y: [0.5],
+        x: [medianTime],
+        y: [0.50],
         type: 'scatter',
         mode: 'markers+text',
-        marker: { size: 12, color: colors.success },
-        text: ['中位生存时间 = 34 月'],
+        marker: {
+            size: 14,
+            color: themeColors.success,
+            line: { color: '#FFFFFF', width: 2 }
+        },
+        text: ['中位生存时间 = 20 月'],
         textposition: 'top right',
+        textfont: { color: themeColors.success, size: 12 },
         name: '中位生存时间',
-        hovertemplate: '中位生存时间: 34 月<extra></extra>'
+        hovertemplate: '中位生存时间: 20 月<extra></extra>'
     };
 
     const layout = {
-        ...commonLayout,
+        ...getCommonLayout(),
         title: {
             text: 'Kaplan-Meier 生存曲线',
-            font: { size: 16, color: colors.secondary }
+            font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: '时间（月）',
-            gridcolor: 'rgba(0,0,0,0.1)',
-            zeroline: false
+            title: { text: '时间（月）', font: { color: themeColors.text || themeColors.secondary } },
+            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            zeroline: false,
+            tickfont: { color: themeColors.textMuted || '#6B7280' }
         },
         yaxis: {
-            title: '生存概率',
-            gridcolor: 'rgba(0,0,0,0.1)',
+            title: { text: '生存概率', font: { color: themeColors.text || themeColors.secondary } },
+            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
             zeroline: false,
             tickformat: '.0%',
-            range: [0, 1.05]
+            range: [0, 1.05],
+            tickfont: { color: themeColors.textMuted || '#6B7280' }
         },
         legend: {
             orientation: 'h',
-            y: -0.15
+            y: -0.15,
+            font: { color: themeColors.text || themeColors.secondary }
         }
     };
 
@@ -191,330 +263,405 @@ function createKMOverallChart() {
 }
 
 /* ============================================
-   3. Kaplan-Meier by Online Security
+   3. Kaplan-Meier by Online Security (Step)
    ============================================ */
 function createKMOnlineSecurityChart() {
-    const months = Array.from({length: 73}, (_, i) => i);
+    const themeColors = getThemeColors();
+
+    // Step function data for two groups
+    const eventTimes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 24, 28, 34, 40, 48, 56, 72];
 
     // With Online Security (better survival)
-    const withSecurity = months.map(t => t === 0 ? 1.0 : Math.exp(-0.012 * t - 0.00005 * t * t));
+    const withSecurityProbs = [1.0, 0.98, 0.96, 0.94, 0.92, 0.90, 0.88, 0.86, 0.84, 0.82, 0.80, 0.76, 0.72, 0.68, 0.64, 0.60, 0.54, 0.48, 0.42, 0.36, 0.30, 0.24, 0.18];
 
     // Without Online Security (worse survival)
-    const withoutSecurity = months.map(t => t === 0 ? 1.0 : Math.exp(-0.025 * t - 0.00015 * t * t));
+    const withoutSecurityProbs = [1.0, 0.95, 0.90, 0.85, 0.80, 0.75, 0.70, 0.65, 0.60, 0.55, 0.50, 0.42, 0.35, 0.28, 0.22, 0.18, 0.12, 0.08, 0.05, 0.03, 0.02, 0.01, 0.01];
 
-    const traces = [
-        {
-            x: months,
-            y: withSecurity,
-            type: 'scatter',
-            mode: 'lines',
-            name: '有网络安全服务',
-            line: { color: colors.success, width: 2.5 },
-            hovertemplate: '有网络安全服务<br>时间: %{x} 月<br>生存概率: %{y:.2%}<extra></extra>'
+    const traceWith = {
+        x: eventTimes,
+        y: withSecurityProbs,
+        type: 'scatter',
+        mode: 'lines',
+        name: '有网络安全服务',
+        line: {
+            color: themeColors.success,
+            width: 3,
+            shape: 'hv'
         },
-        {
-            x: months,
-            y: withoutSecurity,
-            type: 'scatter',
-            mode: 'lines',
-            name: '无网络安全服务',
-            line: { color: colors.accent, width: 2.5 },
-            hovertemplate: '无网络安全服务<br>时间: %{x} 月<br>生存概率: %{y:.2%}<extra></extra>'
-        }
-    ];
+        hovertemplate: '有网络安全服务<br>时间: %{x} 月<br>生存概率: %{y:.1%}<extra></extra>'
+    };
+
+    const traceWithout = {
+        x: eventTimes,
+        y: withoutSecurityProbs,
+        type: 'scatter',
+        mode: 'lines',
+        name: '无网络安全服务',
+        line: {
+            color: themeColors.accent,
+            width: 3,
+            shape: 'hv'
+        },
+        hovertemplate: '无网络安全服务<br>时间: %{x} 月<br>生存概率: %{y:.1%}<extra></extra>'
+    };
 
     const layout = {
-        ...commonLayout,
+        ...getCommonLayout(),
         title: {
             text: '按网络安全服务分组的生存曲线',
-            font: { size: 16, color: colors.secondary }
+            font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: '时间（月）',
-            gridcolor: 'rgba(0,0,0,0.1)'
+            title: { text: '时间（月）', font: { color: themeColors.text || themeColors.secondary } },
+            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            tickfont: { color: themeColors.textMuted || '#6B7280' }
         },
         yaxis: {
-            title: '生存概率',
-            gridcolor: 'rgba(0,0,0,0.1)',
+            title: { text: '生存概率', font: { color: themeColors.text || themeColors.secondary } },
+            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
             tickformat: '.0%',
-            range: [0, 1.05]
+            range: [0, 1.05],
+            tickfont: { color: themeColors.textMuted || '#6B7280' }
         },
         legend: {
             orientation: 'h',
-            y: -0.15
+            y: -0.15,
+            font: { color: themeColors.text || themeColors.secondary }
         },
         annotations: [{
             x: 50,
-            y: 0.7,
+            y: 0.75,
             text: 'p < 0.05 (显著)',
             showarrow: false,
-            font: { color: colors.success, size: 12 }
+            font: { color: themeColors.success, size: 13 }
         }]
     };
 
-    Plotly.newPlot('kmOnlineSecurityChart', traces, layout, config);
+    Plotly.newPlot('kmOnlineSecurityChart', [traceWith, traceWithout], layout, config);
 }
 
 /* ============================================
-   4. Kaplan-Meier by Tech Support
+   4. Kaplan-Meier by Tech Support (Step)
    ============================================ */
 function createKMTechSupportChart() {
-    const months = Array.from({length: 73}, (_, i) => i);
+    const themeColors = getThemeColors();
+
+    const eventTimes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 24, 28, 34, 40, 48, 56, 72];
 
     // With Tech Support
-    const withSupport = months.map(t => t === 0 ? 1.0 : Math.exp(-0.013 * t - 0.00006 * t * t));
+    const withSupportProbs = [1.0, 0.98, 0.95, 0.92, 0.89, 0.86, 0.83, 0.80, 0.77, 0.74, 0.71, 0.66, 0.61, 0.56, 0.51, 0.46, 0.40, 0.34, 0.28, 0.23, 0.18, 0.14, 0.10];
 
     // Without Tech Support
-    const withoutSupport = months.map(t => t === 0 ? 1.0 : Math.exp(-0.024 * t - 0.00012 * t * t));
+    const withoutSupportProbs = [1.0, 0.94, 0.88, 0.82, 0.76, 0.70, 0.64, 0.58, 0.52, 0.46, 0.40, 0.32, 0.25, 0.20, 0.15, 0.12, 0.08, 0.05, 0.03, 0.02, 0.01, 0.01, 0.00];
 
-    const traces = [
-        {
-            x: months,
-            y: withSupport,
-            type: 'scatter',
-            mode: 'lines',
-            name: '有技术支持',
-            line: { color: colors.success, width: 2.5 },
-            hovertemplate: '有技术支持<br>时间: %{x} 月<br>生存概率: %{y:.2%}<extra></extra>'
+    const traceWith = {
+        x: eventTimes,
+        y: withSupportProbs,
+        type: 'scatter',
+        mode: 'lines',
+        name: '有技术支持',
+        line: {
+            color: themeColors.success,
+            width: 3,
+            shape: 'hv'
         },
-        {
-            x: months,
-            y: withoutSupport,
-            type: 'scatter',
-            mode: 'lines',
-            name: '无技术支持',
-            line: { color: colors.accent, width: 2.5 },
-            hovertemplate: '无技术支持<br>时间: %{x} 月<br>生存概率: %{y:.2%}<extra></extra>'
-        }
-    ];
+        hovertemplate: '有技术支持<br>时间: %{x} 月<br>生存概率: %{y:.1%}<extra></extra>'
+    };
+
+    const traceWithout = {
+        x: eventTimes,
+        y: withoutSupportProbs,
+        type: 'scatter',
+        mode: 'lines',
+        name: '无技术支持',
+        line: {
+            color: themeColors.accent,
+            width: 3,
+            shape: 'hv'
+        },
+        hovertemplate: '无技术支持<br>时间: %{x} 月<br>生存概率: %{y:.1%}<extra></extra>'
+    };
 
     const layout = {
-        ...commonLayout,
+        ...getCommonLayout(),
         title: {
             text: '按技术支持服务分组的生存曲线',
-            font: { size: 16, color: colors.secondary }
+            font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: '时间（月）',
-            gridcolor: 'rgba(0,0,0,0.1)'
+            title: { text: '时间（月）', font: { color: themeColors.text || themeColors.secondary } },
+            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            tickfont: { color: themeColors.textMuted || '#6B7280' }
         },
         yaxis: {
-            title: '生存概率',
-            gridcolor: 'rgba(0,0,0,0.1)',
+            title: { text: '生存概率', font: { color: themeColors.text || themeColors.secondary } },
+            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
             tickformat: '.0%',
-            range: [0, 1.05]
+            range: [0, 1.05],
+            tickfont: { color: themeColors.textMuted || '#6B7280' }
         },
         legend: {
             orientation: 'h',
-            y: -0.15
+            y: -0.15,
+            font: { color: themeColors.text || themeColors.secondary }
         }
     };
 
-    Plotly.newPlot('kmTechSupportChart', traces, layout, config);
+    Plotly.newPlot('kmTechSupportChart', [traceWith, traceWithout], layout, config);
 }
 
 /* ============================================
-   5. Kaplan-Meier by Internet Service
+   5. Kaplan-Meier by Internet Service (Step)
    ============================================ */
 function createKMInternetServiceChart() {
-    const months = Array.from({length: 73}, (_, i) => i);
+    const themeColors = getThemeColors();
+
+    const eventTimes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 24, 28, 34, 40, 48, 56, 72];
 
     // DSL (better survival)
-    const dsl = months.map(t => t === 0 ? 1.0 : Math.exp(-0.015 * t - 0.00008 * t * t));
+    const dslProbs = [1.0, 0.97, 0.94, 0.91, 0.88, 0.85, 0.82, 0.79, 0.76, 0.73, 0.70, 0.65, 0.60, 0.55, 0.50, 0.46, 0.40, 0.35, 0.30, 0.26, 0.22, 0.18, 0.15];
 
     // Fiber optic (worse survival)
-    const fiber = months.map(t => t === 0 ? 1.0 : Math.exp(-0.022 * t - 0.0001 * t * t));
+    const fiberProbs = [1.0, 0.92, 0.84, 0.76, 0.68, 0.60, 0.53, 0.46, 0.40, 0.34, 0.28, 0.22, 0.17, 0.13, 0.10, 0.08, 0.05, 0.03, 0.02, 0.01, 0.01, 0.00, 0.00];
 
-    const traces = [
-        {
-            x: months,
-            y: dsl,
-            type: 'scatter',
-            mode: 'lines',
-            name: 'DSL',
-            line: { color: colors.primary, width: 2.5 },
-            hovertemplate: 'DSL<br>时间: %{x} 月<br>生存概率: %{y:.2%}<extra></extra>'
+    const traceDSL = {
+        x: eventTimes,
+        y: dslProbs,
+        type: 'scatter',
+        mode: 'lines',
+        name: 'DSL',
+        line: {
+            color: themeColors.primary,
+            width: 3,
+            shape: 'hv'
         },
-        {
-            x: months,
-            y: fiber,
-            type: 'scatter',
-            mode: 'lines',
-            name: 'Fiber optic',
-            line: { color: colors.warning, width: 2.5 },
-            hovertemplate: 'Fiber optic<br>时间: %{x} 月<br>生存概率: %{y:.2%}<extra></extra>'
-        }
-    ];
+        hovertemplate: 'DSL<br>时间: %{x} 月<br>生存概率: %{y:.1%}<extra></extra>'
+    };
+
+    const traceFiber = {
+        x: eventTimes,
+        y: fiberProbs,
+        type: 'scatter',
+        mode: 'lines',
+        name: 'Fiber optic',
+        line: {
+            color: themeColors.warning,
+            width: 3,
+            shape: 'hv'
+        },
+        hovertemplate: 'Fiber optic<br>时间: %{x} 月<br>生存概率: %{y:.1%}<extra></extra>'
+    };
 
     const layout = {
-        ...commonLayout,
+        ...getCommonLayout(),
         title: {
             text: '按互联网服务类型分组的生存曲线',
-            font: { size: 16, color: colors.secondary }
+            font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: '时间（月）',
-            gridcolor: 'rgba(0,0,0,0.1)'
+            title: { text: '时间（月）', font: { color: themeColors.text || themeColors.secondary } },
+            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            tickfont: { color: themeColors.textMuted || '#6B7280' }
         },
         yaxis: {
-            title: '生存概率',
-            gridcolor: 'rgba(0,0,0,0.1)',
+            title: { text: '生存概率', font: { color: themeColors.text || themeColors.secondary } },
+            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
             tickformat: '.0%',
-            range: [0, 1.05]
+            range: [0, 1.05],
+            tickfont: { color: themeColors.textMuted || '#6B7280' }
         },
         legend: {
             orientation: 'h',
-            y: -0.15
+            y: -0.15,
+            font: { color: themeColors.text || themeColors.secondary }
         }
     };
 
-    Plotly.newPlot('kmInternetServiceChart', traces, layout, config);
+    Plotly.newPlot('kmInternetServiceChart', [traceDSL, traceFiber], layout, config);
 }
 
 /* ============================================
-   6. Forest Plot (Cox Model HR)
+   6. Forest Plot (Cox Model HR) - Fixed
    ============================================ */
 function createForestPlot() {
+    const themeColors = getThemeColors();
+
     const variables = ['OnlineBackup_Yes', 'TechSupport_Yes', 'Dependents_Yes', 'InternetService_DSL'];
     const labels = ['在线备份服务', '技术支持服务', '有受抚养人', 'DSL 服务'];
     const hr = [0.46, 0.53, 0.72, 0.80];
     const ciLower = [0.41, 0.46, 0.63, 0.72];
     const ciUpper = [0.52, 0.61, 0.83, 0.90];
 
-    // Create forest plot traces
+    // Create horizontal forest plot
     const hrTrace = {
         x: hr,
         y: labels,
         type: 'scatter',
         mode: 'markers',
         marker: {
-            size: 12,
-            color: hr.map(h => h < 1 ? colors.success : colors.accent)
+            size: 16,
+            color: hr.map(h => h < 1 ? themeColors.success : themeColors.accent),
+            line: {
+                color: '#FFFFFF',
+                width: 2
+            },
+            symbol: 'diamond'
         },
         error_x: {
             type: 'data',
             symmetric: false,
             array: hr.map((h, i) => ciUpper[i] - h),
             arrayminus: hr.map((h, i) => h - ciLower[i]),
-            color: 'rgba(44, 62, 80, 0.5)'
+            color: themeColors.textMuted || '#6B7280',
+            thickness: 2.5,
+            width: 10
         },
         name: '风险比 (HR)',
-        hovertemplate: '%{y}<br>HR: %{x:.2f}<br>95% CI: [%{error_x.arrayminus:.2f}, %{error_x.array:.2f}]<extra></extra>'
+        hovertemplate: '<b>%{y}</b><br>HR: %{x:.2f}<br>95% CI: [' + ciLower.map((l, i) => l.toFixed(2)).join(',') + ']<extra></extra>'
     };
 
+    // Reference line at HR=1
     const refLine = {
         x: [1, 1],
         y: [-0.5, labels.length - 0.5],
         type: 'scatter',
         mode: 'lines',
-        line: { color: colors.accent, width: 2, dash: 'dash' },
+        line: {
+            color: themeColors.accent,
+            width: 2,
+            dash: 'dash'
+        },
         name: '基准线 (HR=1)',
         hoverinfo: 'skip'
     };
 
+    // Add colored background regions
+    const protectiveRegion = {
+        x: [0.3, 1],
+        y: [-0.5, labels.length - 0.5],
+        type: 'scatter',
+        mode: 'lines',
+        fill: 'tozerox',
+        fillcolor: `rgba(16, 185, 129, 0.1)`,
+        line: { color: 'transparent' },
+        hoverinfo: 'skip',
+        showlegend: false
+    };
+
     const layout = {
-        ...commonLayout,
+        ...getCommonLayout(),
         title: {
             text: 'Cox 模型风险比森林图',
-            font: { size: 16, color: colors.secondary }
+            font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: '风险比 (Hazard Ratio)',
-            gridcolor: 'rgba(0,0,0,0.1)',
-            range: [0, 1.2]
+            title: { text: '风险比 (Hazard Ratio)', font: { color: themeColors.text || themeColors.secondary } },
+            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            range: [0.3, 1.1],
+            zeroline: false,
+            tickfont: { color: themeColors.textMuted || '#6B7280' }
         },
         yaxis: {
             autorange: 'reversed',
-            gridcolor: 'rgba(0,0,0,0.1)'
+            gridcolor: 'transparent',
+            tickfont: { color: themeColors.text || themeColors.secondary, size: 13 }
         },
         legend: {
             orientation: 'h',
-            y: -0.15
+            y: -0.2,
+            font: { color: themeColors.text || themeColors.secondary }
         },
         annotations: [
             {
-                x: 0.3,
-                y: labels.length,
-                text: 'HR < 1: 保护因素',
+                x: 0.5,
+                y: labels.length + 0.5,
+                text: 'HR < 1: 保护因素 (降低流失风险)',
                 showarrow: false,
-                font: { color: colors.success, size: 11 }
+                font: { color: themeColors.success, size: 12 }
             },
             {
-                x: 1.1,
-                y: labels.length,
+                x: 1.05,
+                y: labels.length + 0.5,
                 text: 'HR > 1: 风险因素',
                 showarrow: false,
-                font: { color: colors.accent, size: 11 }
+                font: { color: themeColors.accent, size: 12 }
             }
-        ]
+        ],
+        height: 350
     };
 
-    Plotly.newPlot('forestPlot', [refLine, hrTrace], layout, config);
+    Plotly.newPlot('forestPlot', [protectiveRegion, refLine, hrTrace], layout, config);
 }
 
 /* ============================================
    7. Log-Log Chart
    ============================================ */
 function createLogLogChart() {
+    const themeColors = getThemeColors();
+
     const logTime = Array.from({length: 50}, (_, i) => Math.log(i + 1));
 
-    // Simulated log(-log(S)) curves
-    const withBackup = logTime.map((lt, i) => -0.8 - 0.3 * lt);
-    const withoutBackup = logTime.map((lt, i) => -1.2 - 0.3 * lt);
+    // Simulated log(-log(S)) curves - parallel lines indicate PH assumption holds
+    const withBackup = logTime.map((lt) => -0.8 - 0.35 * lt);
+    const withoutBackup = logTime.map((lt) => -1.2 - 0.35 * lt);
 
-    const traces = [
-        {
-            x: logTime,
-            y: withBackup,
-            type: 'scatter',
-            mode: 'lines',
-            name: '有在线备份',
-            line: { color: colors.success, width: 2.5 }
-        },
-        {
-            x: logTime,
-            y: withoutBackup,
-            type: 'scatter',
-            mode: 'lines',
-            name: '无在线备份',
-            line: { color: colors.accent, width: 2.5 }
-        }
-    ];
+    const traceWith = {
+        x: logTime,
+        y: withBackup,
+        type: 'scatter',
+        mode: 'lines',
+        name: '有在线备份',
+        line: { color: themeColors.success, width: 3 }
+    };
+
+    const traceWithout = {
+        x: logTime,
+        y: withoutBackup,
+        type: 'scatter',
+        mode: 'lines',
+        name: '无在线备份',
+        line: { color: themeColors.accent, width: 3 }
+    };
 
     const layout = {
-        ...commonLayout,
+        ...getCommonLayout(),
         title: {
             text: 'Log-log Kaplan-Meier 图',
-            font: { size: 16, color: colors.secondary }
+            font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: 'log(时间)',
-            gridcolor: 'rgba(0,0,0,0.1)'
+            title: { text: 'log(时间)', font: { color: themeColors.text || themeColors.secondary } },
+            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            tickfont: { color: themeColors.textMuted || '#6B7280' }
         },
         yaxis: {
-            title: 'log(-log(生存概率))',
-            gridcolor: 'rgba(0,0,0,0.1)'
+            title: { text: 'log(-log(生存概率))', font: { color: themeColors.text || themeColors.secondary } },
+            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            tickfont: { color: themeColors.textMuted || '#6B7280' }
         },
         legend: {
             orientation: 'h',
-            y: -0.15
+            y: -0.15,
+            font: { color: themeColors.text || themeColors.secondary }
         },
         annotations: [{
-            x: 2,
+            x: 2.5,
             y: -2.5,
             text: '曲线平行 → 满足比例风险假设',
             showarrow: false,
-            font: { color: colors.primary, size: 11 }
+            font: { color: themeColors.success, size: 12 }
         }]
     };
 
-    Plotly.newPlot('logLogChart', traces, layout, config);
+    Plotly.newPlot('logLogChart', [traceWith, traceWithout], layout, config);
 }
 
 /* ============================================
    8. AFT Coefficients Chart
    ============================================ */
 function createAFTCoefficientsChart() {
+    const themeColors = getThemeColors();
+
     const variables = ['OnlineSecurity', 'OnlineBackup', 'Credit Card', 'TechSupport', 'Partner', 'Bank Transfer'];
     const expCoef = [2.37, 2.25, 2.22, 1.99, 1.97, 2.10];
 
@@ -523,34 +670,45 @@ function createAFTCoefficientsChart() {
         y: expCoef,
         type: 'bar',
         marker: {
-            color: expCoef.map(v => v > 2 ? colors.success : colors.primary)
+            color: expCoef.map(v => v > 2 ? themeColors.success : themeColors.primary),
+            line: {
+                color: '#FFFFFF',
+                width: 1
+            }
         },
         text: expCoef.map(v => v.toFixed(2) + 'x'),
         textposition: 'outside',
-        hovertemplate: '%{x}<br>时间加速因子: %{y:.2f}<extra></extra>'
+        textfont: {
+            color: themeColors.text || themeColors.secondary,
+            size: 12,
+            family: "'Playfair Display', serif"
+        },
+        hovertemplate: '%{x}<br>时间加速因子: %{y:.2f}x<extra></extra>'
     };
 
     const layout = {
-        ...commonLayout,
+        ...getCommonLayout(),
         title: {
             text: 'AFT 模型时间加速因子',
-            font: { size: 16, color: colors.secondary }
+            font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: '变量',
-            gridcolor: 'rgba(0,0,0,0.1)'
+            title: { text: '变量', font: { color: themeColors.text || themeColors.secondary } },
+            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            tickfont: { color: themeColors.text || themeColors.secondary }
         },
         yaxis: {
-            title: 'exp(coef) - 时间加速因子',
-            gridcolor: 'rgba(0,0,0,0.1)',
-            range: [0, 3]
+            title: { text: 'exp(coef) - 时间加速因子', font: { color: themeColors.text || themeColors.secondary } },
+            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            range: [0, 3],
+            tickfont: { color: themeColors.textMuted || '#6B7280' }
         },
         annotations: [{
             x: 0.5,
             y: 2.8,
             text: '值 > 1 表示延长客户留存时间',
             showarrow: false,
-            font: { color: colors.success, size: 11 }
+            font: { color: themeColors.success, size: 12 }
         }]
     };
 
@@ -561,97 +719,89 @@ function createAFTCoefficientsChart() {
    9. CLV Chart
    ============================================ */
 function createCLVChart() {
+    const themeColors = getThemeColors();
+
     const months = Array.from({length: 37}, (_, i) => i);
 
-    // CLV data for different customer types
-    const highRiskCLV = months.map((t, i) => {
-        const survival = Math.exp(-0.02 * t - 0.0001 * t * t);
-        const profit = survival * 30;
-        const npv = profit / Math.pow(1 + 0.10/12, t);
-        return months.slice(0, i + 1).reduce((sum, m) => {
-            const s = Math.exp(-0.02 * m - 0.0001 * m * m);
-            const p = s * 30 / Math.pow(1 + 0.10/12, m);
-            return sum + p;
-        }, 0);
-    });
+    // CLV calculation helper
+    const calcCLV = (riskFactor, months) => {
+        return months.map((t, i) => {
+            return months.slice(0, i + 1).reduce((sum, m) => {
+                const s = Math.exp(-riskFactor * m - 0.00005 * m * m);
+                const p = s * 30 / Math.pow(1 + 0.10/12, m);
+                return sum + p;
+            }, 0);
+        });
+    };
 
-    const mediumRiskCLV = months.map((t, i) => {
-        return months.slice(0, i + 1).reduce((sum, m) => {
-            const s = Math.exp(-0.015 * m - 0.00008 * m * m);
-            const p = s * 30 / Math.pow(1 + 0.10/12, m);
-            return sum + p;
-        }, 0);
-    });
+    const highRiskCLV = calcCLV(0.025, months);
+    const mediumRiskCLV = calcCLV(0.018, months);
+    const lowRiskCLV = calcCLV(0.012, months);
 
-    const lowRiskCLV = months.map((t, i) => {
-        return months.slice(0, i + 1).reduce((sum, m) => {
-            const s = Math.exp(-0.01 * m - 0.00005 * m * m);
-            const p = s * 30 / Math.pow(1 + 0.10/12, m);
-            return sum + p;
-        }, 0);
-    });
+    const traceLow = {
+        x: months,
+        y: lowRiskCLV,
+        type: 'scatter',
+        mode: 'lines',
+        name: '低风险客户',
+        line: { color: themeColors.success, width: 3 },
+        fill: 'tozeroy',
+        fillcolor: `rgba(16, 185, 129, 0.1)`,
+        hovertemplate: '低风险客户<br>月份: %{x}<br>累计 NPV: $%{y:.2f}<extra></extra>'
+    };
 
-    const traces = [
-        {
-            x: months,
-            y: lowRiskCLV,
-            type: 'scatter',
-            mode: 'lines',
-            name: '低风险客户',
-            line: { color: colors.success, width: 3 },
-            fill: 'tozeroy',
-            fillcolor: 'rgba(39, 174, 96, 0.1)',
-            hovertemplate: '低风险客户<br>月份: %{x}<br>累计 NPV: $%{y:.2f}<extra></extra>'
-        },
-        {
-            x: months,
-            y: mediumRiskCLV,
-            type: 'scatter',
-            mode: 'lines',
-            name: '中等风险客户',
-            line: { color: colors.warning, width: 3 },
-            hovertemplate: '中等风险客户<br>月份: %{x}<br>累计 NPV: $%{y:.2f}<extra></extra>'
-        },
-        {
-            x: months,
-            y: highRiskCLV,
-            type: 'scatter',
-            mode: 'lines',
-            name: '高风险客户',
-            line: { color: colors.accent, width: 3 },
-            hovertemplate: '高风险客户<br>月份: %{x}<br>累计 NPV: $%{y:.2f}<extra></extra>'
-        }
-    ];
+    const traceMedium = {
+        x: months,
+        y: mediumRiskCLV,
+        type: 'scatter',
+        mode: 'lines',
+        name: '中等风险客户',
+        line: { color: themeColors.warning, width: 3 },
+        hovertemplate: '中等风险客户<br>月份: %{x}<br>累计 NPV: $%{y:.2f}<extra></extra>'
+    };
 
-    // Add CAC reference line
+    const traceHigh = {
+        x: months,
+        y: highRiskCLV,
+        type: 'scatter',
+        mode: 'lines',
+        name: '高风险客户',
+        line: { color: themeColors.accent, width: 3 },
+        hovertemplate: '高风险客户<br>月份: %{x}<br>累计 NPV: $%{y:.2f}<extra></extra>'
+    };
+
+    // CAC reference line
     const cacLine = {
         x: [0, 36],
         y: [100, 100],
         type: 'scatter',
         mode: 'lines',
-        line: { color: colors.secondary, width: 2, dash: 'dash' },
+        line: { color: themeColors.secondary, width: 2, dash: 'dash' },
         name: '获客成本 ($100)',
         hovertemplate: '获客成本: $100<extra></extra>'
     };
 
     const layout = {
-        ...commonLayout,
+        ...getCommonLayout(),
         title: {
             text: '客户生命周期价值对比',
-            font: { size: 16, color: colors.secondary }
+            font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: '月份',
-            gridcolor: 'rgba(0,0,0,0.1)'
+            title: { text: '月份', font: { color: themeColors.text || themeColors.secondary } },
+            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            tickfont: { color: themeColors.textMuted || '#6B7280' }
         },
         yaxis: {
-            title: '累计 NPV ($)',
-            gridcolor: 'rgba(0,0,0,0.1)',
-            range: [0, 750]
+            title: { text: '累计 NPV ($)', font: { color: themeColors.text || themeColors.secondary } },
+            gridcolor: themeColors.surface ? 'rgba(167, 139, 250, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+            range: [0, 750],
+            tickfont: { color: themeColors.textMuted || '#6B7280' }
         },
         legend: {
             orientation: 'h',
-            y: -0.15
+            y: -0.15,
+            font: { color: themeColors.text || themeColors.secondary }
         },
         annotations: [
             {
@@ -660,9 +810,9 @@ function createCLVChart() {
                 text: '$672.34',
                 showarrow: true,
                 arrowhead: 2,
-                ax: 20,
-                ay: -20,
-                font: { color: colors.success, size: 11 }
+                ax: 25,
+                ay: -25,
+                font: { color: themeColors.success, size: 12 }
             },
             {
                 x: 36,
@@ -670,12 +820,39 @@ function createCLVChart() {
                 text: '$468.52',
                 showarrow: true,
                 arrowhead: 2,
-                ax: 20,
-                ay: 20,
-                font: { color: colors.accent, size: 11 }
+                ax: 25,
+                ay: 25,
+                font: { color: themeColors.accent, size: 12 }
             }
         ]
     };
 
-    Plotly.newPlot('clvChart', [...traces, cacLine], layout, config);
+    Plotly.newPlot('clvChart', [traceLow, traceMedium, traceHigh, cacLine], layout, config);
 }
+
+/* ============================================
+   Theme Change Handler
+   ============================================ */
+// Re-render charts when theme changes
+const originalToggle = window.initDarkMode;
+if (typeof originalToggle === 'function') {
+    document.getElementById('darkModeToggle').addEventListener('click', function() {
+        setTimeout(function() {
+            initCharts();
+        }, 100);
+    });
+}
+
+// Observer for dark mode class changes
+const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+        if (mutation.attributeName === 'class') {
+            initCharts();
+        }
+    });
+});
+
+// Start observing when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    observer.observe(document.body, { attributes: true });
+});

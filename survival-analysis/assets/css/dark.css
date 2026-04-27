@@ -1,29 +1,38 @@
 /* ============================================
    Dark Mode Styles - Survival Analysis Blog
+   Purple Theme Edition
    ============================================ */
 
 /* Dark Mode Variables */
 :root {
-    --dm-background-color: #1E1E1E;
-    --dm-surface-color: #2D2D2D;
-    --dm-text-color: #E0E0E0;
-    --dm-text-muted: #9E9E9E;
-    --dm-border-color: #424242;
-    --dm-primary-color: #0ABAB5;
-    --dm-secondary-color: #E0E0E0;
-    --dm-accent-color: #E74C3C;
-    --dm-success-color: #27AE60;
+    --dm-background-color: #0F0A1F;        /* Deep Dark Purple */
+    --dm-surface-color: #1A1333;           /* Dark Purple Surface */
+    --dm-surface-elevated: #241845;        /* Elevated Purple */
+    --dm-text-color: #E8E4F3;              /* Light Purple Tint Text */
+    --dm-text-muted: #9F8AC7;              /* Muted Purple */
+    --dm-border-color: #3D2E6B;            /* Purple Border */
+    --dm-primary-color: #A78BFA;           /* Light Purple (Fluorescent) */
+    --dm-primary-light: #C4B5FD;           /* Brighter Purple */
+    --dm-primary-dark: #7C3AED;            /* Base Purple */
+    --dm-secondary-color: #E8E4F3;         /* Light Text */
+    --dm-accent-color: #F472B6;            /* Pink Accent */
+    --dm-success-color: #34D399;           /* Bright Green */
+    --dm-warning-color: #FBBF24;           /* Bright Amber */
 }
 
 /* Dark Mode Body */
 body.dark-mode {
-    background-color: var(--dm-background-color);
+    background: linear-gradient(135deg, var(--dm-background-color), #150D28);
     color: var(--dm-text-color);
 }
 
 /* Dark Mode Typography */
 body.dark-mode h1 {
     color: var(--dm-primary-color);
+    background: linear-gradient(135deg, var(--dm-primary-light), var(--dm-primary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 body.dark-mode h2 {
@@ -31,12 +40,16 @@ body.dark-mode h2 {
     border-bottom-color: var(--dm-primary-color);
 }
 
+body.dark-mode h2::after {
+    background: linear-gradient(90deg, var(--dm-accent-color), var(--dm-primary-light));
+}
+
 body.dark-mode h3 {
-    color: var(--dm-secondary-color);
+    color: var(--dm-primary-light);
 }
 
 body.dark-mode a {
-    color: var(--dm-primary-color);
+    color: var(--dm-primary-light);
 }
 
 body.dark-mode a:hover {
@@ -44,27 +57,37 @@ body.dark-mode a:hover {
 }
 
 body.dark-mode code {
-    background-color: rgba(10, 186, 181, 0.2);
+    background-color: rgba(167, 139, 250, 0.15);
+    color: var(--dm-primary-light);
 }
 
 /* Dark Mode Progress Bar */
 body.dark-mode .progress-bar {
-    background: linear-gradient(90deg, var(--dm-primary-color), var(--dm-success-color));
+    background: linear-gradient(90deg,
+        var(--dm-primary-dark) 0%,
+        var(--dm-primary-color) 50%,
+        var(--dm-primary-light) 100%);
+    box-shadow: 0 0 15px rgba(167, 139, 250, 0.5);
 }
 
 /* Dark Mode Toggle Button */
 body.dark-mode .dark-mode-toggle {
-    background-color: var(--dm-surface-color);
+    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
     border-color: var(--dm-border-color);
 }
 
 body.dark-mode .dark-mode-toggle svg {
-    color: var(--dm-text-color);
+    color: var(--dm-primary-color);
+}
+
+body.dark-mode .dark-mode-toggle:hover {
+    border-color: var(--dm-primary-color);
+    box-shadow: 0 0 20px rgba(167, 139, 250, 0.4);
 }
 
 /* Dark Mode Back to Top */
 body.dark-mode .back-to-top {
-    background-color: var(--dm-surface-color);
+    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
     border-color: var(--dm-primary-color);
 }
 
@@ -73,7 +96,7 @@ body.dark-mode .back-to-top svg {
 }
 
 body.dark-mode .back-to-top:hover {
-    background-color: var(--dm-primary-color);
+    background: linear-gradient(135deg, var(--dm-primary-dark), var(--dm-primary-color));
 }
 
 body.dark-mode .back-to-top:hover svg {
@@ -82,8 +105,9 @@ body.dark-mode .back-to-top:hover svg {
 
 /* Dark Mode Sidebar */
 body.dark-mode .sidebar-nav {
-    background-color: var(--dm-surface-color);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
+    border: 1px solid var(--dm-border-color);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 }
 
 body.dark-mode .sidebar-nav h4 {
@@ -96,8 +120,9 @@ body.dark-mode .sidebar-nav a {
 
 body.dark-mode .sidebar-nav a:hover,
 body.dark-mode .sidebar-nav a.active {
-    color: var(--dm-primary-color);
+    color: var(--dm-primary-light);
     border-left-color: var(--dm-primary-color);
+    background: rgba(167, 139, 250, 0.1);
 }
 
 /* Dark Mode Article Header */
@@ -110,12 +135,18 @@ body.dark-mode .article-meta {
 }
 
 body.dark-mode .keyword {
-    background-color: rgba(10, 186, 181, 0.2);
-    color: var(--dm-primary-color);
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(167, 139, 250, 0.1));
+    color: var(--dm-primary-light);
+    border-color: var(--dm-border-color);
+}
+
+body.dark-mode .keyword:hover {
+    background: linear-gradient(135deg, var(--dm-primary-color), var(--dm-primary-dark));
+    color: var(--dm-background-color);
 }
 
 body.dark-mode .article-abstract {
-    background-color: var(--dm-surface-color);
+    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
     border-color: var(--dm-border-color);
 }
 
@@ -125,21 +156,22 @@ body.dark-mode .article-abstract h3 {
 
 /* Dark Mode Data Stats */
 body.dark-mode .stat-card {
-    background-color: var(--dm-surface-color);
+    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
     border-color: var(--dm-border-color);
 }
 
 body.dark-mode .stat-card:hover {
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 25px rgba(167, 139, 250, 0.2);
+    border-color: var(--dm-primary-color);
 }
 
 body.dark-mode .stat-card.highlight {
     border-color: var(--dm-accent-color);
-    background-color: rgba(231, 76, 60, 0.1);
+    background: linear-gradient(135deg, rgba(244, 114, 182, 0.1), rgba(244, 114, 182, 0.05));
 }
 
 body.dark-mode .stat-value {
-    color: var(--dm-primary-color);
+    color: var(--dm-primary-light);
 }
 
 body.dark-mode .stat-card.highlight .stat-value {
@@ -153,11 +185,11 @@ body.dark-mode .stat-label {
 /* Dark Mode Tables */
 body.dark-mode table {
     background-color: var(--dm-surface-color);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 body.dark-mode th {
-    background-color: var(--dm-primary-color);
+    background: linear-gradient(135deg, var(--dm-primary-dark), var(--dm-primary-color));
 }
 
 body.dark-mode td {
@@ -165,11 +197,11 @@ body.dark-mode td {
 }
 
 body.dark-mode tr:hover {
-    background-color: rgba(10, 186, 181, 0.05);
+    background-color: rgba(167, 139, 250, 0.05);
 }
 
 body.dark-mode tr.highlight-row {
-    background-color: rgba(39, 174, 96, 0.1);
+    background: linear-gradient(90deg, rgba(52, 211, 153, 0.1), rgba(167, 139, 250, 0.05));
 }
 
 body.dark-mode td.protect {
@@ -181,18 +213,18 @@ body.dark-mode td.better {
 }
 
 body.dark-mode .badge.success {
-    background-color: rgba(39, 174, 96, 0.2);
+    background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(52, 211, 153, 0.1));
     color: var(--dm-success-color);
 }
 
 body.dark-mode .badge.warning {
-    background-color: rgba(231, 76, 60, 0.2);
+    background: linear-gradient(135deg, rgba(244, 114, 182, 0.2), rgba(244, 114, 182, 0.1));
     color: var(--dm-accent-color);
 }
 
 /* Dark Mode Chart Container */
 body.dark-mode .chart-container {
-    background-color: var(--dm-surface-color);
+    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
     border-color: var(--dm-border-color);
 }
 
@@ -202,25 +234,30 @@ body.dark-mode .chart-caption {
 
 /* Dark Mode Highlight Box */
 body.dark-mode .highlight-box {
-    background-color: rgba(10, 186, 181, 0.15);
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.1), rgba(167, 139, 250, 0.05));
     border-left-color: var(--dm-primary-color);
 }
 
 /* Dark Mode Formula Box */
 body.dark-mode .formula-box {
-    background-color: var(--dm-surface-color);
+    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
     border-color: var(--dm-border-color);
 }
 
 body.dark-mode .formula-box .formula {
-    background-color: rgba(10, 186, 181, 0.2);
-    color: var(--dm-primary-color);
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(167, 139, 250, 0.1));
+    color: var(--dm-primary-light);
+    border-color: var(--dm-border-color);
 }
 
 /* Dark Mode Key Finding */
 body.dark-mode .key-finding {
-    background: linear-gradient(135deg, rgba(39, 174, 96, 0.15), rgba(10, 186, 181, 0.15));
+    background: linear-gradient(135deg, rgba(52, 211, 153, 0.1), rgba(167, 139, 250, 0.08));
     border-color: var(--dm-success-color);
+}
+
+body.dark-mode .key-finding::before {
+    background: linear-gradient(180deg, var(--dm-success-color), var(--dm-primary-color));
 }
 
 body.dark-mode .key-finding h4 {
@@ -229,22 +266,22 @@ body.dark-mode .key-finding h4 {
 
 /* Dark Mode Interpretation Box */
 body.dark-mode .interpretation-box {
-    background-color: rgba(10, 186, 181, 0.1);
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.08), rgba(196, 181, 253, 0.05));
     border-color: var(--dm-primary-color);
 }
 
 body.dark-mode .interpretation-box h4 {
-    color: var(--dm-primary-color);
+    color: var(--dm-primary-light);
 }
 
 /* Dark Mode Model Metrics */
 body.dark-mode .metric {
-    background-color: var(--dm-surface-color);
+    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
     border-color: var(--dm-border-color);
 }
 
 body.dark-mode .metric-value {
-    color: var(--dm-primary-color);
+    color: var(--dm-primary-light);
 }
 
 body.dark-mode .metric-label {
@@ -253,12 +290,12 @@ body.dark-mode .metric-label {
 
 /* Dark Mode Customer Types */
 body.dark-mode .customer-type {
-    background-color: var(--dm-surface-color);
+    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
     border-color: var(--dm-border-color);
 }
 
 body.dark-mode .customer-type:hover {
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 12px 30px rgba(167, 139, 250, 0.2);
 }
 
 body.dark-mode .customer-type.high-risk {
@@ -266,7 +303,7 @@ body.dark-mode .customer-type.high-risk {
 }
 
 body.dark-mode .customer-type.medium-risk {
-    border-color: #F39C12;
+    border-color: var(--dm-warning-color);
 }
 
 body.dark-mode .customer-type.low-risk {
@@ -278,7 +315,7 @@ body.dark-mode .customer-type.high-risk h4 {
 }
 
 body.dark-mode .customer-type.medium-risk h4 {
-    color: #F39C12;
+    color: var(--dm-warning-color);
 }
 
 body.dark-mode .customer-type.low-risk h4 {
@@ -294,7 +331,7 @@ body.dark-mode .customer-type.high-risk .clv-value {
 }
 
 body.dark-mode .customer-type.medium-risk .clv-value {
-    color: #F39C12;
+    color: var(--dm-warning-color);
 }
 
 body.dark-mode .customer-type.low-risk .clv-value {
@@ -307,12 +344,17 @@ body.dark-mode .customer-type .clv-label {
 
 /* Dark Mode Findings */
 body.dark-mode .finding-item {
-    background-color: var(--dm-surface-color);
+    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
     border-color: var(--dm-border-color);
 }
 
+body.dark-mode .finding-item:hover {
+    border-color: var(--dm-primary-color);
+}
+
 body.dark-mode .finding-number {
-    background-color: var(--dm-primary-color);
+    background: linear-gradient(135deg, var(--dm-primary-color), var(--dm-primary-dark));
+    box-shadow: 0 4px 15px rgba(167, 139, 250, 0.3);
 }
 
 body.dark-mode .finding-content h4 {
@@ -325,19 +367,19 @@ body.dark-mode .finding-content p {
 
 /* Dark Mode Recommendations */
 body.dark-mode .recommendation {
-    background-color: var(--dm-surface-color);
+    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
     border-color: var(--dm-border-color);
 }
 
 body.dark-mode .recommendation h4 {
-    color: var(--dm-primary-color);
-    border-bottom-color: rgba(10, 186, 181, 0.3);
+    color: var(--dm-primary-light);
+    border-bottom-color: var(--dm-border-color);
 }
 
 /* Dark Mode Limitations */
 body.dark-mode .limitations {
-    background-color: rgba(231, 76, 60, 0.1);
-    border-color: rgba(231, 76, 60, 0.4);
+    background: linear-gradient(135deg, rgba(244, 114, 182, 0.08), rgba(244, 114, 182, 0.05));
+    border-color: rgba(244, 114, 182, 0.4);
 }
 
 /* Dark Mode Collapsible Code */
@@ -346,16 +388,16 @@ body.dark-mode .collapsible-code {
 }
 
 body.dark-mode .collapsible-trigger {
-    background-color: var(--dm-surface-color);
+    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
     color: var(--dm-text-color);
 }
 
 body.dark-mode .collapsible-trigger:hover {
-    background-color: rgba(10, 186, 181, 0.1);
+    background: var(--dm-surface-elevated);
 }
 
 body.dark-mode .collapsible-trigger span {
-    color: var(--dm-primary-color);
+    color: var(--dm-primary-light);
 }
 
 body.dark-mode .collapsible-trigger .chevron {
@@ -363,7 +405,7 @@ body.dark-mode .collapsible-trigger .chevron {
 }
 
 body.dark-mode .collapsible-content {
-    background-color: #1A1A1A;
+    background-color: #0A0514;
 }
 
 /* Dark Mode References */
@@ -399,4 +441,34 @@ body.dark-mode .js-plotly-plot .plotly .g-gtitle {
 body.dark-mode .js-plotly-plot .plotly .xtick text,
 body.dark-mode .js-plotly-plot .plotly .ytick text {
     fill: var(--dm-text-muted) !important;
+}
+
+/* Dark Mode Grid Lines */
+body.dark-mode .js-plotly-plot .plotly .xgrid,
+body.dark-mode .js-plotly-plot .plotly .ygrid {
+    stroke: var(--dm-border-color) !important;
+}
+
+/* Dark Mode Selection */
+body.dark-mode ::selection {
+    background: rgba(167, 139, 250, 0.3);
+    color: var(--dm-text-color);
+}
+
+/* Dark Mode Scrollbar */
+body.dark-mode::-webkit-scrollbar {
+    width: 10px;
+}
+
+body.dark-mode::-webkit-scrollbar-track {
+    background: var(--dm-background-color);
+}
+
+body.dark-mode::-webkit-scrollbar-thumb {
+    background: var(--dm-border-color);
+    border-radius: 5px;
+}
+
+body.dark-mode::-webkit-scrollbar-thumb:hover {
+    background: var(--dm-primary-dark);
 }
