@@ -87,34 +87,12 @@
     <main class="main-content">
         <!-- Hero Section -->
         <header class="hero-section" id="heroSection">
-            <!-- Character Placeholder (Simple Figure) -->
-            <div class="hero-character-container" id="heroCharacter">
-                <svg class="character-svg" viewBox="0 0 100 120" width="100" height="120">
-                    <!-- Head -->
-                    <circle cx="50" cy="25" r="20" fill="#A78BFA"/>
-                    <!-- Body -->
-                    <rect x="35" y="45" width="30" height="40" rx="5" fill="#7C3AED"/>
-                    <!-- Phone -->
-                    <rect x="65" y="55" width="15" height="25" rx="2" fill="#EC4899"/>
-                    <rect x="67" y="58" width="11" height="18" rx="1" fill="#F5F3FF"/>
-                    <!-- Arm holding phone -->
-                    <path d="M60 55 Q70 50 68 60" stroke="#7C3AED" stroke-width="8" fill="none" stroke-linecap="round"/>
-                    <!-- Legs -->
-                    <rect x="38" y="85" width="10" height="25" rx="3" fill="#5B21B6"/>
-                    <rect x="52" y="85" width="10" height="25" rx="3" fill="#5B21B6"/>
-                </svg>
-                <!-- Dust particles container -->
-                <div class="dust-container" id="dustContainer"></div>
-            </div>
-
-            <!-- Typewriter Text -->
-            <div class="hero-typewriter" id="heroTypewriter">
-                <p class="typewriter-text"></p>
-            </div>
-
-            <!-- Main Title (hidden initially) -->
+            <!-- Main Title with Typewriter -->
             <div class="hero-title-container" id="heroTitleContainer">
-                <h1 class="hero-title">用生存分析预测客户流失</h1>
+                <h1 class="hero-title">
+                    <span class="typewriter-title"></span>
+                    <span class="cursor-blink">|</span>
+                </h1>
                 <p class="hero-subtitle">从 Kaplan-Meier 到 Cox 回归</p>
 
                 <!-- Floating Icons -->
@@ -151,13 +129,13 @@
                 </div>
             </div>
 
-            <!-- Article Meta (hidden initially) -->
+            <!-- Article Meta -->
             <div class="article-meta-hero" id="articleMeta">
                 <span class="date">2026-04-27</span>
                 <span class="reading-time">预计阅读 15 分钟</span>
             </div>
 
-            <!-- Keywords (hidden initially) -->
+            <!-- Keywords -->
             <div class="article-keywords-hero" id="articleKeywords">
                 <span class="keyword">生存分析</span>
                 <span class="keyword">客户流失</span>
@@ -189,20 +167,29 @@
 
             <h3>分析目标</h3>
             <div class="highlight-box target-highlight">
-                <div class="target-mini-svg">
-                    <svg viewBox="0 0 60 60" width="40" height="40">
-                        <circle cx="30" cy="30" r="25" fill="none" stroke="#A78BFA" stroke-width="3"/>
-                        <circle cx="30" cy="30" r="15" fill="none" stroke="#7C3AED" stroke-width="2"/>
-                        <circle cx="30" cy="30" r="5" fill="#7C3AED"/>
-                        <path d="M10 10 L28 28" stroke="#EC4899" stroke-width="2" stroke-linecap="round"/>
-                        <polygon points="28,28 22,24 24,22" fill="#EC4899"/>
-                    </svg>
+                <div class="target-content">
+                    <ul>
+                        <li><strong>识别流失风险因素</strong>：哪些服务或客户特征影响留存</li>
+                        <li><strong>预测客户价值</strong>：计算不同客户群体的 CLV</li>
+                        <li><strong>提供业务建议</strong>：基于分析结果提出可落地的策略</li>
+                    </ul>
+                    <div class="target-svg-container">
+                        <svg class="target-svg" viewBox="0 0 80 80" width="60" height="60">
+                            <!-- 靶子 -->
+                            <circle class="target-ring-1" cx="40" cy="40" r="30" fill="none" stroke="#A78BFA" stroke-width="3"/>
+                            <circle class="target-ring-2" cx="40" cy="40" r="20" fill="none" stroke="#7C3AED" stroke-width="2"/>
+                            <circle class="target-ring-3" cx="40" cy="40" r="8" fill="#7C3AED"/>
+                            <!-- 箭 -->
+                            <g class="arrow-group">
+                                <line class="arrow-shaft" x1="0" y1="0" x2="32" y2="32" stroke="#EC4899" stroke-width="3" stroke-linecap="round"/>
+                                <polygon class="arrow-head" points="32,32 24,28 28,24" fill="#EC4899"/>
+                                <!-- 箭羽 -->
+                                <line class="arrow-feather-1" x1="5" y1="5" x2="10" y2="2" stroke="#EC4899" stroke-width="2" stroke-linecap="round"/>
+                                <line class="arrow-feather-2" x1="5" y1="5" x2="2" y2="10" stroke="#EC4899" stroke-width="2" stroke-linecap="round"/>
+                            </g>
+                        </svg>
+                    </div>
                 </div>
-                <ul>
-                    <li><strong>识别流失风险因素</strong>：哪些服务或客户特征影响留存</li>
-                    <li><strong>预测客户价值</strong>：计算不同客户群体的 CLV</li>
-                    <li><strong>提供业务建议</strong>：基于分析结果提出可落地的策略</li>
-                </ul>
             </div>
         </section>
 

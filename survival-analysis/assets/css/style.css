@@ -370,7 +370,7 @@ body.dark-mode .dark-mode-toggle .moon-icon {
    Hero Section Styles
    ============================================ */
 .hero-section {
-    min-height: 80vh;
+    min-height: 70vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -380,78 +380,36 @@ body.dark-mode .dark-mode-toggle .moon-icon {
     text-align: center;
 }
 
-/* Character Container */
-.hero-character-container {
-    position: relative;
-    width: 100px;
-    height: 120px;
-    margin-bottom: 2em;
-}
-
-.character-svg {
-    width: 100%;
-    height: 100%;
-}
-
-/* Dust Container */
-.dust-container {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;
-    height: 50px;
-    pointer-events: none;
-}
-
-.dust-particle {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: var(--primary-light);
-    border-radius: 50%;
-    opacity: 0;
-}
-
-/* Typewriter */
-.hero-typewriter {
-    max-width: 600px;
-    margin-bottom: 2em;
-    opacity: 0;
-}
-
-.typewriter-text {
-    font-size: 1.2rem;
-    color: var(--text-color);
-    line-height: 1.8;
-    border-right: 2px solid var(--primary-color);
-    padding-right: 0.3em;
-    display: inline;
-}
-
-.typewriter-cursor {
-    animation: blink 1s infinite;
-}
-
-@keyframes blink {
-    0%, 50% { border-color: var(--primary-color); }
-    51%, 100% { border-color: transparent; }
-}
-
 /* Hero Title Container */
 .hero-title-container {
-    opacity: 0;
-    visibility: hidden;
     position: relative;
+    margin-bottom: 1.5em;
 }
 
 .hero-title {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     margin-bottom: 0.3em;
     background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    min-height: 1.2em;
+}
+
+.typewriter-title {
+    display: inline;
+}
+
+.cursor-blink {
+    display: inline-block;
+    color: var(--primary-color);
+    animation: cursorBlink 1s infinite;
+    font-weight: 300;
+}
+
+@keyframes cursorBlink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
 }
 
 .hero-subtitle {
@@ -459,13 +417,15 @@ body.dark-mode .dark-mode-toggle .moon-icon {
     color: var(--text-muted);
     font-family: var(--font-heading);
     margin-bottom: 1em;
+    opacity: 0;
+    transform: translateY(20px);
 }
 
 /* Floating Icons */
 .floating-icons {
     position: absolute;
     width: 350px;
-    height: 200px;
+    height: 180px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -528,19 +488,48 @@ body.dark-mode .dark-mode-toggle .moon-icon {
 }
 
 /* ============================================
-   Target Mini SVG in Highlight Box
+   Target SVG with Arrow Animation
    ============================================ */
 .target-highlight {
     position: relative;
-    padding-left: 3.5em;
 }
 
-.target-mini-svg {
-    position: absolute;
-    left: 1em;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0.8;
+.target-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5em;
+}
+
+.target-content ul {
+    flex: 1;
+    margin: 0;
+}
+
+.target-svg-container {
+    flex-shrink: 0;
+    padding: 0.5em;
+}
+
+.target-svg {
+    display: block;
+}
+
+/* Target rings pulse animation */
+.target-ring-1, .target-ring-2, .target-ring-3 {
+    transform-origin: center;
+}
+
+/* Arrow animation - starts from left, flies to target */
+.arrow-group {
+    opacity: 0;
+    transform: translate(-60px, -60px) rotate(45deg);
+}
+
+/* Arrow hit state - after animation */
+.arrow-group.hit {
+    opacity: 1;
+    transform: translate(0, 0) rotate(45deg);
 }
 
 .article-meta {

@@ -129,8 +129,8 @@ function createChurnDistributionChart() {
         textinfo: 'percent+label',
         textposition: 'outside',
         textfont: {
-            color: themeColors.text,
-            size: 13
+            color: isDark ? '#F5F3FF' : themeColors.text,
+            size: 14
         },
         hovertemplate: '%{label}: %{value} 人<br>占比: %{percent}<extra></extra>'
     }];
@@ -144,14 +144,20 @@ function createChurnDistributionChart() {
         showlegend: true,
         legend: {
             orientation: 'h',
-            y: -0.15,
+            y: -0.25,
+            x: 0.5,
+            xanchor: 'center',
             font: {
-                color: themeColors.text,
-                size: 13
+                color: isDark ? '#F5F3FF' : themeColors.text,
+                size: 14,
+                family: "'Source Sans Pro', sans-serif"
             },
-            bgcolor: 'transparent',
-            bordercolor: 'transparent'
+            bgcolor: isDark ? 'rgba(26, 19, 51, 1)' : 'rgba(255, 255, 255, 1)',
+            bordercolor: isDark ? '#A78BFA' : '#E9D5FF',
+            borderwidth: 2,
+            traceorder: 'normal'
         },
+        margin: { t: 60, r: 30, b: 100, l: 60 },
         annotations: [{
             text: '3351<br>客户',
             showarrow: false,
@@ -273,10 +279,12 @@ function createKMOverallChart() {
         },
         legend: {
             orientation: 'h',
-            y: -0.22,
+            y: -0.25,
+            x: 0.5,
+            xanchor: 'center',
             font: { color: themeColors.text, size: 11 }
         },
-        margin: { t: 60, r: 30, b: 80, l: 60 }
+        margin: { t: 60, r: 30, b: 100, l: 60 }
     };
 
     Plotly.newPlot('kmOverallChart', [ciTrace, survivalTrace, medianLine, medianPoint], layout, config);
@@ -808,7 +816,7 @@ function createCLVChart() {
             font: { size: 18, color: themeColors.primary, family: "'Playfair Display', serif" }
         },
         xaxis: {
-            title: { text: '月份', font: { color: themeColors.text } },
+            title: { text: '月份', font: { color: themeColors.text }, standoff: 10 },
             gridcolor: getGridColor(),
             tickfont: { color: themeColors.textMuted }
         },
@@ -820,9 +828,13 @@ function createCLVChart() {
         },
         legend: {
             orientation: 'h',
-            y: -0.15,
-            font: { color: themeColors.text }
+            y: -0.28,
+            x: 0.5,
+            xanchor: 'center',
+            font: { color: themeColors.text, size: 11 },
+            itemwidth: 30
         },
+        margin: { t: 60, r: 30, b: 120, l: 60 },
         annotations: [
             {
                 x: 36,

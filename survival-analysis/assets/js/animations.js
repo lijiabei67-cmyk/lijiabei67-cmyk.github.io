@@ -23,74 +23,34 @@ function initAnimations() {
 }
 
 /* ============================================
-   1. Hero Section Animation Sequence
+   1. Hero Section Animation - Title Typewriter
    ============================================ */
 function initHeroAnimation() {
-    const heroCharacter = document.getElementById('heroCharacter');
-    const heroTypewriter = document.getElementById('heroTypewriter');
     const heroTitleContainer = document.getElementById('heroTitleContainer');
+    const heroSubtitle = document.querySelector('.hero-subtitle');
     const articleMeta = document.getElementById('articleMeta');
     const articleKeywords = document.getElementById('articleKeywords');
-    const dustContainer = document.getElementById('dustContainer');
 
     // Create main timeline
     const heroTL = gsap.timeline();
 
-    // Step 1: Show character with pop animation
-    heroTL.from(heroCharacter, {
-        scale: 0.5,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'back.out(1.7)'
-    });
-
-    // Step 2: Typewriter effect
+    // Step 1: Typewriter effect for title
     heroTL.add(() => {
-        gsap.to(heroTypewriter, {
-            opacity: 1,
-            duration: 0.3
-        });
-        typeWriterEffect();
-    }, '+=0.2');
+        titleTypewriterEffect();
+    });
 
     // Wait for typewriter to complete
-    heroTL.to({}, { duration: 3.5 });
+    heroTL.to({}, { duration: 2.5 });
 
-    // Step 3: Character runs away with dust effect
-    heroTL.to(heroCharacter, {
-        x: window.innerWidth + 200,
-        y: -80,
-        rotation: 20,
-        scale: 0.6,
-        duration: 0.6,
-        ease: 'power2.in',
-        onStart: () => {
-            createDustParticles(dustContainer);
-        }
-    });
-
-    // Step 4: Show title container
-    heroTL.to(heroTitleContainer, {
+    // Step 2: Show subtitle
+    heroTL.to(heroSubtitle, {
         opacity: 1,
-        visibility: 'visible',
-        duration: 0.1
-    }, '-=0.2');
-
-    heroTL.from('.hero-title', {
-        y: 40,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out'
-    });
-
-    heroTL.from('.hero-subtitle', {
-        y: 20,
-        opacity: 0,
+        y: 0,
         duration: 0.6,
         ease: 'power2.out'
-    }, '-=0.4');
+    });
 
-    // Step 5: Floating icons appear
+    // Step 3: Floating icons appear
     heroTL.from('.floating-icon', {
         scale: 0,
         opacity: 0,
@@ -104,7 +64,7 @@ function initHeroAnimation() {
         startFloatingAnimation();
     });
 
-    // Step 6: Show meta and keywords
+    // Step 4: Show meta and keywords
     heroTL.to(articleMeta, {
         opacity: 1,
         duration: 0.4
@@ -124,10 +84,10 @@ function initHeroAnimation() {
     }, '-=0.2');
 }
 
-// Typewriter effect function
-function typeWriterEffect() {
-    const text = '我们想分析客户流失的原因和时间点，并且优化获客策略';
-    const typewriterEl = document.querySelector('.typewriter-text');
+// Title typewriter effect
+function titleTypewriterEffect() {
+    const text = '用生存分析预测客户流失';
+    const typewriterEl = document.querySelector('.typewriter-title');
     if (!typewriterEl) return;
 
     let index = 0;
@@ -136,36 +96,11 @@ function typeWriterEffect() {
         if (index < text.length) {
             typewriterEl.textContent = text.substring(0, index + 1);
             index++;
-            setTimeout(type, 70);
-        } else {
-            typewriterEl.classList.add('typewriter-cursor');
+            setTimeout(type, 100);
         }
     }
 
     type();
-}
-
-// Create dust particles
-function createDustParticles(container) {
-    if (!container) return;
-
-    for (let i = 0; i < 12; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'dust-particle';
-        particle.style.left = (40 + Math.random() * 20) + '%';
-        particle.style.bottom = Math.random() * 15 + 'px';
-        container.appendChild(particle);
-
-        gsap.to(particle, {
-            x: (Math.random() - 0.5) * 80,
-            y: -Math.random() * 40,
-            opacity: 0.7,
-            scale: Math.random() * 1.2 + 0.5,
-            duration: 0.6,
-            ease: 'power1.out',
-            onComplete: () => particle.remove()
-        });
-    }
 }
 
 // Floating icons continuous animation
@@ -253,6 +188,50 @@ function initSectionAnimations() {
         });
     });
 
+    // Target highlight with arrow animation
+    const targetHighlight = document.querySelector('.target-highlight');
+    if (targetHighlight) {
+        const arrowGroup = targetHighlight.querySelector('.arrow-group');
+        const targetRings = targetHighlight.querySelectorAll('.target-ring-1, .target-ring-2');
+
+        if (arrowGroup) {
+            ScrollTrigger.create({
+                trigger: targetHighlight,
+                start: 'top 85%',
+                onEnter: () => {
+                    // Arrow flies in
+                    gsap.to(arrowGroup, {
+                        opacity: 1,
+                        x: 0,
+                        y: 0,
+                        duration: 0.6,
+                        delay: 0.3,
+                        ease: 'power2.out',
+                        onStart: function() {
+                            arrowGroup.style.transform = 'rotate(45deg)';
+                        }
+                    });
+
+                    // Target rings pulse after hit
+                    if (targetRings.length > 0) {
+                        gsap.fromTo(targetRings,
+                            { scale: 1 },
+                            {
+                                scale: 1.1,
+                                duration: 0.15,
+                                delay: 0.8,
+                                stagger: 0.05,
+                                yoyo: true,
+                                repeat: 1,
+                                ease: 'power1.inOut'
+                            }
+                        );
+                    }
+                }
+            });
+        }
+    }
+
     // Formula boxes
     gsap.utils.toArray('.formula-box').forEach(box => {
         gsap.from(box, {
@@ -290,28 +269,47 @@ function initStatCardAnimations() {
         // Number counter animation
         const valueEl = card.querySelector('.stat-value');
         if (valueEl) {
-            const endValue = parseFloat(valueEl.textContent.replace(/[^0-9.]/g, ''));
-            const suffix = valueEl.textContent.replace(/[0-9.,]/g, '');
+            const originalText = valueEl.textContent;
+            const endValue = parseFloat(originalText.replace(/[^0-9.]/g, ''));
+            const suffix = originalText.replace(/[0-9.,]/g, '');
 
-            if (!isNaN(endValue)) {
+            if (!isNaN(endValue) && endValue > 0) {
                 ScrollTrigger.create({
                     trigger: card,
                     start: 'top 90%',
+                    once: true,
                     onEnter: () => {
-                        gsap.from(valueEl, {
-                            textContent: 0,
-                            duration: 1.5,
-                            ease: 'power1.out',
-                            snap: { textContent: endValue % 1 === 0 ? 1 : 0.01 },
-                            onUpdate: function() {
-                                const current = parseFloat(valueEl.textContent);
-                                if (endValue % 1 === 0) {
-                                    valueEl.textContent = Math.round(current).toLocaleString() + suffix;
+                        const isInteger = endValue % 1 === 0;
+                        const duration = 1500; // ms
+                        const startTime = performance.now();
+
+                        function animateStat(currentTime) {
+                            const elapsed = currentTime - startTime;
+                            const progress = Math.min(elapsed / duration, 1);
+
+                            // Ease out
+                            const eased = 1 - Math.pow(1 - progress, 2);
+                            const currentValue = endValue * eased;
+
+                            if (isInteger) {
+                                valueEl.textContent = Math.round(currentValue).toLocaleString() + suffix;
+                            } else {
+                                valueEl.textContent = currentValue.toFixed(2) + suffix;
+                            }
+
+                            if (progress < 1) {
+                                requestAnimationFrame(animateStat);
+                            } else {
+                                // Ensure exact final value
+                                if (isInteger) {
+                                    valueEl.textContent = Math.round(endValue).toLocaleString() + suffix;
                                 } else {
-                                    valueEl.textContent = current.toFixed(2) + suffix;
+                                    valueEl.textContent = endValue.toFixed(2) + suffix;
                                 }
                             }
-                        });
+                        }
+
+                        requestAnimationFrame(animateStat);
                     }
                 });
             }
@@ -456,22 +454,41 @@ function initCustomerTypeAnimations() {
         });
 
         if (clvValue) {
-            const value = parseFloat(clvValue.textContent.replace(/[^0-9.]/g, ''));
-            if (!isNaN(value)) {
+            // Get the target value from the HTML content
+            const originalHTML = clvValue.innerHTML;
+            const originalText = clvValue.textContent;
+            const targetValue = parseFloat(originalText.replace(/[^0-9.]/g, ''));
+
+            if (!isNaN(targetValue) && targetValue > 0) {
                 ScrollTrigger.create({
                     trigger: card,
                     start: 'top 85%',
+                    once: true,  // Only run once
                     onEnter: () => {
-                        gsap.from(clvValue, {
-                            textContent: 0,
-                            duration: 1.2,
-                            ease: 'power1.out',
-                            snap: { textContent: 0.01 },
-                            onUpdate: function() {
-                                const current = parseFloat(clvValue.textContent);
-                                clvValue.textContent = '$' + current.toFixed(2);
+                        // Animate from 0 to target value
+                        let currentValue = 0;
+                        const duration = 1200; // ms
+                        const startTime = performance.now();
+
+                        function animateCounter(currentTime) {
+                            const elapsed = currentTime - startTime;
+                            const progress = Math.min(elapsed / duration, 1);
+
+                            // Ease out
+                            const eased = 1 - Math.pow(1 - progress, 2);
+                            currentValue = targetValue * eased;
+
+                            clvValue.textContent = '$' + currentValue.toFixed(2);
+
+                            if (progress < 1) {
+                                requestAnimationFrame(animateCounter);
+                            } else {
+                                // Ensure exact final value
+                                clvValue.textContent = '$' + targetValue.toFixed(2);
                             }
-                        });
+                        }
+
+                        requestAnimationFrame(animateCounter);
                     }
                 });
             }
