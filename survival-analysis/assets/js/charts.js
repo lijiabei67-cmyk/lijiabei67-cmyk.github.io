@@ -137,6 +137,11 @@ function createChurnDistributionChart() {
             size: 15,
             family: "'Source Sans Pro', sans-serif"
         },
+        outsidetextfont: {
+            color: labelColor,
+            size: 15,
+            family: "'Source Sans Pro', sans-serif"
+        },
         hovertemplate: '%{label}: %{value} 人<br>占比: %{percent}<extra></extra>'
     }];
 
@@ -169,7 +174,26 @@ function createChurnDistributionChart() {
         }]
     };
 
-    Plotly.newPlot('churnDistributionChart', data, layout, config);
+    Plotly.newPlot('churnDistributionChart', data, layout, config).then(function() {
+        // Post-render: force outside labels to correct color in dark mode
+        fixPieLabelColors('churnDistributionChart', labelColor);
+    });
+}
+
+// Helper: directly force SVG text fill for pie chart outside labels
+function fixPieLabelColors(chartId, color) {
+    var el = document.getElementById(chartId);
+    if (!el) return;
+    var texts = el.querySelectorAll('.pielayer text');
+    for (var i = 0; i < texts.length; i++) {
+        texts[i].style.fill = color;
+        texts[i].setAttribute('fill', color);
+    }
+    var tspans = el.querySelectorAll('.pielayer tspan');
+    for (var j = 0; j < tspans.length; j++) {
+        tspans[j].style.fill = color;
+        tspans[j].setAttribute('fill', color);
+    }
 }
 
 /* ============================================

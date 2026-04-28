@@ -367,16 +367,19 @@ body.dark-mode .js-plotly-plot .plotly .scatterlayer .line {
     stroke-width: 3 !important;
 }
 
-/* Dark Mode Pie Chart */
+/* Dark Mode Pie Chart - Outside text labels (percent+label on left/right) */
+body.dark-mode .js-plotly-plot .pielayer text,
+body.dark-mode .js-plotly-plot .pielayer tspan,
+body.dark-mode .js-plotly-plot g.pielayer text,
+body.dark-mode .js-plotly-plot g.pielayer tspan,
+body.dark-mode .js-plotly-plot .plotly g.pielayer text {
+    fill: #F5F3FF !important;
+}
+
+/* Dark Mode Pie Chart - Slice styling */
 body.dark-mode .js-plotly-plot .plotly .pielayer .slice {
     stroke: var(--dm-surface-color) !important;
     stroke-width: 2 !important;
-}
-
-/* Dark Mode Pie Chart - Outside text labels (percent+label) */
-body.dark-mode .js-plotly-plot .plotly .pielayer text {
-    fill: #F5F3FF !important;
-    font-weight: 600 !important;
 }
 
 /* Dark Mode Legend - Ensure visibility */
