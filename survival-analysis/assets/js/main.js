@@ -18,12 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
 function initDarkMode() {
     const toggleBtn = document.getElementById('darkModeToggle');
 
-    // Check localStorage for saved preference
+    // Only apply dark mode if user explicitly saved it
     const savedMode = localStorage.getItem('darkMode');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    // Apply saved preference or system preference
-    if (savedMode === 'true' || (savedMode === null && prefersDark)) {
+    if (savedMode === 'true') {
         document.body.classList.add('dark-mode');
     }
 
@@ -36,16 +33,6 @@ function initDarkMode() {
         localStorage.setItem('darkMode', isDark);
     });
 
-    // Listen for system preference changes
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-        if (localStorage.getItem('darkMode') === null) {
-            if (e.matches) {
-                document.body.classList.add('dark-mode');
-            } else {
-                document.body.classList.remove('dark-mode');
-            }
-        }
-    });
 }
 
 /* ============================================
