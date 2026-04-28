@@ -110,27 +110,42 @@ body.dark-mode .article-meta-hero {
 }
 
 /* Dark Mode Target SVG */
-body.dark-mode .target-svg .target-ring-1 {
-    stroke: var(--dm-primary-color);
+body.dark-mode .target-svg {
+    filter: drop-shadow(0 4px 15px rgba(167, 139, 250, 0.3));
 }
 
-body.dark-mode .target-svg .target-ring-2 {
+body.dark-mode .target-svg .target-ring-outer {
     stroke: var(--dm-primary-light);
 }
 
-body.dark-mode .target-svg .target-ring-3 {
+body.dark-mode .target-svg .target-ring-mid {
+    stroke: var(--dm-primary-color);
+}
+
+body.dark-mode .target-svg .target-ring-inner {
+    stroke: var(--dm-primary-dark);
+}
+
+body.dark-mode .target-svg .target-ring-bullseye {
     fill: var(--dm-primary-color);
+    stroke: var(--dm-primary-light);
+}
+
+body.dark-mode .target-svg .crosshair {
+    stroke: var(--dm-primary-light);
 }
 
 body.dark-mode .target-svg .arrow-shaft,
-body.dark-mode .target-svg .arrow-head,
-body.dark-mode .target-svg .arrow-feather-1,
-body.dark-mode .target-svg .arrow-feather-2 {
+body.dark-mode .target-svg .arrow-feather {
     stroke: var(--dm-accent-color);
 }
 
 body.dark-mode .target-svg .arrow-head {
     fill: var(--dm-accent-color);
+}
+
+body.dark-mode .target-svg .impact-wave {
+    stroke: var(--dm-accent-color);
 }
 
 /* Dark Mode Progress Bar */
@@ -350,6 +365,21 @@ body.dark-mode .js-plotly-plot .plotly .scatterlayer .line {
 body.dark-mode .js-plotly-plot .plotly .pielayer .slice {
     stroke: var(--dm-surface-color) !important;
     stroke-width: 2 !important;
+}
+
+/* Dark Mode Pie Chart - Outside text labels (percent+label) */
+body.dark-mode .js-plotly-plot .plotly .pielayer text {
+    fill: #F5F3FF !important;
+    font-weight: 600 !important;
+}
+
+/* Dark Mode Legend - Ensure visibility */
+body.dark-mode .js-plotly-plot .plotly .legend .legendtext {
+    fill: #F5F3FF !important;
+}
+
+body.dark-mode .js-plotly-plot .plotly .infolayer > .legend text {
+    fill: #F5F3FF !important;
 }
 
 /* Dark Mode Bar Chart */

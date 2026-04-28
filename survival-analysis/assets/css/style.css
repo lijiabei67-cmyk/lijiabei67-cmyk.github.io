@@ -394,6 +394,7 @@ body.dark-mode .dark-mode-toggle .moon-icon {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     min-height: 1.2em;
+    transition: filter 0.3s ease;
 }
 
 .typewriter-title {
@@ -498,7 +499,7 @@ body.dark-mode .dark-mode-toggle .moon-icon {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1.5em;
+    gap: 2em;
 }
 
 .target-content ul {
@@ -509,27 +510,48 @@ body.dark-mode .dark-mode-toggle .moon-icon {
 .target-svg-container {
     flex-shrink: 0;
     padding: 0.5em;
+    position: relative;
 }
 
 .target-svg {
     display: block;
+    filter: drop-shadow(0 4px 12px rgba(124, 58, 237, 0.15));
 }
 
-/* Target rings pulse animation */
-.target-ring-1, .target-ring-2, .target-ring-3 {
-    transform-origin: center;
+/* Target rings - base state for animation */
+.target-ring {
+    transform-origin: 100px 100px;
 }
 
-/* Arrow animation - starts from left, flies to target */
-.arrow-group {
+.target-ring-outer {
+    stroke-dasharray: 534;
+    stroke-dashoffset: 534;
+}
+
+.target-ring-mid {
+    stroke-dasharray: 377;
+    stroke-dashoffset: 377;
+}
+
+.target-ring-inner {
+    stroke-dasharray: 220;
+    stroke-dashoffset: 220;
+}
+
+/* Arrow - starts far left, off-screen */
+#targetArrowGroup {
     opacity: 0;
-    transform: translate(-60px, -60px) rotate(45deg);
+    transform: translate(-120px, -30px) rotate(35deg) scale(0.3);
 }
 
-/* Arrow hit state - after animation */
-.arrow-group.hit {
-    opacity: 1;
-    transform: translate(0, 0) rotate(45deg);
+/* Impact wave */
+.impact-wave {
+    transform-origin: 100px 100px;
+}
+
+/* Crosshairs */
+.crosshair {
+    opacity: 0;
 }
 
 .article-meta {
@@ -1188,6 +1210,21 @@ td.better {
 
     .recommendations {
         grid-template-columns: 1fr;
+    }
+
+    .target-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .target-svg-container {
+        order: 1;
+        margin-top: 1em;
+    }
+
+    .target-svg {
+        width: 100px;
+        height: 100px;
     }
 
     .finding-item {

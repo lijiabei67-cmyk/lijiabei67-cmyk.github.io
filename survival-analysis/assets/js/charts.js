@@ -114,6 +114,10 @@ function createChurnDistributionChart() {
     const themeColors = getThemeColors();
     const isDark = document.body.classList.contains('dark-mode');
 
+    // Strong high-contrast text for dark mode
+    const labelColor = isDark ? '#F5F3FF' : '#1E1B4B';
+    const legendBgColor = isDark ? 'rgba(26, 19, 51, 0.95)' : 'rgba(255, 255, 255, 0.95)';
+
     const data = [{
         values: [1795, 1556],
         labels: ['未流失', '已流失'],
@@ -129,8 +133,9 @@ function createChurnDistributionChart() {
         textinfo: 'percent+label',
         textposition: 'outside',
         textfont: {
-            color: isDark ? '#F5F3FF' : themeColors.text,
-            size: 14
+            color: labelColor,
+            size: 15,
+            family: "'Source Sans Pro', sans-serif"
         },
         hovertemplate: '%{label}: %{value} 人<br>占比: %{percent}<extra></extra>'
     }];
@@ -144,18 +149,17 @@ function createChurnDistributionChart() {
         showlegend: true,
         legend: {
             orientation: 'h',
-            y: -0.25,
+            y: -0.3,
             x: 0.5,
             xanchor: 'center',
             font: {
-                color: isDark ? '#F5F3FF' : themeColors.text,
-                size: 14,
+                color: labelColor,
+                size: 15,
                 family: "'Source Sans Pro', sans-serif"
             },
-            bgcolor: isDark ? 'rgba(26, 19, 51, 1)' : 'rgba(255, 255, 255, 1)',
+            bgcolor: legendBgColor,
             bordercolor: isDark ? '#A78BFA' : '#E9D5FF',
-            borderwidth: 2,
-            traceorder: 'normal'
+            borderwidth: 2
         },
         margin: { t: 60, r: 30, b: 100, l: 60 },
         annotations: [{
@@ -828,13 +832,14 @@ function createCLVChart() {
         },
         legend: {
             orientation: 'h',
-            y: -0.28,
+            y: -0.35,
             x: 0.5,
             xanchor: 'center',
-            font: { color: themeColors.text, size: 11 },
-            itemwidth: 30
+            font: { color: themeColors.text, size: 12 },
+            itemclick: false,
+            itemdoubleclick: false
         },
-        margin: { t: 60, r: 30, b: 120, l: 60 },
+        margin: { t: 60, r: 30, b: 140, l: 60 },
         annotations: [
             {
                 x: 36,

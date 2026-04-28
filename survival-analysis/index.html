@@ -173,20 +173,28 @@
                         <li><strong>预测客户价值</strong>：计算不同客户群体的 CLV</li>
                         <li><strong>提供业务建议</strong>：基于分析结果提出可落地的策略</li>
                     </ul>
-                    <div class="target-svg-container">
-                        <svg class="target-svg" viewBox="0 0 80 80" width="60" height="60">
-                            <!-- 靶子 -->
-                            <circle class="target-ring-1" cx="40" cy="40" r="30" fill="none" stroke="#A78BFA" stroke-width="3"/>
-                            <circle class="target-ring-2" cx="40" cy="40" r="20" fill="none" stroke="#7C3AED" stroke-width="2"/>
-                            <circle class="target-ring-3" cx="40" cy="40" r="8" fill="#7C3AED"/>
-                            <!-- 箭 -->
-                            <g class="arrow-group">
-                                <line class="arrow-shaft" x1="0" y1="0" x2="32" y2="32" stroke="#EC4899" stroke-width="3" stroke-linecap="round"/>
-                                <polygon class="arrow-head" points="32,32 24,28 28,24" fill="#EC4899"/>
+                    <div class="target-svg-container" id="targetContainer">
+                        <svg class="target-svg" viewBox="0 0 200 200" width="160" height="160">
+                            <!-- 靶子外环 -->
+                            <circle class="target-ring target-ring-outer" cx="100" cy="100" r="85" fill="none" stroke="#C4B5FD" stroke-width="5"/>
+                            <circle class="target-ring target-ring-mid" cx="100" cy="100" r="60" fill="none" stroke="#A78BFA" stroke-width="4"/>
+                            <circle class="target-ring target-ring-inner" cx="100" cy="100" r="35" fill="none" stroke="#7C3AED" stroke-width="5"/>
+                            <circle class="target-ring target-ring-bullseye" cx="100" cy="100" r="12" fill="#7C3AED" stroke="#5B21B6" stroke-width="2"/>
+                            <!-- 十字准星 -->
+                            <line class="crosshair crosshair-h" x1="70" y1="100" x2="88" y2="100" stroke="#A78BFA" stroke-width="1.5" opacity="0.5"/>
+                            <line class="crosshair crosshair-v" x1="100" y1="70" x2="100" y2="88" stroke="#A78BFA" stroke-width="1.5" opacity="0.5"/>
+                            <!-- 箭 - 从左侧飞入 -->
+                            <g class="arrow-group" id="targetArrowGroup">
+                                <!-- 箭杆 -->
+                                <line class="arrow-shaft" x1="10" y1="55" x2="88" y2="88" stroke="#EC4899" stroke-width="4" stroke-linecap="round"/>
+                                <!-- 箭头 -->
+                                <polygon class="arrow-head" points="88,88 78,80 80,92" fill="#EC4899"/>
                                 <!-- 箭羽 -->
-                                <line class="arrow-feather-1" x1="5" y1="5" x2="10" y2="2" stroke="#EC4899" stroke-width="2" stroke-linecap="round"/>
-                                <line class="arrow-feather-2" x1="5" y1="5" x2="2" y2="10" stroke="#EC4899" stroke-width="2" stroke-linecap="round"/>
+                                <line class="arrow-feather" x1="15" y1="48" x2="22" y2="53" stroke="#EC4899" stroke-width="2.5" stroke-linecap="round"/>
+                                <line class="arrow-feather" x1="12" y1="55" x2="20" y2="58" stroke="#EC4899" stroke-width="2.5" stroke-linecap="round"/>
                             </g>
+                            <!-- 命中效果 - 冲击波 -->
+                            <circle class="impact-wave" cx="100" cy="100" r="15" fill="none" stroke="#F472B6" stroke-width="3" opacity="0"/>
                         </svg>
                     </div>
                 </div>
@@ -663,19 +671,19 @@
                 <div class="customer-type high-risk">
                     <h4>高风险客户</h4>
                     <p class="features">无受抚养人、光纤服务、无在线备份、无技术支持</p>
-                    <p class="clv-value">$468.52</p>
+                    <p class="clv-value" data-target="468.52">$468.52</p>
                     <p class="clv-label">36 个月 CLV</p>
                 </div>
                 <div class="customer-type medium-risk">
                     <h4>中等风险客户</h4>
                     <p class="features">有受抚养人、DSL 服务、无在线备份、无技术支持</p>
-                    <p class="clv-value">$560.87</p>
+                    <p class="clv-value" data-target="560.87">$560.87</p>
                     <p class="clv-label">36 个月 CLV</p>
                 </div>
                 <div class="customer-type low-risk">
                     <h4>低风险客户</h4>
                     <p class="features">有受抚养人、DSL 服务、有在线备份、有技术支持</p>
-                    <p class="clv-value">$672.34</p>
+                    <p class="clv-value" data-target="672.34">$672.34</p>
                     <p class="clv-label">36 个月 CLV</p>
                 </div>
             </div>

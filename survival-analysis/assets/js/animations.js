@@ -30,73 +30,112 @@ function initHeroAnimation() {
     const heroSubtitle = document.querySelector('.hero-subtitle');
     const articleMeta = document.getElementById('articleMeta');
     const articleKeywords = document.getElementById('articleKeywords');
+    const cursorEl = document.querySelector('.cursor-blink');
 
     // Create main timeline
-    const heroTL = gsap.timeline();
+    const heroTL = gsap.timeline({ delay: 0.3 });
 
-    // Step 1: Typewriter effect for title
+    // Step 1: Fade in the title container with a subtle scale
+    heroTL.from(heroTitleContainer, {
+        opacity: 0,
+        y: 20,
+        duration: 0.5,
+        ease: 'power2.out'
+    });
+
+    // Step 2: Typewriter effect
     heroTL.add(() => {
         titleTypewriterEffect();
     });
 
-    // Wait for typewriter to complete
-    heroTL.to({}, { duration: 2.5 });
+    // Wait for typewriter to complete (15 chars * 100ms = 1.5s)
+    heroTL.to({}, { duration: 2.0 });
 
-    // Step 2: Show subtitle
+    // Remove blinking cursor after typing done
+    heroTL.add(() => {
+        if (cursorEl) {
+            cursorEl.style.display = 'none';
+        }
+    });
+
+    // Step 3: Title glow pulse
+    heroTL.to('.hero-title', {
+        filter: 'brightness(1.3)',
+        duration: 0.5,
+        yoyo: true,
+        repeat: 1,
+        ease: 'power1.inOut'
+    });
+
+    // Step 4: Show subtitle with bounce
     heroTL.to(heroSubtitle, {
         opacity: 1,
         y: 0,
-        duration: 0.6,
-        ease: 'power2.out'
-    });
+        duration: 0.7,
+        ease: 'back.out(1.7)'
+    }, '-=0.2');
 
-    // Step 3: Floating icons appear
+    // Step 5: Floating icons appear with stagger
     heroTL.from('.floating-icon', {
         scale: 0,
         opacity: 0,
-        duration: 0.5,
-        stagger: 0.1,
-        ease: 'back.out(1.5)'
-    }, '-=0.3');
+        duration: 0.6,
+        stagger: 0.12,
+        ease: 'back.out(2)'
+    }, '-=0.4');
 
     // Start continuous floating animation
     heroTL.add(() => {
         startFloatingAnimation();
     });
 
-    // Step 4: Show meta and keywords
+    // Step 6: Show meta and keywords
     heroTL.to(articleMeta, {
         opacity: 1,
-        duration: 0.4
-    });
+        duration: 0.5
+    }, '-=0.1');
 
     heroTL.to(articleKeywords, {
         opacity: 1,
-        duration: 0.4
-    }, '-=0.2');
+        duration: 0.5
+    }, '-=0.3');
 
     heroTL.from('.article-keywords-hero .keyword', {
         scale: 0,
         opacity: 0,
-        duration: 0.3,
-        stagger: 0.06,
+        duration: 0.4,
+        stagger: 0.07,
         ease: 'back.out(1.5)'
-    }, '-=0.2');
+    }, '-=0.3');
 }
 
 // Title typewriter effect
 function titleTypewriterEffect() {
     const text = '用生存分析预测客户流失';
     const typewriterEl = document.querySelector('.typewriter-title');
+    const cursorEl = document.querySelector('.cursor-blink');
     if (!typewriterEl) return;
 
     let index = 0;
+    typewriterEl.textContent = '';
 
     function type() {
         if (index < text.length) {
-            typewriterEl.textContent = text.substring(0, index + 1);
+            typewriterEl.textContent += text[index];
             index++;
-            setTimeout(type, 100);
+            // Variable speed: faster for common chars
+            const delay = 80 + Math.random() * 40;
+            setTimeout(type, delay);
+        } else {
+            // Blink cursor a few times then hide
+            if (cursorEl) {
+                gsap.to(cursorEl, {
+                    opacity: 0,
+                    duration: 0.8,
+                    delay: 1.5,
+                    ease: 'power2.out'
+                });
+            }
         }
     }
 
@@ -191,45 +230,103 @@ function initSectionAnimations() {
     // Target highlight with arrow animation
     const targetHighlight = document.querySelector('.target-highlight');
     if (targetHighlight) {
-        const arrowGroup = targetHighlight.querySelector('.arrow-group');
-        const targetRings = targetHighlight.querySelectorAll('.target-ring-1, .target-ring-2');
+        const arrowGroup = targetHighlight.querySelector('#targetArrowGroup');
+        const targetRings = targetHighlight.querySelectorAll('.target-ring');
+        const impactWave = targetHighlight.querySelector('.impact-wave');
+        const crosshairs = targetHighlight.querySelectorAll('.crosshair');
 
-        if (arrowGroup) {
-            ScrollTrigger.create({
+        const targetTL = gsap.timeline({
+            scrollTrigger: {
                 trigger: targetHighlight,
-                start: 'top 85%',
-                onEnter: () => {
-                    // Arrow flies in
-                    gsap.to(arrowGroup, {
-                        opacity: 1,
-                        x: 0,
-                        y: 0,
-                        duration: 0.6,
-                        delay: 0.3,
-                        ease: 'power2.out',
-                        onStart: function() {
-                            arrowGroup.style.transform = 'rotate(45deg)';
-                        }
-                    });
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            }
+        });
 
-                    // Target rings pulse after hit
-                    if (targetRings.length > 0) {
-                        gsap.fromTo(targetRings,
-                            { scale: 1 },
-                            {
-                                scale: 1.1,
-                                duration: 0.15,
-                                delay: 0.8,
-                                stagger: 0.05,
-                                yoyo: true,
-                                repeat: 1,
-                                ease: 'power1.inOut'
-                            }
-                        );
-                    }
-                }
-            });
-        }
+        // Step 1: Draw target rings one by one
+        targetTL.to('.target-ring-outer', {
+            strokeDashoffset: 0,
+            duration: 0.6,
+            ease: 'power2.inOut'
+        });
+
+        targetTL.to('.target-ring-mid', {
+            strokeDashoffset: 0,
+            duration: 0.5,
+            ease: 'power2.inOut'
+        }, '-=0.3');
+
+        targetTL.to('.target-ring-inner', {
+            strokeDashoffset: 0,
+            duration: 0.4,
+            ease: 'power2.inOut'
+        }, '-=0.3');
+
+        targetTL.to('.target-ring-bullseye', {
+            scale: 1.3,
+            duration: 0.2,
+            yoyo: true,
+            repeat: 1,
+            ease: 'power1.inOut'
+        }, '-=0.2');
+
+        // Step 2: Show crosshairs
+        targetTL.to(crosshairs, {
+            opacity: 0.6,
+            duration: 0.3
+        }, '-=0.1');
+
+        // Step 3: Arrow flies in from left with swoosh
+        targetTL.to('#targetArrowGroup', {
+            opacity: 1,
+            x: 0,
+            y: 0,
+            scale: 1,
+            rotation: 0,
+            duration: 0.7,
+            ease: 'power3.in',
+            onStart: () => {
+                // Quiver/shake effect before release
+                gsap.to('#targetArrowGroup', {
+                    y: -5,
+                    duration: 0.08,
+                    yoyo: true,
+                    repeat: 3,
+                    ease: 'power1.inOut'
+                });
+            }
+        }, '-=0.5');
+
+        // Step 4: Arrow hits bullseye - rings expand briefly
+        targetTL.to(targetRings, {
+            scale: 1.05,
+            duration: 0.12,
+            stagger: 0.04,
+            yoyo: true,
+            repeat: 1,
+            transformOrigin: '100px 100px',
+            ease: 'power1.inOut'
+        }, '-=0.1');
+
+        // Step 5: Impact wave radiates out
+        targetTL.fromTo(impactWave, {
+            r: 8,
+            opacity: 1
+        }, {
+            r: 60,
+            opacity: 0,
+            duration: 0.7,
+            ease: 'power2.out'
+        }, '-=0.3');
+
+        // Step 6: Bullseye glow pulse
+        targetTL.to('.target-ring-bullseye', {
+            fill: '#EC4899',
+            duration: 0.3,
+            yoyo: true,
+            repeat: 1,
+            ease: 'power1.inOut'
+        });
     }
 
     // Formula boxes
@@ -454,41 +551,37 @@ function initCustomerTypeAnimations() {
         });
 
         if (clvValue) {
-            // Get the target value from the HTML content
-            const originalHTML = clvValue.innerHTML;
-            const originalText = clvValue.textContent;
-            const targetValue = parseFloat(originalText.replace(/[^0-9.]/g, ''));
+            // Use data-target attribute for reliable value extraction
+            let targetValue = parseFloat(clvValue.getAttribute('data-target'));
+
+            // Fallback: parse from text content if data-target not set
+            if (!targetValue || isNaN(targetValue)) {
+                const originalText = clvValue.textContent;
+                targetValue = parseFloat(originalText.replace(/[^0-9.]/g, ''));
+            }
 
             if (!isNaN(targetValue) && targetValue > 0) {
+                // Use a proxy object for GSAP to animate
+                const counterObj = { value: 0 };
+
                 ScrollTrigger.create({
                     trigger: card,
                     start: 'top 85%',
-                    once: true,  // Only run once
+                    once: true,
                     onEnter: () => {
-                        // Animate from 0 to target value
-                        let currentValue = 0;
-                        const duration = 1200; // ms
-                        const startTime = performance.now();
+                        clvValue.textContent = '$0.00';
 
-                        function animateCounter(currentTime) {
-                            const elapsed = currentTime - startTime;
-                            const progress = Math.min(elapsed / duration, 1);
-
-                            // Ease out
-                            const eased = 1 - Math.pow(1 - progress, 2);
-                            currentValue = targetValue * eased;
-
-                            clvValue.textContent = '$' + currentValue.toFixed(2);
-
-                            if (progress < 1) {
-                                requestAnimationFrame(animateCounter);
-                            } else {
-                                // Ensure exact final value
+                        gsap.to(counterObj, {
+                            value: targetValue,
+                            duration: 1.5,
+                            ease: 'power2.out',
+                            onUpdate: () => {
+                                clvValue.textContent = '$' + counterObj.value.toFixed(2);
+                            },
+                            onComplete: () => {
                                 clvValue.textContent = '$' + targetValue.toFixed(2);
                             }
-                        }
-
-                        requestAnimationFrame(animateCounter);
+                        });
                     }
                 });
             }
