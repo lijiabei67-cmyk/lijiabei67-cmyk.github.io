@@ -85,17 +85,34 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Hero Section -->
+        <!-- Hero Section - Asymmetric Staggered Layout -->
         <header class="hero-section" id="heroSection">
-            <!-- Main Title with Typewriter -->
-            <div class="hero-title-container" id="heroTitleContainer">
-                <h1 class="hero-title">
-                    <span class="typewriter-title"></span>
-                    <span class="cursor-blink">|</span>
-                </h1>
-                <p class="hero-subtitle">从 Kaplan-Meier 到 Cox 回归</p>
+            <!-- Ambient decorative elements -->
+            <div class="hero-ambient">
+                <div class="ambient-orb orb-1"></div>
+                <div class="ambient-orb orb-2"></div>
+                <div class="ambient-grid"></div>
+            </div>
 
-                <!-- Floating Icons -->
+            <!-- Main staggered layout -->
+            <div class="hero-layout">
+                <!-- Title Block - Left aligned, large -->
+                <div class="hero-title-block" id="heroTitleBlock">
+                    <h1 class="hero-title" id="heroTitle">
+                        <span class="typewriter-chars" id="typewriterChars" aria-label="时间与概率的博弈"></span>
+                        <span class="cursor-blink" id="heroCursor">|</span>
+                    </h1>
+                    <div class="title-accent-line" id="titleAccentLine"></div>
+                </div>
+
+                <!-- Subtitle Block - Right indented, italic -->
+                <div class="hero-subtitle-block" id="heroSubtitleBlock">
+                    <p class="hero-subtitle" id="heroSubtitle">
+                        基于 Kaplan-Meier 与 Cox 模型的<br>客户流失预测
+                    </p>
+                </div>
+
+                <!-- Floating Icons - scattered around asymmetric layout -->
                 <div class="floating-icons">
                     <div class="floating-icon icon-calculator">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -129,10 +146,24 @@
                 </div>
             </div>
 
-            <!-- Article Meta -->
-            <div class="article-meta-hero" id="articleMeta">
-                <span class="date">2026-04-27</span>
-                <span class="reading-time">预计阅读 15 分钟</span>
+            <!-- Article Meta Badges - Frosted glass capsules -->
+            <div class="hero-meta-badges" id="heroMetaBadges">
+                <span class="meta-badge">
+                    <svg class="meta-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    2026-04-27
+                </span>
+                <span class="meta-badge">
+                    <svg class="meta-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    预计阅读 15 分钟
+                </span>
             </div>
 
             <!-- Keywords -->

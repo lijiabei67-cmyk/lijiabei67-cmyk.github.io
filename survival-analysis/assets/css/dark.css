@@ -78,17 +78,40 @@ body.dark-mode strong {
 }
 
 /* ============================================
-   Dark Mode Hero Section
+   Dark Mode Hero Section - Asymmetric Layout
    ============================================ */
 body.dark-mode .hero-title {
+    background: linear-gradient(135deg, var(--dm-primary-light) 0%, var(--dm-primary-color) 50%, var(--dm-primary-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+body.dark-mode .typewriter-char.key-word {
+    background: linear-gradient(135deg, #C4B5FD 0%, #A78BFA 40%, #F472B6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 25px rgba(167, 139, 250, 0.6);
+}
+
+body.dark-mode .cursor-blink {
+    color: var(--dm-primary-light);
+}
+
+body.dark-mode .hero-subtitle {
+    color: var(--dm-text-muted);
+}
+
+body.dark-mode .subtitle-highlight {
     background: linear-gradient(135deg, var(--dm-primary-light), var(--dm-primary-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
-body.dark-mode .hero-subtitle {
-    color: var(--dm-text-muted);
+body.dark-mode .title-accent-line {
+    background: linear-gradient(90deg, var(--dm-primary-light), var(--dm-accent-color));
 }
 
 body.dark-mode .floating-icon {
@@ -102,11 +125,40 @@ body.dark-mode .floating-icon svg {
 
 body.dark-mode .typewriter-text {
     color: var(--dm-text-color);
-    border-right-color: var(--dm-primary-color);
 }
 
-body.dark-mode .article-meta-hero {
-    color: var(--dm-text-muted);
+/* Dark Mode Ambient Orbs */
+body.dark-mode .ambient-orb.orb-1 {
+    opacity: 0.2;
+}
+
+body.dark-mode .ambient-orb.orb-2 {
+    opacity: 0.18;
+}
+
+body.dark-mode .ambient-grid {
+    background-image:
+        linear-gradient(rgba(167, 139, 250, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(167, 139, 250, 0.04) 1px, transparent 1px);
+}
+
+/* Dark Mode Meta Badges */
+body.dark-mode .meta-badge {
+    background: linear-gradient(135deg, rgba(36, 24, 69, 0.8), rgba(26, 19, 51, 0.7));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-color: rgba(167, 139, 250, 0.35);
+    color: var(--dm-primary-light);
+}
+
+body.dark-mode .meta-badge:hover {
+    background: linear-gradient(135deg, rgba(36, 24, 69, 0.9), rgba(26, 19, 51, 0.85));
+    border-color: var(--dm-primary-color);
+    box-shadow: 0 4px 20px rgba(167, 139, 250, 0.25);
+}
+
+body.dark-mode .meta-badge-icon {
+    color: var(--dm-primary-color);
 }
 
 /* Dark Mode Target SVG */

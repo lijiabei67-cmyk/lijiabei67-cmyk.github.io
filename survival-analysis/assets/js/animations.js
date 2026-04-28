@@ -23,123 +23,155 @@ function initAnimations() {
 }
 
 /* ============================================
-   1. Hero Section Animation - Title Typewriter
+   1. Hero Section - Split-Text Typewriter
+      Asymmetric staggered layout, key-word glow
    ============================================ */
 function initHeroAnimation() {
-    const heroTitleContainer = document.getElementById('heroTitleContainer');
-    const heroSubtitle = document.querySelector('.hero-subtitle');
-    const articleMeta = document.getElementById('articleMeta');
+    const heroTitleBlock = document.getElementById('heroTitleBlock');
+    const heroSubtitleBlock = document.getElementById('heroSubtitleBlock');
+    const heroMetaBadges = document.getElementById('heroMetaBadges');
     const articleKeywords = document.getElementById('articleKeywords');
-    const cursorEl = document.querySelector('.cursor-blink');
+    const cursorEl = document.getElementById('heroCursor');
+    const accentLine = document.getElementById('titleAccentLine');
+    const typewriterChars = document.getElementById('typewriterChars');
 
-    // Create main timeline
-    const heroTL = gsap.timeline({ delay: 0.3 });
+    if (!typewriterChars) return;
 
-    // Step 1: Fade in the title container with a subtle scale
-    heroTL.from(heroTitleContainer, {
+    // ---- Prepare subtitle with highlighted key term ----
+    const subtitleEl = document.getElementById('heroSubtitle');
+    if (subtitleEl) {
+        subtitleEl.innerHTML = '基于 Kaplan-Meier 与 Cox 模型的<br><span class="subtitle-highlight">客户流失</span>预测';
+    }
+
+    // ---- Split title into character spans ----
+    const titleText = '时间与概率的博弈';
+    // Key word ranges: "时间" = [0,1], "概率" = [3,4]
+    const keyWordRanges = [[0, 1], [3, 4]];
+    const charSpans = [];
+
+    typewriterChars.innerHTML = '';
+    for (let i = 0; i < titleText.length; i++) {
+        const span = document.createElement('span');
+        span.className = 'typewriter-char';
+        span.textContent = titleText[i];
+        for (const [s, e] of keyWordRanges) {
+            if (i >= s && i <= e) { span.classList.add('key-word'); break; }
+        }
+        typewriterChars.appendChild(span);
+        charSpans.push(span);
+    }
+
+    // ---- Cursor blinking animation ----
+    const cursorBlink = gsap.to(cursorEl, {
         opacity: 0,
-        y: 20,
-        duration: 0.5,
+        duration: 0.55,
+        repeat: -1,
+        yoyo: true,
+        ease: 'steps(1)',
+        paused: true
+    });
+    cursorBlink.play();
+
+    // ---- Main timeline ----
+    const heroTL = gsap.timeline({ delay: 0.4 });
+
+    // 1. Title block fades in
+    heroTL.to(heroTitleBlock, {
+        opacity: 1,
+        duration: 0.45,
         ease: 'power2.out'
     });
 
-    // Step 2: Typewriter effect
-    heroTL.add(() => {
-        titleTypewriterEffect();
-    });
-
-    // Wait for typewriter to complete (15 chars * 100ms = 1.5s)
-    heroTL.to({}, { duration: 2.0 });
-
-    // Remove blinking cursor after typing done
-    heroTL.add(() => {
-        if (cursorEl) {
-            cursorEl.style.display = 'none';
+    // 2. Split-text typewriter: stagger each character
+    //    Characters fly up from below with a bounce
+    heroTL.to(charSpans, {
+        opacity: 1,
+        y: 0,
+        duration: 0.35,
+        stagger: {
+            each: 0.1,
+            from: 'start'
+        },
+        ease: 'back.out(2.2)',
+        onStart: () => {
+            // Fade cursor slightly before typing begins
+            gsap.to(cursorEl, { opacity: 1, duration: 0.1 });
         }
     });
 
-    // Step 3: Title glow pulse
+    // 3. Key words glow after being typed
+    //    "时间" finishes ~0.55s into stagger, "概率" ~0.85s
+    heroTL.add(() => {
+        charSpans.forEach(s => {
+            if (s.classList.contains('key-word')) s.classList.add('revealed');
+        });
+    });
+
+    // 4. Title brightness pulse
     heroTL.to('.hero-title', {
-        filter: 'brightness(1.3)',
-        duration: 0.5,
+        filter: 'brightness(1.35) saturate(1.2)',
+        duration: 0.55,
         yoyo: true,
         repeat: 1,
         ease: 'power1.inOut'
     });
 
-    // Step 4: Show subtitle with bounce
-    heroTL.to(heroSubtitle, {
+    // 5. Draw accent line under title
+    heroTL.to(accentLine, {
+        width: '80px',
+        duration: 0.7,
+        ease: 'power3.out'
+    }, '-=0.4');
+
+    // 6. Hide cursor after typing is done
+    heroTL.to(cursorEl, {
+        opacity: 0,
+        duration: 0.4,
+        ease: 'power2.out',
+        onComplete: () => cursorBlink.pause()
+    }, '-=0.5');
+
+    // 7. Subtitle block fades in and slides up
+    heroTL.to(heroSubtitleBlock, {
         opacity: 1,
         y: 0,
         duration: 0.7,
-        ease: 'back.out(1.7)'
-    }, '-=0.2');
+        ease: 'power2.out'
+    }, '-=0.1');
 
-    // Step 5: Floating icons appear with stagger
+    // 8. Floating icons pop in with staggered bounce
     heroTL.from('.floating-icon', {
         scale: 0,
         opacity: 0,
-        duration: 0.6,
+        duration: 0.55,
         stagger: 0.12,
         ease: 'back.out(2)'
-    }, '-=0.4');
+    }, '-=0.35');
 
-    // Start continuous floating animation
-    heroTL.add(() => {
-        startFloatingAnimation();
-    });
+    // Start continuous floating
+    heroTL.add(startFloatingAnimation);
 
-    // Step 6: Show meta and keywords
-    heroTL.to(articleMeta, {
+    // 9. Meta badges fade-in-up
+    heroTL.to(heroMetaBadges, {
         opacity: 1,
-        duration: 0.5
-    }, '-=0.1');
+        y: 0,
+        duration: 0.6,
+        ease: 'power2.out'
+    }, '-=0.2');
 
+    // 10. Keywords stagger in
     heroTL.to(articleKeywords, {
         opacity: 1,
-        duration: 0.5
-    }, '-=0.3');
+        duration: 0.4
+    }, '-=0.15');
 
     heroTL.from('.article-keywords-hero .keyword', {
         scale: 0,
         opacity: 0,
-        duration: 0.4,
+        duration: 0.35,
         stagger: 0.07,
         ease: 'back.out(1.5)'
-    }, '-=0.3');
-}
-
-// Title typewriter effect
-function titleTypewriterEffect() {
-    const text = '用生存分析预测客户流失';
-    const typewriterEl = document.querySelector('.typewriter-title');
-    const cursorEl = document.querySelector('.cursor-blink');
-    if (!typewriterEl) return;
-
-    let index = 0;
-    typewriterEl.textContent = '';
-
-    function type() {
-        if (index < text.length) {
-            typewriterEl.textContent += text[index];
-            index++;
-            // Variable speed: faster for common chars
-            const delay = 80 + Math.random() * 40;
-            setTimeout(type, delay);
-        } else {
-            // Blink cursor a few times then hide
-            if (cursorEl) {
-                gsap.to(cursorEl, {
-                    opacity: 0,
-                    duration: 0.8,
-                    delay: 1.5,
-                    ease: 'power2.out'
-                });
-            }
-        }
-    }
-
-    type();
+    }, '-=0.25');
 }
 
 // Floating icons continuous animation
