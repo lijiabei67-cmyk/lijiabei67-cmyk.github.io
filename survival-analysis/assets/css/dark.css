@@ -1,647 +1,94 @@
 /* ============================================
-   Dark Mode Styles - Survival Analysis Blog
-   Purple Theme Edition
+   Dark Mode - Minimal overrides
+   Default theme is now dark glassmorphism.
+   These rules handle the light-mode fallback
+   when .dark-mode is removed from body.
    ============================================ */
 
-/* Dark Mode Variables */
-:root {
-    --dm-background-color: #0F0A1F;        /* Deep Dark Purple */
-    --dm-surface-color: #1A1333;           /* Dark Purple Surface */
-    --dm-surface-elevated: #241845;        /* Elevated Purple */
-    --dm-text-color: #F5F3FF;              /* Bright Light Text - High Contrast */
-    --dm-text-muted: #C4B5FD;              /* Bright Muted Purple - Better Readability */
-    --dm-border-color: #3D2E6B;            /* Purple Border */
-    --dm-primary-color: #A78BFA;           /* Light Purple (Fluorescent) */
-    --dm-primary-light: #C4B5FD;           /* Brighter Purple */
-    --dm-primary-dark: #7C3AED;            /* Base Purple */
-    --dm-secondary-color: #F5F3FF;         /* Light Text */
-    --dm-accent-color: #F472B6;            /* Pink Accent */
-    --dm-success-color: #34D399;           /* Bright Green */
-    --dm-warning-color: #FBBF24;           /* Bright Amber */
+/* Light mode fallback: soften the darkness */
+body:not(.dark-mode) {
+    background: #1A1530;
+    color: #E8E4F0;
 }
 
-/* Dark Mode Body */
-body.dark-mode {
-    background: linear-gradient(135deg, var(--dm-background-color), #150D28);
-    color: var(--dm-text-color);
+body:not(.dark-mode) .bg-mesh {
+    background: #1A1530;
 }
 
-/* Dark Mode Typography - Ensure High Contrast */
-body.dark-mode h1 {
-    color: var(--dm-primary-color);
-    background: linear-gradient(135deg, var(--dm-primary-light), var(--dm-primary-color));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+body:not(.dark-mode) .mesh-orb {
+    opacity: 0.2;
 }
 
-body.dark-mode h2 {
-    color: var(--dm-secondary-color);
-    border-bottom-color: var(--dm-primary-color);
+body:not(.dark-mode) .noise-overlay {
+    opacity: 0.02;
 }
 
-body.dark-mode h2::after {
-    background: linear-gradient(90deg, var(--dm-accent-color), var(--dm-primary-light));
-}
-
-body.dark-mode h3 {
-    color: var(--dm-primary-light);
-}
-
-body.dark-mode h4 {
-    color: var(--dm-text-color);
-}
-
-body.dark-mode p {
-    color: var(--dm-text-color);
-}
-
-body.dark-mode li {
-    color: var(--dm-text-color);
-}
-
-body.dark-mode a {
-    color: var(--dm-primary-light);
-}
-
-body.dark-mode a:hover {
-    color: var(--dm-accent-color);
-}
-
-body.dark-mode code {
-    background-color: rgba(167, 139, 250, 0.2);
-    color: var(--dm-primary-light);
-}
-
-body.dark-mode strong {
-    color: var(--dm-text-color);
-}
-
-/* ============================================
-   Dark Mode Hero - Editorial Magazine
-   Clean, no neon — simple color inversion
-   ============================================ */
-body.dark-mode .hero-watermark {
-    color: #C4B5FD;
-    opacity: 0.04;
-}
-
-body.dark-mode .hero-word {
-    color: #F0EDF7;
-}
-
-body.dark-mode .word-stroke {
-    color: transparent;
-    -webkit-text-stroke: 1.8px #A78BFA;
-}
-
-body.dark-mode .eng-text {
-    color: #8B85A6;
-}
-
-body.dark-mode .eng-dot {
-    color: #7C3AED;
-}
-
-body.dark-mode .hero-subtitle {
-    color: #A78BFA;
-}
-
-body.dark-mode .meta-item {
-    color: #8B85A6;
-}
-
-body.dark-mode .meta-divider {
-    color: #4A4190;
-}
-
-/* Dark Mode Target SVG */
-body.dark-mode .target-svg {
-    filter: drop-shadow(0 4px 15px rgba(167, 139, 250, 0.3));
-}
-
-body.dark-mode .target-svg .target-ring-outer {
-    stroke: var(--dm-primary-light);
-}
-
-body.dark-mode .target-svg .target-ring-mid {
-    stroke: var(--dm-primary-color);
-}
-
-body.dark-mode .target-svg .target-ring-inner {
-    stroke: var(--dm-primary-dark);
-}
-
-body.dark-mode .target-svg .target-ring-bullseye {
-    fill: var(--dm-primary-color);
-    stroke: var(--dm-primary-light);
-}
-
-body.dark-mode .target-svg .crosshair {
-    stroke: var(--dm-primary-light);
-}
-
-body.dark-mode .target-svg .arrow-shaft,
-body.dark-mode .target-svg .arrow-feather {
-    stroke: var(--dm-accent-color);
-}
-
-body.dark-mode .target-svg .arrow-head {
-    fill: var(--dm-accent-color);
-}
-
-body.dark-mode .target-svg .impact-wave {
-    stroke: var(--dm-accent-color);
-}
-
-/* Dark Mode Progress Bar */
-body.dark-mode .progress-bar {
-    background: linear-gradient(90deg,
-        var(--dm-primary-dark) 0%,
-        var(--dm-primary-color) 50%,
-        var(--dm-primary-light) 100%);
-    box-shadow: 0 0 15px rgba(167, 139, 250, 0.5);
-}
-
-/* Dark Mode Toggle Button */
-body.dark-mode .dark-mode-toggle {
-    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
-    border-color: var(--dm-border-color);
-}
-
-body.dark-mode .dark-mode-toggle svg {
-    color: var(--dm-primary-color);
-}
-
-body.dark-mode .dark-mode-toggle:hover {
-    border-color: var(--dm-primary-color);
-    box-shadow: 0 0 20px rgba(167, 139, 250, 0.4);
-}
-
-/* Dark Mode Back to Top */
-body.dark-mode .back-to-top {
-    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
-    border-color: var(--dm-primary-color);
-}
-
-body.dark-mode .back-to-top svg {
-    color: var(--dm-primary-color);
-}
-
-body.dark-mode .back-to-top:hover {
-    background: linear-gradient(135deg, var(--dm-primary-dark), var(--dm-primary-color));
-}
-
-body.dark-mode .back-to-top:hover svg {
-    color: var(--dm-background-color);
-}
-
-/* Dark Mode Sidebar */
-body.dark-mode .sidebar-nav {
-    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
-    border: 1px solid var(--dm-border-color);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-}
-
-body.dark-mode .sidebar-nav h4 {
-    color: var(--dm-primary-color);
-}
-
-body.dark-mode .sidebar-nav a {
-    color: var(--dm-text-muted);
-}
-
-body.dark-mode .sidebar-nav a:hover,
-body.dark-mode .sidebar-nav a.active {
-    color: var(--dm-primary-light);
-    border-left-color: var(--dm-primary-color);
-    background: rgba(167, 139, 250, 0.1);
-}
-
-/* Dark Mode Article Header */
-body.dark-mode .article-header {
-    border-bottom-color: var(--dm-border-color);
-}
-
-body.dark-mode .article-meta {
-    color: var(--dm-text-muted);
-}
-
-body.dark-mode .keyword {
-    background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(167, 139, 250, 0.1));
-    color: var(--dm-primary-light);
-    border-color: var(--dm-border-color);
-}
-
-body.dark-mode .keyword:hover {
-    background: linear-gradient(135deg, var(--dm-primary-color), var(--dm-primary-dark));
-    color: var(--dm-background-color);
-}
-
-body.dark-mode .article-abstract {
-    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
-    border-color: var(--dm-border-color);
-}
-
-body.dark-mode .article-abstract h3 {
-    color: var(--dm-primary-color);
-}
-
-/* Dark Mode Data Stats */
-body.dark-mode .stat-card {
-    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
-    border-color: var(--dm-border-color);
-}
-
-body.dark-mode .stat-card:hover {
-    box-shadow: 0 8px 25px rgba(167, 139, 250, 0.2);
-    border-color: var(--dm-primary-color);
-}
-
-body.dark-mode .stat-card.highlight {
-    border-color: var(--dm-accent-color);
-    background: linear-gradient(135deg, rgba(244, 114, 182, 0.1), rgba(244, 114, 182, 0.05));
-}
-
-body.dark-mode .stat-value {
-    color: var(--dm-primary-light);
-}
-
-body.dark-mode .stat-card.highlight .stat-value {
-    color: var(--dm-accent-color);
-}
-
-body.dark-mode .stat-label {
-    color: var(--dm-text-muted);
-}
-
-/* Dark Mode Tables */
-body.dark-mode table {
-    background-color: var(--dm-surface-color);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-mode th {
-    background: linear-gradient(135deg, var(--dm-primary-dark), var(--dm-primary-color));
+body:not(.dark-mode) .hero-word {
     color: #FFFFFF;
 }
 
-body.dark-mode td {
-    border-bottom-color: var(--dm-border-color);
-    color: var(--dm-text-color);
+body:not(.dark-mode) .hero-watermark {
+    color: #FFFFFF;
+    opacity: 0.03;
 }
 
-body.dark-mode tr:hover {
-    background-color: rgba(167, 139, 250, 0.05);
-}
+/* Keep dark mode styling pristine */
+body.dark-mode .hero-word { color: #F0EDF7; }
+body.dark-mode .hero-watermark { color: #C4B5FD; opacity: 0.025; }
+body.dark-mode .word-stroke { color: transparent; -webkit-text-stroke: 1.8px rgba(167, 139, 250, 0.7); }
 
-body.dark-mode tr:hover td {
-    color: var(--dm-text-color);
-}
-
-body.dark-mode tr.highlight-row {
-    background: linear-gradient(90deg, rgba(52, 211, 153, 0.1), rgba(167, 139, 250, 0.05));
-}
-
-body.dark-mode td.protect {
-    color: var(--dm-success-color);
-}
-
-body.dark-mode td.better {
-    color: var(--dm-success-color);
-}
-
-body.dark-mode .badge.success {
-    background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(52, 211, 153, 0.1));
-    color: var(--dm-success-color);
-}
-
-body.dark-mode .badge.warning {
-    background: linear-gradient(135deg, rgba(244, 114, 182, 0.2), rgba(244, 114, 182, 0.1));
-    color: var(--dm-accent-color);
-}
-
-/* Dark Mode Chart Container */
-body.dark-mode .chart-container {
-    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
-    border-color: var(--dm-border-color);
-    box-shadow: 0 4px 15px rgba(167, 139, 250, 0.15);
-}
-
-body.dark-mode .chart-caption {
-    color: var(--dm-text-muted);
-}
-
-/* Dark Mode Plotly Charts - Force visibility */
-body.dark-mode .js-plotly-plot {
-    background-color: transparent !important;
-}
-
-body.dark-mode .js-plotly-plot .plotly .main-svg {
-    background-color: transparent !important;
-}
-
-body.dark-mode .js-plotly-plot .plotly .bg {
-    fill: transparent !important;
-}
-
+/* ---- Plotly Charts - Dark mode visibility ---- */
+body.dark-mode .js-plotly-plot { background-color: transparent !important; }
+body.dark-mode .js-plotly-plot .plotly .main-svg { background-color: transparent !important; }
+body.dark-mode .js-plotly-plot .plotly .bg { fill: transparent !important; }
 body.dark-mode .js-plotly-plot .plotly .xtitle,
 body.dark-mode .js-plotly-plot .plotly .ytitle,
-body.dark-mode .js-plotly-plot .plotly .g-gtitle {
-    fill: var(--dm-text-color) !important;
-}
-
+body.dark-mode .js-plotly-plot .plotly .g-gtitle { fill: #F0EDF7 !important; }
 body.dark-mode .js-plotly-plot .plotly .xtick text,
-body.dark-mode .js-plotly-plot .plotly .ytick text {
-    fill: var(--dm-text-muted) !important;
-}
-
-/* Dark Mode Grid Lines - Make visible */
+body.dark-mode .js-plotly-plot .plotly .ytick text { fill: #A09BB8 !important; }
 body.dark-mode .js-plotly-plot .plotly .xgrid,
-body.dark-mode .js-plotly-plot .plotly .ygrid {
-    stroke: rgba(167, 139, 250, 0.3) !important;
-}
+body.dark-mode .js-plotly-plot .plotly .ygrid { stroke: rgba(167, 139, 250, 0.2) !important; }
 
-/* Dark Mode Chart Lines and Traces */
-body.dark-mode .js-plotly-plot .plotly .scatterlayer .line {
-    stroke-width: 3 !important;
-}
-
-/* Dark Mode Pie Chart - Outside text labels (percent+label on left/right) */
+/* Dark mode pie chart labels */
 body.dark-mode .js-plotly-plot .pielayer text,
 body.dark-mode .js-plotly-plot .pielayer tspan,
-body.dark-mode .js-plotly-plot g.pielayer text,
-body.dark-mode .js-plotly-plot g.pielayer tspan,
-body.dark-mode .js-plotly-plot .plotly g.pielayer text {
-    fill: #F5F3FF !important;
+body.dark-mode .js-plotly-plot g.pielayer text {
+    fill: #F0EDF7 !important;
 }
-
-/* Dark Mode Pie Chart - Slice styling */
 body.dark-mode .js-plotly-plot .plotly .pielayer .slice {
-    stroke: var(--dm-surface-color) !important;
+    stroke: var(--bg-elevated, #1A1330) !important;
     stroke-width: 2 !important;
 }
 
-/* Dark Mode Legend - Ensure visibility */
+/* Dark mode legend */
+body.dark-mode .js-plotly-plot .plotly .legend text,
+body.dark-mode .js-plotly-plot .plotly .infolayer > .legend text,
 body.dark-mode .js-plotly-plot .plotly .legend .legendtext {
-    fill: #F5F3FF !important;
+    fill: #F0EDF7 !important;
 }
-
-body.dark-mode .js-plotly-plot .plotly .infolayer > .legend text {
-    fill: #F5F3FF !important;
-}
-
-/* Dark Mode Bar Chart */
-body.dark-mode .js-plotly-plot .plotly .barlayer .bar {
-    stroke: var(--dm-surface-color) !important;
-    stroke-width: 1 !important;
-}
-
-/* Dark Mode Legend */
-body.dark-mode .js-plotly-plot .plotly .legend text {
-    fill: var(--dm-text-color) !important;
-}
-
 body.dark-mode .js-plotly-plot .plotly .legend .legendrect {
     fill: transparent !important;
-    stroke: var(--dm-border-color) !important;
+    stroke: rgba(255,255,255,0.08) !important;
 }
 
-/* Dark Mode Highlight Box */
-body.dark-mode .highlight-box {
-    background: linear-gradient(135deg, rgba(167, 139, 250, 0.1), rgba(167, 139, 250, 0.05));
-    border-left-color: var(--dm-primary-color);
+/* Dark mode bar chart */
+body.dark-mode .js-plotly-plot .plotly .barlayer .bar {
+    stroke: transparent !important;
 }
 
-body.dark-mode .highlight-box li {
-    color: var(--dm-text-color);
-}
-
-/* Dark Mode Formula Box */
-body.dark-mode .formula-box {
-    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
-    border-color: var(--dm-border-color);
-}
-
-body.dark-mode .formula-box .formula {
-    background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(167, 139, 250, 0.1));
-    color: var(--dm-primary-light);
-    border-color: var(--dm-border-color);
-}
-
-/* Dark Mode Key Finding */
-body.dark-mode .key-finding {
-    background: linear-gradient(135deg, rgba(52, 211, 153, 0.1), rgba(167, 139, 250, 0.08));
-    border-color: var(--dm-success-color);
-}
-
-body.dark-mode .key-finding::before {
-    background: linear-gradient(180deg, var(--dm-success-color), var(--dm-primary-color));
-}
-
-body.dark-mode .key-finding h4 {
-    color: var(--dm-success-color);
-}
-
-body.dark-mode .key-finding p {
-    color: var(--dm-text-color);
-}
-
-/* Dark Mode Interpretation Box */
-body.dark-mode .interpretation-box {
-    background: linear-gradient(135deg, rgba(167, 139, 250, 0.08), rgba(196, 181, 253, 0.05));
-    border-color: var(--dm-primary-color);
-}
-
-body.dark-mode .interpretation-box h4 {
-    color: var(--dm-primary-light);
-}
-
-body.dark-mode .interpretation-box li {
-    color: var(--dm-text-color);
-}
-
-body.dark-mode .interpretation-box p {
-    color: var(--dm-text-color);
-}
-
-/* Dark Mode Model Metrics */
-body.dark-mode .metric {
-    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
-    border-color: var(--dm-border-color);
-}
-
-body.dark-mode .metric-value {
-    color: var(--dm-primary-light);
-}
-
-body.dark-mode .metric-label {
-    color: var(--dm-text-muted);
-}
-
-/* Dark Mode Customer Types */
-body.dark-mode .customer-type {
-    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
-    border-color: var(--dm-border-color);
-}
-
-body.dark-mode .customer-type:hover {
-    box-shadow: 0 12px 30px rgba(167, 139, 250, 0.2);
-}
-
-body.dark-mode .customer-type.high-risk {
-    border-color: var(--dm-accent-color);
-}
-
-body.dark-mode .customer-type.medium-risk {
-    border-color: var(--dm-warning-color);
-}
-
-body.dark-mode .customer-type.low-risk {
-    border-color: var(--dm-success-color);
-}
-
-body.dark-mode .customer-type.high-risk h4 {
-    color: var(--dm-accent-color);
-}
-
-body.dark-mode .customer-type.medium-risk h4 {
-    color: var(--dm-warning-color);
-}
-
-body.dark-mode .customer-type.low-risk h4 {
-    color: var(--dm-success-color);
-}
-
-body.dark-mode .customer-type .features {
-    color: var(--dm-text-muted);
-}
-
-body.dark-mode .customer-type.high-risk .clv-value {
-    color: var(--dm-accent-color);
-}
-
-body.dark-mode .customer-type.medium-risk .clv-value {
-    color: var(--dm-warning-color);
-}
-
-body.dark-mode .customer-type.low-risk .clv-value {
-    color: var(--dm-success-color);
-}
-
-body.dark-mode .customer-type .clv-label {
-    color: var(--dm-text-muted);
-}
-
-/* Dark Mode Findings */
-body.dark-mode .finding-item {
-    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
-    border-color: var(--dm-border-color);
-}
-
-body.dark-mode .finding-item:hover {
-    border-color: var(--dm-primary-color);
-}
-
-body.dark-mode .finding-number {
-    background: linear-gradient(135deg, var(--dm-primary-color), var(--dm-primary-dark));
-    box-shadow: 0 4px 15px rgba(167, 139, 250, 0.3);
-}
-
-body.dark-mode .finding-content h4 {
-    color: var(--dm-secondary-color);
-}
-
-body.dark-mode .finding-content p {
-    color: var(--dm-text-color);
-}
-
-/* Dark Mode Recommendations */
-body.dark-mode .recommendation {
-    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
-    border-color: var(--dm-border-color);
-}
-
-body.dark-mode .recommendation h4 {
-    color: var(--dm-primary-light);
-    border-bottom-color: var(--dm-border-color);
-}
-
-body.dark-mode .recommendation li {
-    color: var(--dm-text-color);
-}
-
-/* Dark Mode Limitations */
-body.dark-mode .limitations {
-    background: linear-gradient(135deg, rgba(244, 114, 182, 0.08), rgba(244, 114, 182, 0.05));
-    border-color: rgba(244, 114, 182, 0.4);
-}
-
-body.dark-mode .limitations li {
-    color: var(--dm-text-color);
-}
-
-/* Dark Mode Collapsible Code */
-body.dark-mode .collapsible-code {
-    border-color: var(--dm-border-color);
-}
-
-body.dark-mode .collapsible-trigger {
-    background: linear-gradient(135deg, var(--dm-surface-color), var(--dm-surface-elevated));
-    color: var(--dm-text-color);
-}
-
-body.dark-mode .collapsible-trigger:hover {
-    background: var(--dm-surface-elevated);
-}
-
-body.dark-mode .collapsible-trigger span {
-    color: var(--dm-primary-light);
-}
-
-body.dark-mode .collapsible-trigger .chevron {
-    color: var(--dm-text-muted);
-}
-
+/* ---- Collapsible code dark mode ---- */
 body.dark-mode .collapsible-content {
-    background-color: #0A0514;
+    background: rgba(10, 10, 15, 0.8);
 }
 
-/* Dark Mode References */
-body.dark-mode .references-list li {
-    border-bottom-color: var(--dm-border-color);
-}
-
-body.dark-mode .reference-desc {
-    color: var(--dm-text-muted);
-}
-
-/* Dark Mode Footer */
-body.dark-mode .article-footer {
-    border-top-color: var(--dm-border-color);
-    color: var(--dm-text-muted);
-}
-
-/* Dark Mode Selection */
+/* ---- Selection color ---- */
 body.dark-mode ::selection {
-    background: rgba(167, 139, 250, 0.3);
-    color: var(--dm-text-color);
+    background: rgba(167, 139, 250, 0.25);
+    color: #F0EDF7;
 }
 
-/* Dark Mode Scrollbar */
-body.dark-mode::-webkit-scrollbar {
-    width: 10px;
-}
-
-body.dark-mode::-webkit-scrollbar-track {
-    background: var(--dm-background-color);
-}
-
-body.dark-mode::-webkit-scrollbar-thumb {
-    background: var(--dm-border-color);
-    border-radius: 5px;
-}
-
-body.dark-mode::-webkit-scrollbar-thumb:hover {
-    background: var(--dm-primary-dark);
-}
+/* ---- Scrollbar ---- */
+body.dark-mode::-webkit-scrollbar { width: 8px; }
+body.dark-mode::-webkit-scrollbar-track { background: var(--bg-abyss, #0A0A0F); }
+body.dark-mode::-webkit-scrollbar-thumb { background: rgba(167, 139, 250, 0.2); border-radius: 4px; }
+body.dark-mode::-webkit-scrollbar-thumb:hover { background: rgba(167, 139, 250, 0.35); }
