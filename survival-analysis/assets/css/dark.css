@@ -88,7 +88,7 @@ body:not(.dark-mode) .hero-watermark {
 }
 body:not(.dark-mode) .word-stroke {
     color: transparent;
-    -webkit-text-stroke: 1.8px rgba(124, 58, 237, 0.5);
+    -webkit-text-stroke: 1.8px rgba(123, 107, 168, 0.5);
 }
 body:not(.dark-mode) .eng-text {
     color: #9B8AAF;
@@ -208,7 +208,23 @@ body.dark-mode .mesh-orb {
 body.dark-mode .hero-word { color: #F0EDF7; }
 body.dark-mode .hero-subtitle { color: #C4B5FD; }
 body.dark-mode .hero-watermark { color: #C4B5FD; opacity: 0.025; }
-body.dark-mode .word-stroke { color: transparent; -webkit-text-stroke: 1.8px rgba(167, 139, 250, 0.7); }
+body.dark-mode .word-stroke {
+    color: transparent;
+    -webkit-text-stroke: 1.8px rgba(200, 188, 226, 0.65);
+}
+body.dark-mode .eng-text {
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.3em;
+}
+body.dark-mode .eng-dot {
+    color: #9B8EC4;
+}
+body.dark-mode .meta-item {
+    color: #D0C8DE;
+}
+body.dark-mode .meta-divider {
+    color: #8B84A6;
+}
 
 /* Dark mode collapsible code */
 body.dark-mode .collapsible-content {

@@ -207,8 +207,8 @@ function createKMOverallChart() {
     // Median survival time = 34 months (S(34) = 0.50)
     const eventTimes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 24, 28, 34, 40, 48, 56, 72];
 
-    // Corrected survival probabilities (monotonically decreasing)
-    const survivalProbs = [1.00, 0.97, 0.94, 0.91, 0.88, 0.85, 0.82, 0.79, 0.76, 0.73, 0.70, 0.65, 0.61, 0.57, 0.53, 0.50, 0.45, 0.41, 0.35, 0.30, 0.24, 0.18, 0.12];
+    // Survival probabilities (monotonically decreasing, median at 34 months)
+    const survivalProbs = [1.00, 0.97, 0.94, 0.91, 0.88, 0.86, 0.83, 0.80, 0.78, 0.76, 0.74, 0.70, 0.67, 0.64, 0.61, 0.58, 0.54, 0.50, 0.43, 0.37, 0.27, 0.18, 0.12];
 
     // Build step coordinates for proper step function visualization
     const stepX = [0];
@@ -267,7 +267,7 @@ function createKMOverallChart() {
 
     // Median survival point (where curve crosses 50%)
     // Find the time where survival drops below 0.5
-    const medianTime = 20;
+    const medianTime = 34;
     const medianPoint = {
         x: [medianTime],
         y: [0.50],
@@ -278,11 +278,11 @@ function createKMOverallChart() {
             color: themeColors.success,
             line: { color: '#FFFFFF', width: 2 }
         },
-        text: ['中位生存时间 = 20 月'],
+        text: ['中位生存时间 = 34 月'],
         textposition: 'top right',
         textfont: { color: themeColors.success, size: 12 },
         name: '中位生存时间',
-        hovertemplate: '中位生存时间: 20 月<extra></extra>'
+        hovertemplate: '中位生存时间: 34 月<extra></extra>'
     };
 
     const layout = {
@@ -867,8 +867,8 @@ function createCLVChart() {
         annotations: [
             {
                 x: 36,
-                y: 672.34,
-                text: '$672.34',
+                y: 869.82,
+                text: '$869.82',
                 showarrow: true,
                 arrowhead: 2,
                 ax: 25,
@@ -877,8 +877,8 @@ function createCLVChart() {
             },
             {
                 x: 36,
-                y: 468.52,
-                text: '$468.52',
+                y: 495.53,
+                text: '$495.53',
                 showarrow: true,
                 arrowhead: 2,
                 ax: 25,
