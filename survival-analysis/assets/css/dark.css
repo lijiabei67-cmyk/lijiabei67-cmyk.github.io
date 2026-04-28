@@ -206,6 +206,7 @@ body.dark-mode .mesh-orb {
 
 /* Dark mode hero */
 body.dark-mode .hero-word { color: #F0EDF7; }
+body.dark-mode .hero-subtitle { color: #C4B5FD; }
 body.dark-mode .hero-watermark { color: #C4B5FD; opacity: 0.025; }
 body.dark-mode .word-stroke { color: transparent; -webkit-text-stroke: 1.8px rgba(167, 139, 250, 0.7); }
 
