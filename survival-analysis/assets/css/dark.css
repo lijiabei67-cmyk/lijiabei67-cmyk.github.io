@@ -1,43 +1,220 @@
 /* ============================================
-   Dark Mode - Minimal overrides
-   Default theme is now dark glassmorphism.
-   These rules handle the light-mode fallback
-   when .dark-mode is removed from body.
+   Light Mode & Dark Mode Visual System
    ============================================ */
 
-/* Light mode fallback: soften the darkness */
+/* ============================================
+   LIGHT MODE — Pearl White + Sakura/Lilac/Blue
+   Reference: morning.png
+   ============================================ */
 body:not(.dark-mode) {
-    background: #1A1530;
-    color: #E8E4F0;
+    /* Override all CSS variables for light mode */
+    --bg-abyss: #F9F9FB;
+    --bg-base: #FFFFFF;
+    --bg-elevated: #F3F0F8;
+
+    /* Palette — darker for light bg readability */
+    --primary: #7C3AED;
+    --primary-soft: #6D28D9;
+    --primary-dim: #5B21B6;
+    --accent: #EC4899;
+    --accent-soft: #DB2777;
+    --success: #059669;
+    --warning: #D97706;
+
+    --glass-bg: rgba(255, 255, 255, 0.45);
+    --glass-bg-hover: rgba(255, 255, 255, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.55);
+    --glass-border-strong: rgba(255, 255, 255, 0.75);
+    --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+    --glass-shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.03);
+
+    --text-primary: #2A1B38;
+    --text-secondary: #4A3A5E;
+    --text-muted: #7B6B90;
+    --text-dim: #A095B2;
+
+    background: var(--bg-abyss);
+    color: var(--text-primary);
 }
 
+/* Light mode mesh orbs — disable screen blend, use airy pastel colors */
 body:not(.dark-mode) .bg-mesh {
-    background: #1A1530;
+    background: #F9F9FB;
 }
 
 body:not(.dark-mode) .mesh-orb {
-    opacity: 0.2;
+    mix-blend-mode: normal;
+    opacity: 0.55;
+    filter: blur(110px);
 }
 
+body:not(.dark-mode) .mesh-orb-1 {
+    background: radial-gradient(circle at 40% 40%, #FF85C0 0%, #FFB8D8 30%, transparent 65%);
+    width: 850px; height: 850px;
+}
+
+body:not(.dark-mode) .mesh-orb-2 {
+    background: radial-gradient(circle at 50% 50%, #85A5FF 0%, #B8CCFF 30%, transparent 65%);
+    width: 750px; height: 750px;
+}
+
+body:not(.dark-mode) .mesh-orb-3 {
+    background: radial-gradient(circle at 40% 30%, #B37FEB 0%, #D4B8F5 30%, transparent 65%);
+    width: 700px; height: 700px;
+}
+
+body:not(.dark-mode) .mesh-orb-4 {
+    background: radial-gradient(circle at 55% 45%, #FF85C0 0%, #FFC8E0 30%, transparent 65%);
+    width: 600px; height: 600px;
+}
+
+/* Light mode noise — lighter */
 body:not(.dark-mode) .noise-overlay {
-    opacity: 0.02;
+    opacity: 0.025;
 }
 
+/* Light mode sparkles — visible against white */
+body:not(.dark-mode) .sparkle svg {
+    color: #B37FEB;
+}
+
+/* ---- Light Mode Hero ---- */
 body:not(.dark-mode) .hero-word {
-    color: #FFFFFF;
+    color: #2A1B38;
 }
-
 body:not(.dark-mode) .hero-watermark {
-    color: #FFFFFF;
+    color: #2A1B38;
     opacity: 0.03;
 }
+body:not(.dark-mode) .word-stroke {
+    color: transparent;
+    -webkit-text-stroke: 1.8px rgba(124, 58, 237, 0.5);
+}
+body:not(.dark-mode) .eng-text {
+    color: #9B8AAF;
+}
+body:not(.dark-mode) .eng-dot {
+    color: #B37FEB;
+}
+body:not(.dark-mode) .hero-subtitle {
+    color: #7B6B90;
+}
+body:not(.dark-mode) .meta-item {
+    color: #A095B2;
+}
+body:not(.dark-mode) .meta-divider {
+    color: #C8BFD8;
+}
 
-/* Keep dark mode styling pristine */
+/* ---- Light Mode Glass — stronger white cards ---- */
+body:not(.dark-mode) .sidebar-nav {
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+}
+body:not(.dark-mode) .chart-container {
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+body:not(.dark-mode) .stat-card {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* ---- Light Mode Typography ---- */
+body:not(.dark-mode) h1 { color: #2A1B38; }
+body:not(.dark-mode) h2 { color: #2A1B38; border-bottom-color: rgba(124, 58, 237, 0.25); }
+body:not(.dark-mode) h2::after { background: linear-gradient(90deg, #7C3AED, transparent); }
+body:not(.dark-mode) h3 { color: #5B21B6; }
+body:not(.dark-mode) h4 { color: #2A1B38; }
+body:not(.dark-mode) p { color: var(--text-secondary); }
+body:not(.dark-mode) li { color: var(--text-secondary); }
+body:not(.dark-mode) a { color: #7C3AED; }
+body:not(.dark-mode) a:hover { color: #EC4899; }
+body:not(.dark-mode) strong { color: #2A1B38; }
+body:not(.dark-mode) code {
+    background: rgba(124, 58, 237, 0.08);
+    color: #7C3AED;
+}
+
+/* ---- Light Mode Table ---- */
+body:not(.dark-mode) table {
+    background: rgba(255, 255, 255, 0.5);
+}
+body:not(.dark-mode) th {
+    background: rgba(124, 58, 237, 0.12);
+    color: #5B21B6;
+}
+body:not(.dark-mode) td { color: var(--text-secondary); border-bottom-color: rgba(124, 58, 237, 0.1); }
+body:not(.dark-mode) tr:hover { background: rgba(124, 58, 237, 0.04); }
+body:not(.dark-mode) tr:hover td { color: #2A1B38; }
+
+/* ---- Light Mode Collapsible Code ---- */
+body:not(.dark-mode) .collapsible-content {
+    background: rgba(30, 25, 50, 0.95);
+}
+
+/* ---- Light Mode Toggle Button ---- */
+body:not(.dark-mode) .dark-mode-toggle {
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(124, 58, 237, 0.2);
+}
+body:not(.dark-mode) .dark-mode-toggle svg { color: #7C3AED; }
+body:not(.dark-mode) .dark-mode-toggle:hover {
+    background: rgba(255, 255, 255, 0.7);
+    border-color: #7C3AED;
+}
+
+/* ---- Light Mode Back to Top ---- */
+body:not(.dark-mode) .back-to-top {
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(124, 58, 237, 0.3);
+}
+body:not(.dark-mode) .back-to-top svg { color: #7C3AED; }
+
+/* ---- Light Mode Selection ---- */
+body:not(.dark-mode) ::selection {
+    background: rgba(124, 58, 237, 0.15);
+    color: #2A1B38;
+}
+
+/* ---- Light Mode Scrollbar ---- */
+body:not(.dark-mode)::-webkit-scrollbar { width: 8px; }
+body:not(.dark-mode)::-webkit-scrollbar-track { background: #F3F0F8; }
+body:not(.dark-mode)::-webkit-scrollbar-thumb { background: rgba(124, 58, 237, 0.2); border-radius: 4px; }
+body:not(.dark-mode)::-webkit-scrollbar-thumb:hover { background: rgba(124, 58, 237, 0.35); }
+
+/* ---- Light Mode Target SVG ---- */
+body:not(.dark-mode) .target-svg {
+    filter: drop-shadow(0 4px 12px rgba(124, 58, 237, 0.1));
+}
+
+/* ---- Light Mode Progress Bar ---- */
+body:not(.dark-mode) .progress-bar {
+    background: linear-gradient(90deg, #B37FEB, #7C3AED);
+}
+
+/* ============================================
+   DARK MODE — Deep Abyss + High-Saturation Mesh
+   Reference: purple.png
+   ============================================ */
+
+/* Dark mode mesh orbs — mix-blend-mode: screen for fluorescent glow */
+body.dark-mode .mesh-orb {
+    mix-blend-mode: screen;
+}
+
+/* Dark mode hero */
 body.dark-mode .hero-word { color: #F0EDF7; }
 body.dark-mode .hero-watermark { color: #C4B5FD; opacity: 0.025; }
 body.dark-mode .word-stroke { color: transparent; -webkit-text-stroke: 1.8px rgba(167, 139, 250, 0.7); }
 
-/* ---- Plotly Charts - Dark mode visibility ---- */
+/* Dark mode collapsible code */
+body.dark-mode .collapsible-content {
+    background: rgba(8, 4, 16, 0.85);
+}
+
+/* ---- Plotly Charts — Dark mode visibility ---- */
 body.dark-mode .js-plotly-plot { background-color: transparent !important; }
 body.dark-mode .js-plotly-plot .plotly .main-svg { background-color: transparent !important; }
 body.dark-mode .js-plotly-plot .plotly .bg { fill: transparent !important; }
@@ -56,7 +233,7 @@ body.dark-mode .js-plotly-plot g.pielayer text {
     fill: #F0EDF7 !important;
 }
 body.dark-mode .js-plotly-plot .plotly .pielayer .slice {
-    stroke: var(--bg-elevated, #1A1330) !important;
+    stroke: var(--bg-elevated, #1A1035) !important;
     stroke-width: 2 !important;
 }
 
@@ -68,7 +245,7 @@ body.dark-mode .js-plotly-plot .plotly .legend .legendtext {
 }
 body.dark-mode .js-plotly-plot .plotly .legend .legendrect {
     fill: transparent !important;
-    stroke: rgba(255,255,255,0.08) !important;
+    stroke: rgba(255, 255, 255, 0.08) !important;
 }
 
 /* Dark mode bar chart */
@@ -76,19 +253,14 @@ body.dark-mode .js-plotly-plot .plotly .barlayer .bar {
     stroke: transparent !important;
 }
 
-/* ---- Collapsible code dark mode ---- */
-body.dark-mode .collapsible-content {
-    background: rgba(10, 10, 15, 0.8);
-}
-
-/* ---- Selection color ---- */
+/* ---- Dark Mode Selection ---- */
 body.dark-mode ::selection {
     background: rgba(167, 139, 250, 0.25);
     color: #F0EDF7;
 }
 
-/* ---- Scrollbar ---- */
+/* ---- Dark Mode Scrollbar ---- */
 body.dark-mode::-webkit-scrollbar { width: 8px; }
-body.dark-mode::-webkit-scrollbar-track { background: var(--bg-abyss, #0A0A0F); }
+body.dark-mode::-webkit-scrollbar-track { background: var(--bg-abyss, #080410); }
 body.dark-mode::-webkit-scrollbar-thumb { background: rgba(167, 139, 250, 0.2); border-radius: 4px; }
 body.dark-mode::-webkit-scrollbar-thumb:hover { background: rgba(167, 139, 250, 0.35); }

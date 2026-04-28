@@ -3,12 +3,12 @@
    Dark Glassmorphism & Mesh Gradient Theme
    ============================================ */
 
-/* ---- CSS Variables ---- */
+/* ---- CSS Variables (Dark Mode Defaults) ---- */
 :root {
     /* Deep Base */
-    --bg-abyss: #0A0A0F;
-    --bg-base: #110B19;
-    --bg-elevated: #1A1330;
+    --bg-abyss: #080410;
+    --bg-base: #0F0A1E;
+    --bg-elevated: #1A1035;
 
     /* Purple Palette */
     --primary: #A78BFA;
@@ -20,12 +20,12 @@
     --warning: #FBBF24;
 
     /* Glass Surfaces */
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-bg-hover: rgba(255, 255, 255, 0.06);
-    --glass-border: rgba(255, 255, 255, 0.07);
-    --glass-border-strong: rgba(255, 255, 255, 0.12);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-    --glass-shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.3);
+    --glass-bg: rgba(255, 255, 255, 0.04);
+    --glass-bg-hover: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-border-strong: rgba(255, 255, 255, 0.14);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --glass-shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.4);
 
     /* Text */
     --text-primary: #F0EDF7;
@@ -80,36 +80,37 @@ body {
 .mesh-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(130px);
-    opacity: 0.35;
+    filter: blur(100px);
+    opacity: 0.7;
     will-change: transform;
+    mix-blend-mode: screen;
 }
 
 .mesh-orb-1 {
-    width: 650px; height: 650px;
-    background: radial-gradient(circle, #7C3AED 0%, transparent 70%);
-    top: -250px; left: -150px;
+    width: 900px; height: 900px;
+    background: radial-gradient(circle at 40% 40%, #8B5CF6 0%, #7C3AED 30%, transparent 65%);
+    top: -300px; left: -200px;
     animation: orbFloat1 22s ease-in-out infinite;
 }
 
 .mesh-orb-2 {
-    width: 550px; height: 550px;
-    background: radial-gradient(circle, #3B82F6 0%, transparent 70%);
-    top: 30%; right: -200px;
+    width: 800px; height: 800px;
+    background: radial-gradient(circle at 50% 50%, #6366F1 0%, #4F46E5 25%, transparent 65%);
+    top: 20%; right: -300px;
     animation: orbFloat2 26s ease-in-out infinite;
 }
 
 .mesh-orb-3 {
-    width: 450px; height: 450px;
-    background: radial-gradient(circle, #A78BFA 0%, transparent 70%);
-    bottom: -150px; left: 25%;
+    width: 750px; height: 750px;
+    background: radial-gradient(circle at 40% 30%, #A78BFA 0%, #8B5CF6 25%, transparent 65%);
+    bottom: -250px; left: 20%;
     animation: orbFloat3 20s ease-in-out infinite;
 }
 
 .mesh-orb-4 {
-    width: 380px; height: 380px;
-    background: radial-gradient(circle, #EC4899 0%, transparent 70%);
-    top: 15%; left: 45%;
+    width: 650px; height: 650px;
+    background: radial-gradient(circle at 55% 45%, #F472B6 0%, #EC4899 25%, transparent 65%);
+    top: 10%; left: 40%;
     animation: orbFloat4 24s ease-in-out infinite;
 }
 
