@@ -17,7 +17,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:wght@200;300;400;600&family=Fira+Code:wght@400;500&family=Noto+Serif+SC:wght@400;700;900&display=swap" rel="stylesheet">
 
     <!-- Styles -->
     <link rel="stylesheet" href="./assets/css/style.css">
@@ -85,94 +85,47 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Hero Section - Asymmetric Staggered Layout -->
+        <!-- Hero Section - Editorial Magazine Layout -->
         <header class="hero-section" id="heroSection">
-            <!-- Ambient decorative elements -->
-            <div class="hero-ambient">
-                <div class="ambient-orb orb-1"></div>
-                <div class="ambient-orb orb-2"></div>
-                <div class="ambient-grid"></div>
-            </div>
+            <!-- Background Watermark -->
+            <div class="hero-watermark" aria-hidden="true">生存</div>
 
-            <!-- Main staggered layout -->
+            <!-- Staggered Typography Layout -->
             <div class="hero-layout">
-                <!-- Title Block - Left aligned, large -->
-                <div class="hero-title-block" id="heroTitleBlock">
-                    <h1 class="hero-title" id="heroTitle">
-                        <span class="typewriter-chars" id="typewriterChars" aria-label="时间与概率的博弈"></span>
-                        <span class="cursor-blink" id="heroCursor">|</span>
-                    </h1>
-                    <div class="title-accent-line" id="titleAccentLine"></div>
+                <!-- Row 1: "时间" huge + "与" small outline -->
+                <div class="hero-title-row row-1">
+                    <span class="hero-word word-xl" id="heroWordTime">时间</span>
+                    <span class="hero-word word-sm word-stroke" id="heroWordAnd">与</span>
                 </div>
 
-                <!-- Subtitle Block - Right indented, italic -->
+                <!-- Row 2: "概率的" medium + "博弈" extra huge -->
+                <div class="hero-title-row row-2">
+                    <span class="hero-word word-lg" id="heroWordProb">概率的</span>
+                    <span class="hero-word word-xl" id="heroWordGame">博弈</span>
+                </div>
+
+                <!-- English Embellishment -->
+                <div class="hero-english-line" id="heroEnglishLine">
+                    <span class="eng-text">Survival</span>
+                    <span class="eng-dot">&middot;</span>
+                    <span class="eng-text">Analysis</span>
+                    <span class="eng-dot">&middot;</span>
+                    <span class="eng-text">Customer Churn</span>
+                </div>
+
+                <!-- Subtitle -->
                 <div class="hero-subtitle-block" id="heroSubtitleBlock">
-                    <p class="hero-subtitle" id="heroSubtitle">
-                        基于 Kaplan-Meier 与 Cox 模型的<br>客户流失预测
-                    </p>
-                </div>
-
-                <!-- Floating Icons - scattered around asymmetric layout -->
-                <div class="floating-icons">
-                    <div class="floating-icon icon-calculator">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="4" y="2" width="16" height="20" rx="2"/>
-                            <line x1="8" y1="6" x2="16" y2="6"/>
-                            <circle cx="8" cy="11" r="1" fill="currentColor"/>
-                            <circle cx="12" cy="11" r="1" fill="currentColor"/>
-                            <circle cx="16" cy="11" r="1" fill="currentColor"/>
-                            <circle cx="8" cy="15" r="1" fill="currentColor"/>
-                            <circle cx="12" cy="15" r="1" fill="currentColor"/>
-                            <circle cx="16" cy="15" r="1" fill="currentColor"/>
-                            <circle cx="8" cy="19" r="1" fill="currentColor"/>
-                            <rect x="11" y="18" width="6" height="2" rx="1" fill="currentColor"/>
-                        </svg>
-                    </div>
-                    <div class="floating-icon icon-notebook">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                            <line x1="8" y1="7" x2="16" y2="7"/>
-                            <line x1="8" y1="11" x2="16" y2="11"/>
-                            <line x1="8" y1="15" x2="12" y2="15"/>
-                        </svg>
-                    </div>
-                    <div class="floating-icon icon-chart">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M3 3v18h18"/>
-                            <path d="M7 16l4-4 4 4 5-6"/>
-                        </svg>
-                    </div>
+                    <p class="hero-subtitle">基于 Kaplan-Meier 与 Cox 模型的客户流失预测</p>
                 </div>
             </div>
 
-            <!-- Article Meta Badges - Frosted glass capsules -->
-            <div class="hero-meta-badges" id="heroMetaBadges">
-                <span class="meta-badge">
-                    <svg class="meta-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                        <line x1="16" y1="2" x2="16" y2="6"/>
-                        <line x1="8" y1="2" x2="8" y2="6"/>
-                        <line x1="3" y1="10" x2="21" y2="10"/>
-                    </svg>
-                    2026-04-27
-                </span>
-                <span class="meta-badge">
-                    <svg class="meta-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                    预计阅读 15 分钟
-                </span>
-            </div>
-
-            <!-- Keywords -->
-            <div class="article-keywords-hero" id="articleKeywords">
-                <span class="keyword">生存分析</span>
-                <span class="keyword">客户流失</span>
-                <span class="keyword">Kaplan-Meier</span>
-                <span class="keyword">Cox 回归</span>
-                <span class="keyword">电信行业</span>
+            <!-- Meta Line -->
+            <div class="hero-meta-line" id="heroMetaLine">
+                <span class="meta-item">2026-04-27</span>
+                <span class="meta-divider">/</span>
+                <span class="meta-item">预计阅读 15 分钟</span>
+                <span class="meta-divider">/</span>
+                <span class="meta-item">生存分析 &middot; 客户流失 &middot; Kaplan-Meier &middot; Cox 回归</span>
             </div>
         </header>
 

@@ -23,186 +23,73 @@ function initAnimations() {
 }
 
 /* ============================================
-   1. Hero Section - Split-Text Typewriter
-      Asymmetric staggered layout, key-word glow
+   1. Hero Section - Editorial Fade-in Stagger
+      Clean, restrained, serif typography
    ============================================ */
 function initHeroAnimation() {
-    const heroTitleBlock = document.getElementById('heroTitleBlock');
-    const heroSubtitleBlock = document.getElementById('heroSubtitleBlock');
-    const heroMetaBadges = document.getElementById('heroMetaBadges');
-    const articleKeywords = document.getElementById('articleKeywords');
-    const cursorEl = document.getElementById('heroCursor');
-    const accentLine = document.getElementById('titleAccentLine');
-    const typewriterChars = document.getElementById('typewriterChars');
+    const wordTime    = document.getElementById('heroWordTime');
+    const wordAnd     = document.getElementById('heroWordAnd');
+    const wordProb    = document.getElementById('heroWordProb');
+    const wordGame    = document.getElementById('heroWordGame');
+    const englishLine = document.getElementById('heroEnglishLine');
+    const subtitleBlk = document.getElementById('heroSubtitleBlock');
+    const metaLine    = document.getElementById('heroMetaLine');
 
-    if (!typewriterChars) return;
+    if (!wordTime) return;
 
-    // ---- Prepare subtitle with highlighted key term ----
-    const subtitleEl = document.getElementById('heroSubtitle');
-    if (subtitleEl) {
-        subtitleEl.innerHTML = '基于 Kaplan-Meier 与 Cox 模型的<br><span class="subtitle-highlight">客户流失</span>预测';
-    }
-
-    // ---- Split title into character spans ----
-    const titleText = '时间与概率的博弈';
-    // Key word ranges: "时间" = [0,1], "概率" = [3,4]
-    const keyWordRanges = [[0, 1], [3, 4]];
-    const charSpans = [];
-
-    typewriterChars.innerHTML = '';
-    for (let i = 0; i < titleText.length; i++) {
-        const span = document.createElement('span');
-        span.className = 'typewriter-char';
-        span.textContent = titleText[i];
-        for (const [s, e] of keyWordRanges) {
-            if (i >= s && i <= e) { span.classList.add('key-word'); break; }
-        }
-        typewriterChars.appendChild(span);
-        charSpans.push(span);
-    }
-
-    // ---- Cursor blinking animation ----
-    const cursorBlink = gsap.to(cursorEl, {
+    // ---- Watermark subtle scale-in ----
+    gsap.from('.hero-watermark', {
+        scale: 1.08,
         opacity: 0,
-        duration: 0.55,
-        repeat: -1,
-        yoyo: true,
-        ease: 'steps(1)',
-        paused: true
-    });
-    cursorBlink.play();
-
-    // ---- Main timeline ----
-    const heroTL = gsap.timeline({ delay: 0.4 });
-
-    // 1. Title block fades in
-    heroTL.to(heroTitleBlock, {
-        opacity: 1,
-        duration: 0.45,
-        ease: 'power2.out'
+        duration: 1.8,
+        delay: 0.2,
+        ease: 'power3.out'
     });
 
-    // 2. Split-text typewriter: stagger each character
-    //    Characters fly up from below with a bounce
-    heroTL.to(charSpans, {
+    // ---- Main fade-in-up timeline ----
+    const heroTL = gsap.timeline({ delay: 0.5 });
+
+    // Row 1: "时间" → "与" (0.12s stagger)
+    heroTL.to([wordTime, wordAnd], {
         opacity: 1,
         y: 0,
-        duration: 0.35,
-        stagger: {
-            each: 0.1,
-            from: 'start'
-        },
-        ease: 'back.out(2.2)',
-        onStart: () => {
-            // Fade cursor slightly before typing begins
-            gsap.to(cursorEl, { opacity: 1, duration: 0.1 });
-        }
+        duration: 0.85,
+        stagger: 0.12,
+        ease: 'power3.out'
     });
 
-    // 3. Key words glow after being typed
-    //    "时间" finishes ~0.55s into stagger, "概率" ~0.85s
-    heroTL.add(() => {
-        charSpans.forEach(s => {
-            if (s.classList.contains('key-word')) s.classList.add('revealed');
-        });
-    });
+    // Row 2: "概率的" → "博弈" (0.12s stagger)
+    heroTL.to([wordProb, wordGame], {
+        opacity: 1,
+        y: 0,
+        duration: 0.85,
+        stagger: 0.12,
+        ease: 'power3.out'
+    }, '-=0.55');
 
-    // 4. Title brightness pulse
-    heroTL.to('.hero-title', {
-        filter: 'brightness(1.35) saturate(1.2)',
-        duration: 0.55,
-        yoyo: true,
-        repeat: 1,
-        ease: 'power1.inOut'
-    });
-
-    // 5. Draw accent line under title
-    heroTL.to(accentLine, {
-        width: '80px',
-        duration: 0.7,
+    // English embellishment
+    heroTL.to(englishLine, {
+        opacity: 1,
+        y: 0,
+        duration: 0.75,
         ease: 'power3.out'
     }, '-=0.4');
 
-    // 6. Hide cursor after typing is done
-    heroTL.to(cursorEl, {
-        opacity: 0,
-        duration: 0.4,
-        ease: 'power2.out',
-        onComplete: () => cursorBlink.pause()
-    }, '-=0.5');
-
-    // 7. Subtitle block fades in and slides up
-    heroTL.to(heroSubtitleBlock, {
+    // Subtitle
+    heroTL.to(subtitleBlk, {
         opacity: 1,
         y: 0,
         duration: 0.7,
-        ease: 'power2.out'
-    }, '-=0.1');
-
-    // 8. Floating icons pop in with staggered bounce
-    heroTL.from('.floating-icon', {
-        scale: 0,
-        opacity: 0,
-        duration: 0.55,
-        stagger: 0.12,
-        ease: 'back.out(2)'
+        ease: 'power3.out'
     }, '-=0.35');
 
-    // Start continuous floating
-    heroTL.add(startFloatingAnimation);
-
-    // 9. Meta badges fade-in-up
-    heroTL.to(heroMetaBadges, {
+    // Meta line
+    heroTL.to(metaLine, {
         opacity: 1,
         y: 0,
-        duration: 0.6,
-        ease: 'power2.out'
-    }, '-=0.2');
-
-    // 10. Keywords stagger in
-    heroTL.to(articleKeywords, {
-        opacity: 1,
-        duration: 0.4
-    }, '-=0.15');
-
-    heroTL.from('.article-keywords-hero .keyword', {
-        scale: 0,
-        opacity: 0,
-        duration: 0.35,
-        stagger: 0.07,
-        ease: 'back.out(1.5)'
-    }, '-=0.25');
-}
-
-// Floating icons continuous animation
-function startFloatingAnimation() {
-    gsap.to('.icon-calculator', {
-        y: -10,
-        duration: 1.8,
-        ease: 'sine.inOut',
-        repeat: -1,
-        yoyo: true
-    });
-
-    gsap.to('.icon-notebook', {
-        y: -8,
-        rotation: 3,
-        duration: 2,
-        ease: 'sine.inOut',
-        repeat: -1,
-        yoyo: true,
-        delay: 0.2
-    });
-
-    gsap.to('.icon-chart', {
-        y: -12,
-        rotation: -2,
-        duration: 1.6,
-        ease: 'sine.inOut',
-        repeat: -1,
-        yoyo: true,
-        delay: 0.4
-    });
+        duration: 0.65,
+        ease: 'power3.out'
+    }, '-=0.3');
 }
 
 /* ============================================
